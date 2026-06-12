@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Copy, Download, Minimize2 } from "lucide-react";
@@ -8,29 +8,19 @@ import { toast } from "sonner";
 
 function optimizeSvg(svg: string): string {
   return svg
-    // Remove XML declaration
     .replace(/<\?xml[^>]*\?>/gi, "")
-    // Remove comments
     .replace(/<!--[\s\S]*?-->/g, "")
-    // Remove metadata, title, desc
     .replace(/<metadata[\s\S]*?<\/metadata>/gi, "")
     .replace(/<title[\s\S]*?<\/title>/gi, "")
     .replace(/<desc[\s\S]*?<\/desc>/gi, "")
-    // Remove empty groups
     .replace(/<g[^>]*>\s*<\/g>/gi, "")
-    // Remove unnecessary whitespace in attributes
     .replace(/\s{2,}/g, " ")
-    // Remove whitespace between tags
     .replace(/>\s+</g, "><")
-    // Remove unnecessary precision in numbers (4 decimal places → 2)
     .replace(/(\d+\.\d{3,})/g, m => parseFloat(m).toFixed(2))
-    // Remove default attribute values
     .replace(/\s+fill="none"/g, "")
     .replace(/\s+stroke-width="1"/g, "")
     .replace(/\s+stroke="none"/g, "")
-    // Remove style attributes that are empty
     .replace(/\s+style=""/g, "")
-    // Trim
     .trim();
 }
 
@@ -50,12 +40,20 @@ export function SvgOptimizerTool() {
   const [input, setInput] = useState(SAMPLE_SVG);
   const [output, setOutput] = useState("");
   const [stats, setStats] = useState<{ original: number; optimized: number; savings: number } | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const optimize = () => {
-    const opt = optimizeSvg(input);
+  const optimize = (src: string) => {
+    if (!src.trim()) { setOutput(""); setStats(null); return; }
+    const opt = optimizeSvg(src);
     setOutput(opt);
-    setStats({ original: input.length, optimized: opt.length, savings: Math.round((1 - opt.length / input.length) * 100) });
+    setStats({ original: src.length, optimized: opt.length, savings: Math.round((1 - opt.length / src.length) * 100) });
   };
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => optimize(input), 300);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [input]);
 
   const copy = () => { navigator.clipboard.writeText(output); toast.success("Copied!"); };
 
@@ -68,9 +66,12 @@ export function SvgOptimizerTool() {
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
-        <Minimize2 className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">SVG Optimizer</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
+        <div className="flex items-center gap-2">
+          <Minimize2 className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium">SVG Optimizer</span>
+        </div>
+        <span className="text-[10px] text-emerald-500 font-medium">● Live</span>
       </div>
       <div className="p-5 space-y-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -89,14 +90,10 @@ export function SvgOptimizerTool() {
                 </div>
               )}
             </div>
-            <Textarea readOnly value={output} className="min-h-[280px] resize-none text-xs font-mono bg-muted/10" placeholder="Click Optimize to see results…" />
+            <Textarea readOnly value={output} className="min-h-[280px] resize-none text-xs font-mono bg-muted/10" placeholder="Optimized SVG will appear here…" />
             {stats && <p className="text-xs text-muted-foreground mt-1">{stats.optimized} bytes</p>}
           </div>
         </div>
-
-        <Button onClick={optimize} disabled={!input.trim()} className="w-full gap-2">
-          <Minimize2 className="w-4 h-4" />Optimize SVG
-        </Button>
 
         {stats && (
           <div className="flex items-center gap-4 p-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5">

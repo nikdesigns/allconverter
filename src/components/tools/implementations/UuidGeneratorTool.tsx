@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Copy, RefreshCw, Hash } from "lucide-react";
@@ -21,9 +21,7 @@ function uuidv1Like(): string {
   return `${time.slice(-8)}-${time.slice(-12,-8)}-1${rand.slice(0,3)}-${(8+Math.floor(Math.random()*4)).toString(16)}${rand.slice(3,6)}-${rand.slice(6,18)}`;
 }
 
-function nilUuid(): string {
-  return "00000000-0000-0000-0000-000000000000";
-}
+function nilUuid(): string { return "00000000-0000-0000-0000-000000000000"; }
 
 type Version = "v4" | "v1" | "nil";
 
@@ -34,15 +32,15 @@ export function UuidGeneratorTool() {
   const [uppercase, setUppercase] = useState(false);
   const [noDashes, setNoDashes] = useState(false);
 
-  // Populate initial UUIDs only on client to avoid hydration mismatch (crypto/Math.random differ on server)
-  useEffect(() => {
-    setUuids(Array.from({ length: 5 }, uuidv4));
+  const generate = useCallback((ver: Version, cnt: number) => {
+    const gen = ver === "v4" ? uuidv4 : ver === "v1" ? uuidv1Like : nilUuid;
+    setUuids(Array.from({ length: cnt }, gen));
   }, []);
 
-  const generate = () => {
-    const gen = version === "v4" ? uuidv4 : version === "v1" ? uuidv1Like : nilUuid;
-    setUuids(Array.from({ length: count }, gen));
-  };
+  // Initial generation + auto-regenerate when version or count changes
+  useEffect(() => {
+    generate(version, count);
+  }, [version, count, generate]);
 
   const format = (u: string) => {
     let r = u;
@@ -58,9 +56,12 @@ export function UuidGeneratorTool() {
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
-        <Hash className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">UUID Generator</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
+        <div className="flex items-center gap-2">
+          <Hash className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium">UUID Generator</span>
+        </div>
+        <span className="text-[10px] text-emerald-500 font-medium">● Live</span>
       </div>
       <div className="p-5 space-y-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -77,7 +78,8 @@ export function UuidGeneratorTool() {
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Count (1–50)</label>
-            <Input type="number" min={1} max={50} value={count} onChange={e => setCount(Math.min(50,Math.max(1,+e.target.value)))}
+            <Input type="number" min={1} max={50} value={count}
+              onChange={e => setCount(Math.min(50, Math.max(1, +e.target.value)))}
               className="text-sm font-mono" />
           </div>
           <div className="flex flex-col gap-2 justify-end">
@@ -92,8 +94,8 @@ export function UuidGeneratorTool() {
           </div>
         </div>
 
-        <Button onClick={generate} className="w-full gap-2">
-          <RefreshCw className="w-4 h-4" /> Generate {count} UUID{count > 1 ? "s" : ""}
+        <Button onClick={() => generate(version, count)} className="w-full gap-2">
+          <RefreshCw className="w-4 h-4" /> Regenerate {count} UUID{count > 1 ? "s" : ""}
         </Button>
 
         {uuids.length > 0 && (

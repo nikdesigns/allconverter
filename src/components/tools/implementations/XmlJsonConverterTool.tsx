@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { Copy, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
-// Simple XML→JSON parser
 function xmlToJson(xml: string): unknown {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xml.trim(), "text/xml");
@@ -35,7 +34,6 @@ function xmlToJson(xml: string): unknown {
   return { [doc.documentElement.tagName]: nodeToObj(doc.documentElement) };
 }
 
-// Simple JSON→XML serializer
 function jsonToXml(obj: unknown, tag = "root", indent = 0): string {
   const pad = "  ".repeat(indent);
   if (typeof obj === "object" && obj !== null && !Array.isArray(obj)) {
@@ -60,33 +58,47 @@ export function XmlJsonConverterTool() {
   );
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const convert = () => {
+  const convert = (src: string, toJson: boolean) => {
+    if (!src.trim()) { setOutput(""); setError(""); return; }
     try {
       setError("");
-      if (isXmlToJson) {
-        setOutput(JSON.stringify(xmlToJson(input), null, 2));
+      if (toJson) {
+        setOutput(JSON.stringify(xmlToJson(src), null, 2));
       } else {
-        const obj = JSON.parse(input);
+        const obj = JSON.parse(src);
         const [rootTag, rootVal] = Object.entries(obj)[0] ?? ["root", obj];
         setOutput(`<?xml version="1.0" encoding="UTF-8"?>\n` + jsonToXml(rootVal, rootTag));
       }
-    } catch (e) { setError((e as Error).message); }
+    } catch (e) {
+      setError((e as Error).message);
+      setOutput("");
+    }
   };
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => convert(input, isXmlToJson), 300);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [input, isXmlToJson]);
 
   const copy = () => { navigator.clipboard.writeText(output); toast.success("Copied!"); };
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
-        <ArrowRight className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">{isXmlToJson ? "XML to JSON" : "JSON to XML"} Converter</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
+        <div className="flex items-center gap-2">
+          <ArrowRight className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium">{isXmlToJson ? "XML to JSON" : "JSON to XML"} Converter</span>
+        </div>
+        <span className="text-[10px] text-emerald-500 font-medium">● Live</span>
       </div>
       <div className="p-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">{isXmlToJson ? "XML" : "JSON"} Input</label>
-            <Textarea value={input} onChange={e => setInput(e.target.value)} className="min-h-[280px] resize-none text-xs font-mono" />
+            <Textarea value={input} onChange={e => setInput(e.target.value)} className="min-h-70 resize-none text-xs font-mono" />
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
@@ -94,15 +106,12 @@ export function XmlJsonConverterTool() {
               {output && <Button size="sm" variant="ghost" onClick={copy} className="h-6 text-xs gap-1"><Copy className="w-3 h-3" />Copy</Button>}
             </div>
             {error ? (
-              <div className="min-h-[280px] p-3 rounded-xl border border-red-500/20 bg-red-500/5 text-xs text-red-500 font-mono">{error}</div>
+              <div className="min-h-70 p-3 rounded-xl border border-red-500/20 bg-red-500/5 text-xs text-red-500 font-mono">{error}</div>
             ) : (
-              <Textarea readOnly value={output} className="min-h-[280px] resize-none text-xs font-mono bg-muted/10" placeholder="Output will appear here…" />
+              <Textarea readOnly value={output} className="min-h-70 resize-none text-xs font-mono bg-muted/10" placeholder="Output will appear here…" />
             )}
           </div>
         </div>
-        <Button onClick={convert} className="w-full mt-4 gap-2">
-          <ArrowRight className="w-4 h-4" />Convert {isXmlToJson ? "XML → JSON" : "JSON → XML"}
-        </Button>
       </div>
     </div>
   );

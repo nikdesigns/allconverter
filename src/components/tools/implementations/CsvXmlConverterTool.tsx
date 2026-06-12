@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -29,21 +29,34 @@ export function CsvXmlConverterTool() {
   const [rootEl, setRootEl] = useState("records");
   const [rowEl, setRowEl] = useState("record");
   const [error, setError] = useState("");
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const convert = () => {
+  const convert = (src: string, root: string, row: string) => {
+    if (!src.trim()) { setOutput(""); setError(""); return; }
     setError("");
     try {
-      setOutput(csvToXml(input, rootEl.trim() || "records", rowEl.trim() || "record"));
-    } catch (e) { setError((e as Error).message); }
+      setOutput(csvToXml(src, root.trim() || "records", row.trim() || "record"));
+    } catch (e) {
+      setError((e as Error).message);
+    }
   };
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => convert(input, rootEl, rowEl), 300);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [input, rootEl, rowEl]);
 
   const copy = () => { navigator.clipboard.writeText(output); toast.success("Copied!"); };
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
-        <ArrowRight className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">CSV to XML Converter</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
+        <div className="flex items-center gap-2">
+          <ArrowRight className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium">CSV to XML Converter</span>
+        </div>
+        <span className="text-[10px] text-emerald-500 font-medium">● Live</span>
       </div>
       <div className="p-5 space-y-4">
         <div className="flex gap-3">
@@ -73,7 +86,6 @@ export function CsvXmlConverterTool() {
             )}
           </div>
         </div>
-        <Button onClick={convert} className="w-full gap-2"><ArrowRight className="w-4 h-4" />Convert CSV → XML</Button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
@@ -34,6 +34,7 @@ export function ImageResizerTool() {
   const [outputUrl, setOutputUrl] = useState("");
   const [outputDims, setOutputDims] = useState({ w: 0, h: 0 });
   const [processing, setProcessing] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleFile = (files: File[]) => {
     const f = files[0];
@@ -67,26 +68,24 @@ export function ImageResizerTool() {
     }
   };
 
-  const resize = async () => {
-    if (!file) return;
+  const resize = async (f: File, ow: number, oh: number) => {
     setProcessing(true);
     try {
       let targetW: number, targetH: number;
       if (mode === "pixels") {
-        targetW = parseInt(width) || origW;
-        targetH = parseInt(height) || origH;
+        targetW = parseInt(width) || ow;
+        targetH = parseInt(height) || oh;
       } else if (mode === "percent") {
         const p = parseFloat(percent) / 100;
-        targetW = Math.round(origW * p);
-        targetH = Math.round(origH * p);
+        targetW = Math.round(ow * p);
+        targetH = Math.round(oh * p);
       } else {
         targetW = PRESETS[preset].w;
         targetH = PRESETS[preset].h;
       }
-
       await new Promise<void>((resolve) => {
         const img = new Image();
-        const src = URL.createObjectURL(file);
+        const src = URL.createObjectURL(f);
         img.onload = () => {
           const canvas = document.createElement("canvas");
           canvas.width = targetW;
@@ -102,30 +101,51 @@ export function ImageResizerTool() {
               setOutputDims({ w: targetW, h: targetH });
             }
             resolve();
-          }, file.type || "image/jpeg", 0.92);
+          }, f.type || "image/jpeg", 0.92);
         };
         img.src = src;
       });
-      toast.success("Image resized successfully");
+    } catch {
+      toast.error("Resize failed");
     } finally {
       setProcessing(false);
     }
   };
 
+  // Auto-resize on settings change for percent and preset modes (debounced 500ms)
+  useEffect(() => {
+    if (!file || !origW) return;
+    if (mode === "pixels") return; // pixels uses debounce below
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => resize(file, origW, origH), 500);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [file, mode, percent, preset, origW, origH]);
+
+  // Pixels mode: debounced 600ms after typing stops
+  useEffect(() => {
+    if (!file || !origW || mode !== "pixels") return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => resize(file, origW, origH), 600);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [width, height]);
+
   const outputName = file ? file.name.replace(/\.[^.]+$/, `_${outputDims.w}x${outputDims.h}$&`) : "";
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
-        <Maximize2 className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">Image Resizer</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
+        <div className="flex items-center gap-2">
+          <Maximize2 className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium">Image Resizer</span>
+          {processing && <div className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" />}
+        </div>
+        {file && <span className="text-[10px] text-emerald-500 font-medium">● Live</span>}
       </div>
       <div className="p-5 space-y-5">
         {!file ? (
           <FileUploadZone accept="image/*" onFiles={handleFile} label="Drop an image to resize" sublabel="JPG, PNG, WebP, GIF supported" />
         ) : (
           <>
-            {/* Image preview + info */}
             <div className="flex items-start gap-4">
               <img src={preview} alt="Preview" className="w-24 h-24 object-cover rounded-xl border border-border" />
               <div className="flex-1">
@@ -135,7 +155,6 @@ export function ImageResizerTool() {
               </div>
             </div>
 
-            {/* Mode tabs */}
             <div>
               <div className="flex bg-muted rounded-lg p-0.5 mb-4">
                 {(["pixels", "percent", "preset"] as ResizeMode[]).map((m) => (
@@ -163,6 +182,7 @@ export function ImageResizerTool() {
                     <input type="checkbox" checked={keepRatio} onChange={(e) => setKeepRatio(e.target.checked)} className="accent-primary" />
                     Maintain aspect ratio
                   </label>
+                  <p className="text-[10px] text-muted-foreground">Auto-resizes 0.6s after you stop typing</p>
                 </div>
               )}
 
@@ -189,10 +209,6 @@ export function ImageResizerTool() {
                 </div>
               )}
             </div>
-
-            <Button onClick={resize} disabled={processing} className="w-full gap-2">
-              {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Resizing…</> : "Resize Image"}
-            </Button>
 
             {outputUrl && (
               <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 flex items-center gap-4">

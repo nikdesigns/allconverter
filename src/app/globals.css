@@ -1,26 +1,695 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-foreground: var(--heading);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+
+  /* Design system color tokens (from SKILL.md) */
+  --color-neutral-primary-soft: var(--neutral-primary-soft);
+  --color-neutral-primary: var(--neutral-primary);
+  --color-neutral-primary-medium: var(--neutral-primary-medium);
+  --color-neutral-primary-strong: var(--neutral-primary-strong);
+  --color-neutral-secondary-soft: var(--neutral-secondary-soft);
+  --color-neutral-secondary: var(--neutral-secondary);
+  --color-neutral-secondary-medium: var(--neutral-secondary-medium);
+  --color-neutral-secondary-strong: var(--neutral-secondary-strong);
+  --color-neutral-tertiary-soft: var(--neutral-tertiary-soft);
+  --color-neutral-tertiary: var(--neutral-tertiary);
+  --color-neutral-tertiary-medium: var(--neutral-tertiary-medium);
+  --color-neutral-quaternary: var(--neutral-quaternary);
+  --color-quaternary-medium: var(--quaternary-medium);
+  --color-gray: var(--gray);
+
+  --color-brand-softer: var(--brand-softer);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand: var(--brand);
+  --color-brand-medium: var(--brand-medium);
+  --color-brand-strong: var(--brand-strong);
+
+  --color-success-soft: var(--success-soft);
+  --color-success: var(--success);
+  --color-success-medium: var(--success-medium);
+  --color-success-strong: var(--success-strong);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger: var(--danger);
+  --color-danger-medium: var(--danger-medium);
+  --color-danger-strong: var(--danger-strong);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning: var(--warning);
+  --color-warning-medium: var(--warning-medium);
+  --color-warning-strong: var(--warning-strong);
+
+  --color-dark: var(--dark);
+  --color-disabled: var(--disabled);
+
+  /* Text tokens */
+  --color-heading: var(--heading);
+  --color-body: var(--body);
+  --color-body-subtle: var(--body-subtle);
+  --color-white: var(--white);
+  --color-black: var(--black);
+
+  --color-fg-brand: var(--fg-brand);
+  --color-fg-brand-strong: var(--fg-brand-strong);
+  --color-fg-success-strong: var(--fg-success-strong);
+  --color-fg-danger-strong: var(--fg-danger-strong);
+  --color-fg-disabled: var(--fg-disabled);
+
+  /* Border tokens */
+  --color-border-default: var(--border-default);
+  --color-border-default-medium: var(--border-default-medium);
+  --color-border-brand: var(--border-brand);
+  --color-border-success: var(--border-success);
+  --color-border-danger: var(--border-danger);
+  --color-border-warning: var(--border-warning);
+
+  /* Legacy shadcn mappings (point to new tokens) */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border-default);
+  --color-destructive: var(--danger);
+  --color-accent: var(--neutral-secondary-medium);
+  --color-accent-foreground: var(--heading);
+  --color-muted: var(--neutral-secondary-soft);
+  --color-muted-foreground: var(--body-subtle);
+  --color-secondary: var(--neutral-secondary-medium);
+  --color-secondary-foreground: var(--body);
+  --color-primary: var(--brand);
+  --color-primary-foreground: var(--white);
+  --color-popover: var(--neutral-primary);
+  --color-popover-foreground: var(--heading);
+  --color-card: var(--neutral-primary-soft);
+  --color-card-foreground: var(--heading);
+
+  /* Radius scale per spec */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-default);
+  --radius-lg: var(--radius-base);
+  --radius-xl: calc(var(--radius-base) * 1.33);
+  --radius-2xl: calc(var(--radius-base) * 1.67);
+  --radius-3xl: calc(var(--radius-base) * 2);
+  --radius-4xl: calc(var(--radius-base) * 2.33);
+  --radius-full: var(--radius-full);
+
+  --color-sidebar: var(--neutral-primary-soft);
+  --color-sidebar-foreground: var(--heading);
+  --color-sidebar-primary: var(--brand);
+  --color-sidebar-primary-foreground: var(--white);
+  --color-sidebar-accent: var(--neutral-secondary-medium);
+  --color-sidebar-accent-foreground: var(--heading);
+  --color-sidebar-border: var(--border-default);
+  --color-sidebar-ring: var(--brand);
+
+  /* Shadows from spec */
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================
+   DESIGN SYSTEM TOKENS (from SKILL.md)
+   Material Design 3 inspired — refined purple tones
+   Dark mode via .dark class (next-themes) + automatic via system
+   ============================================ */
+
+:root {
+  /* SF Pro (system font) stack — native Apple SF Pro on macOS/iOS, excellent fallbacks elsewhere.
+     Prevents any serif/Times fallback and gives a modern, clean sans look matching the request. */
+  --font-sans: "SF Pro", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* ============================================
+     LIGHTER VERSION — clean, soft, modern take on the Shugo palette
+     ============================================ */
+  /* Background Tokens - Light (lighter variant) */
+  --neutral-primary-soft: #F8F8FB;
+  --neutral-primary: #FFFFFF;
+  --neutral-primary-medium: #F4F4F8;
+  --neutral-primary-strong: #F0F0F5;
+  --neutral-secondary-soft: #F4F4F8;
+  --neutral-secondary: #F0F0F5;
+  --neutral-secondary-medium: #EAEAF0;
+  --neutral-secondary-strong: #E4E4EB;
+  --neutral-tertiary-soft: #E4E4EB;
+  --neutral-tertiary: #DEDEE6;
+  --neutral-tertiary-medium: #D8D8E0;
+  --neutral-quaternary: #D0D0D9;
+  --quaternary-medium: #C8C8D2;
+  --gray: #A8A8B3;
+
+  /* Brand - Light (blue/teal — allconverter.tools palette) */
+  --brand-softer: #DFFBFF;
+  --brand-soft: #B3EEFF;
+  --brand: #0099DD;
+  --brand-medium: #33B8F0;
+  --brand-strong: #0072A8;
+
+  /* Status - Light (harmonized) */
+  --success-soft: #E6F4EA;
+  --success: #2E7D32;
+  --success-medium: #C6E2C9;
+  --success-strong: #1B5E20;
+  --danger-soft: #FCE8E6;
+  --danger: #C13A32;
+  --danger-medium: #FADBD9;
+  --danger-strong: #8C1D18;
+  --warning-soft: #FFF3E0;
+  --warning: #E65100;
+  --warning-medium: #FFE0B2;
+  --warning-strong: #BF360C;
+
+  /* Utility - Light */
+  --dark: #1A1A20;
+  --dark-strong: #121216;
+  --disabled: #EDEDF3;
+
+  /* Text Colors - Light */
+  --white: #FFFFFF;
+  --black: #121216;
+  --heading: #1E1E24;
+  --body: #4F4F58;
+  --body-subtle: #767680;
+
+  /* Brand FG - Light */
+  --fg-brand-subtle: #33B8F0;
+  --fg-brand: #0099DD;
+  --fg-brand-strong: #0072A8;
+
+  /* Status FG - Light */
+  --fg-success: #2E7D32;
+  --fg-success-strong: #1B5E20;
+  --fg-danger: #C13A32;
+  --fg-danger-strong: #8C1D18;
+  --fg-warning-subtle: #E65100;
+  --fg-warning: #BF360C;
+  --fg-disabled: #A8A8B3;
+
+  /* Border Colors - Light */
+  --border-dark: #1A1A20;
+  --border-buffer: #FFFFFF;
+  --border-buffer-medium: #F8F8FB;
+  --border-buffer-strong: #F0F0F5;
+  --border-muted: #F4F4F8;
+  --border-light-subtle: #E4E4EB;
+  --border-light: #DEDEE6;
+  --border-light-medium: #D8D8E0;
+  --border-default-subtle: #E0E0E8;
+  --border-default: #D0D0D9;
+  --border-default-medium: #B8B8C2;
+  --border-default-strong: #9C9CA8;
+  --border-success-subtle: #C6E2C9;
+  --border-success: #2E7D32;
+  --border-danger-subtle: #FADBD9;
+  --border-danger: #C13A32;
+  --border-warning-subtle: #FFE0B2;
+  --border-warning: #E65100;
+  --border-brand-subtle: #B3EEFF;
+  --border-brand-light: #0099DD;
+  --border-brand: #0099DD;
+  --border-dark-subtle: #1A1A20;
+  --border-purple: #9A82DB;
+  --border-orange: #FB8C00;
+
+  /* Accent (same both modes) */
+  --accent-purple: #9A82DB;
+  --accent-sky: #0288D1;
+  --accent-teal: #00897B;
+  --accent-pink: #D81B60;
+  --accent-cyan: #00ACC1;
+  --accent-fuchsia: #AB47BC;
+  --accent-indigo: #3F51B5;
+  --accent-orange: #FB8C00;
+
+  /* Legacy / Component mappings - Light */
+  --background: var(--neutral-primary-soft);
+  --foreground: var(--heading);
+  --card: var(--neutral-primary-soft);
+  --card-foreground: var(--heading);
+  --popover: var(--neutral-primary);
+  --popover-foreground: var(--heading);
+  --primary: var(--brand);
+  --primary-foreground: var(--white);
+  --secondary: var(--neutral-secondary-medium);
+  --secondary-foreground: var(--body);
+  --muted: var(--neutral-secondary-soft);
+  --muted-foreground: var(--body-subtle);
+  --accent: var(--neutral-secondary-medium);
+  --accent-foreground: var(--heading);
+  --destructive: var(--danger);
+  --border: var(--border-default);
+  --input: var(--neutral-secondary-medium);
+  --ring: var(--brand);
+
+  /* Radius per spec */
+  --radius-base: 12px;
+  --radius-default: 8px;
+  --radius-sm: 4px;
+  --radius-full: 9999px;
+  --radius: var(--radius-base);
+
+  /* Shadows per spec (elevation, same light/dark) */
+  --shadow-2xs: 0 1px 1px rgb(0 0 0 / 0.03), 0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.08), 0 2px 6px -1px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 2px 6px -1px rgb(0 0 0 / 0.08), 0 6px 16px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 8px 20px -4px rgb(0 0 0 / 0.08), 0 4px 12px -2px rgb(0 0 0 / 0.04);
+  --shadow-xl: 0 16px 32px -8px rgb(0 0 0 / 0.1), 0 8px 16px -4px rgb(0 0 0 / 0.06);
+  --shadow-2xl: 0 24px 48px -12px rgb(0 0 0 / 0.15);
+
+  /* Misc */
+  --chart-1: var(--brand);
+  --chart-2: var(--accent-purple);
+  --chart-3: #0288D1;
+  --chart-4: #00897B;
+  --chart-5: #D81B60;
+}
+
+/* ============================================
+   DARK — Shugo.gg inspired (premium dark gaming armory aesthetic)
+   Deep cool darks, elegant violet-purple accents, high contrast clean UI
+   ============================================ */
+.dark {
+  /* Background Tokens - Dark (Shugo.gg style) */
+  --neutral-primary-soft: #0B0B0F;
+  --neutral-primary: #121216;
+  --neutral-primary-medium: #18181D;
+  --neutral-primary-strong: #1F1F25;
+  --neutral-secondary-soft: #0B0B0F;
+  --neutral-secondary: #121216;
+  --neutral-secondary-medium: #1F1F25;
+  --neutral-secondary-strong: #25252C;
+  --neutral-tertiary-soft: #1A1A20;
+  --neutral-tertiary: #222229;
+  --neutral-tertiary-medium: #282830;
+  --neutral-quaternary: #32323A;
+  --quaternary-medium: #3C3C46;
+  --gray: #5C5C68;
+
+  /* Brand - Dark (blue/teal — allconverter.tools palette) */
+  --brand-softer: #021824;
+  --brand-soft: #053652;
+  --brand: #00BFFF;
+  --brand-medium: #40D0FF;
+  --brand-strong: #0099DD;
+
+  /* Status - Dark */
+  --success-soft: #0A2A15;
+  --success: #4ADE80;
+  --success-medium: #14532D;
+  --success-strong: #22C55E;
+  --danger-soft: #3A0F0F;
+  --danger: #F87171;
+  --danger-medium: #7F1D1D;
+  --danger-strong: #EF4444;
+  --warning-soft: #3D2A0A;
+  --warning: #FBBF24;
+  --warning-medium: #78350F;
+  --warning-strong: #F59E0B;
+
+  /* Utility - Dark */
+  --dark: #0B0B0F;
+  --dark-strong: #18181D;
+  --disabled: #1F1F25;
+
+  /* Text Colors - Dark */
+  --white: #FFFFFF;
+  --black: #0B0B0F;
+  --heading: #F1F1F5;
+  --body: #C3C3CB;
+  --body-subtle: #8A8A96;
+
+  /* Brand FG - Dark */
+  --fg-brand-subtle: #40D0FF;
+  --fg-brand: #00BFFF;
+  --fg-brand-strong: #80E8FF;
+
+  /* Status FG - Dark */
+  --fg-success: #4ADE80;
+  --fg-success-strong: #86EFAC;
+  --fg-danger: #FCA5A5;
+  --fg-danger-strong: #FECACA;
+  --fg-warning-subtle: #FCD34D;
+  --fg-warning: #FDE047;
+  --fg-disabled: #6B6B78;
+
+  /* Border Colors - Dark */
+  --border-dark: #3C3C46;
+  --border-buffer: #0B0B0F;
+  --border-buffer-medium: #121216;
+  --border-buffer-strong: #18181D;
+  --border-muted: #1A1A20;
+  --border-light-subtle: #222229;
+  --border-light: #282830;
+  --border-light-medium: #32323A;
+  --border-default-subtle: #25252C;
+  --border-default: #2F2F38;
+  --border-default-medium: #3C3C46;
+  --border-default-strong: #52525C;
+  --border-success-subtle: #14532D;
+  --border-success: #4ADE80;
+  --border-danger-subtle: #7F1D1D;
+  --border-danger: #F87171;
+  --border-warning-subtle: #78350F;
+  --border-warning: #FBBF24;
+  --border-brand-subtle: #053652;
+  --border-brand-light: #00BFFF;
+  --border-brand: #00BFFF;
+  --border-dark-subtle: #25252C;
+  --border-purple: #A78BFA;
+  --border-orange: #FBBF24;
+
+  /* Legacy / Component mappings - Dark */
+  --background: var(--neutral-primary-soft);
+  --foreground: var(--heading);
+  --card: var(--neutral-primary-soft);
+  --card-foreground: var(--heading);
+  --popover: var(--neutral-primary);
+  --popover-foreground: var(--heading);
+  --primary: var(--brand);
+  --primary-foreground: var(--white);
+  --secondary: var(--neutral-secondary-medium);
+  --secondary-foreground: var(--body);
+  --muted: var(--neutral-secondary-soft);
+  --muted-foreground: var(--body-subtle);
+  --accent: var(--neutral-secondary-medium);
+  --accent-foreground: var(--heading);
+  --destructive: var(--danger);
+  --border: var(--border-default);
+  --input: var(--neutral-secondary-medium);
+  --ring: var(--brand);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-body antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    @apply font-sans scroll-smooth;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--brand-medium);
+    color: var(--heading);
+  }
+
+  /* Typography uses SF Pro system font stack (see :root --font-sans) */
+  h1 {
+    font-size: 36px;
+    line-height: 1.12;
+    letter-spacing: -0.25px;
+    font-weight: 500;
+    color: var(--heading);
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 45px; }
+  }
+  @media (min-width: 1024px) {
+    h1 { font-size: 57px; }
+  }
+
+  h2 {
+    font-size: 28px;
+    line-height: 1.16;
+    font-weight: 500;
+    color: var(--heading);
+  }
+  @media (min-width: 768px) {
+    h2 { font-size: 36px; }
+  }
+  @media (min-width: 1024px) {
+    h2 { font-size: 45px; }
+  }
+
+  h3 {
+    font-size: 24px;
+    line-height: 1.22;
+    font-weight: 500;
+    color: var(--heading);
+  }
+  @media (min-width: 768px) {
+    h3 { font-size: 28px; }
+  }
+  @media (min-width: 1024px) {
+    h3 { font-size: 36px; }
+  }
+
+  h4 {
+    font-size: 22px;
+    line-height: 1.29;
+    font-weight: 500;
+    color: var(--heading);
+  }
+  @media (min-width: 768px) {
+    h4 { font-size: 24px; }
+  }
+  @media (min-width: 1024px) {
+    h4 { font-size: 28px; }
+  }
+
+  h5, h6 {
+    font-size: 20px;
+    line-height: 1.33;
+    font-weight: 500;
+    color: var(--heading);
+  }
+
+  p {
+    color: var(--body);
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+  }
+
+  /* Small supporting copy */
+  .text-caption,
+  .text-meta,
+  .text-helper {
+    font-size: 14px;
+    line-height: 1.43;
+    letter-spacing: 0.25px;
+    color: var(--body);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================
+   UTILITY CLASSES — follow design tokens
+   ============================================ */
+@layer utilities {
+  /* Gradient text — brand palette: cyan → deep indigo */
+  .gradient-text {
+    background: linear-gradient(90deg, #00BFFF 0%, #0077CC 50%, #4B0082 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .dark .gradient-text {
+    background: linear-gradient(90deg, #00BFFF 0%, #40D0FF 40%, #8B5CF6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Cards — match cards.md exactly */
+  .card {
+    background: var(--neutral-primary-soft);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-base);
+    box-shadow: var(--shadow-sm);
+  }
+  .card-interactive {
+    background: var(--neutral-primary-soft);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-base);
+    box-shadow: var(--shadow-sm);
+    transition: all 200ms;
+    cursor: pointer;
+  }
+  .card-interactive:hover {
+    background: var(--neutral-secondary-medium);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Tool card (uses card spec) */
+  .tool-card {
+    background: var(--neutral-primary-soft);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-base);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+    transition: all 200ms;
+  }
+  .tool-card:hover {
+    background: var(--neutral-secondary-medium);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Glass / subtle elevated surface */
+  .glass-card {
+    background: var(--neutral-primary-soft);
+    border: 1px solid var(--border-default);
+    backdrop-filter: blur(12px);
+  }
+
+  /* Focus ring helper (4px per buttons spec for most) */
+  .focus-ring {
+    outline: none;
+  }
+  .focus-ring:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--brand-medium);
+  }
+
+  /* Containers per layout.md: 1152px, 24px pad */
+  .container-xl {
+    max-width: 1152px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .container-lg {
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Section rhythm per layout.md */
+  .section {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+
+  /* Subtle grid for hero */
+  .grid-pattern {
+    background-image: linear-gradient(var(--border-default) 1px, transparent 1px),
+      linear-gradient(to right, var(--border-default) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.5;
+  }
+
+  /* Hero surface using neutral layers */
+  .hero-gradient {
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, var(--brand-softer), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 50%, var(--brand-soft), transparent);
+  }
+}
+
+/* ============================================
+   SCROLLBAR — neutral tokens
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-default-medium);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--body-subtle);
+}
+
+/* ============================================
+   PROSE / CONTENT (token based)
+   ============================================ */
+.prose-tool h2 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--heading);
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+.prose-tool h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--heading);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+.prose-tool p {
+  color: var(--body);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.prose-tool ul {
+  margin-bottom: 16px;
+}
+.prose-tool li {
+  color: var(--body);
+}
+
+/* ============================================
+   ANIMATIONS (subtle)
+   ============================================ */
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--body) 8%, transparent), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   UPLOAD AREA — inputs.md + borders spec (dashed for dropzones)
+   ============================================ */
+.upload-area {
+  position: relative;
+  border: 2px dashed var(--border-default);
+  border-radius: var(--radius-base);
+  padding: 48px;
+  text-align: center;
+  transition: all 200ms;
+  cursor: pointer;
+  background: var(--neutral-secondary-medium);
+}
+.upload-area:hover,
+.upload-area.dragover {
+  border-color: var(--border-brand);
+  background: var(--brand-softer);
+}
+
+/* ============================================
+   CODE BLOCKS
+   ============================================ */
+.code-block {
+  font-family: var(--font-geist-mono);
+  font-size: 14px;
+  background: var(--neutral-secondary-soft);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-default);
+  padding: 16px;
+  overflow: auto;
+}
+pre.code-block {
+  white-space: pre;
 }

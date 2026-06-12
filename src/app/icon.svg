@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Brand blue rounded square, matching --radius-default: 8px -->
+  <rect width="32" height="32" rx="7" fill="#0099DD"/>
+  <!-- Lucide Zap polygon scaled and centered in 32×32 -->
+  <polygon points="17,6 7,18 16,18 15,26 25,14 16,14" fill="white"/>
+</svg>

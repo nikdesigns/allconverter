@@ -86,8 +86,19 @@ const LoanCalculatorTool = lazy(() => import("./implementations/LoanCalculatorTo
 const PasswordStrengthCheckerTool = lazy(() => import("./implementations/PasswordStrengthCheckerTool").then(m => ({ default: m.PasswordStrengthCheckerTool })));
 const FinanceCalculatorTool = lazy(() => import("./implementations/FinanceCalculatorTool").then(m => ({ default: m.FinanceCalculatorTool })));
 
-// ── Business & AI tools ────────────────────────────────────────────────────────
+// ── Business tools ─────────────────────────────────────────────────────────────
 const InvoiceGeneratorTool = lazy(() => import("./implementations/InvoiceGeneratorTool").then(m => ({ default: m.InvoiceGeneratorTool })));
+const GstInvoiceGeneratorTool = lazy(() => import("./implementations/GstInvoiceGeneratorTool").then(m => ({ default: m.GstInvoiceGeneratorTool })));
+const QuotationGeneratorTool = lazy(() => import("./implementations/QuotationGeneratorTool").then(m => ({ default: m.QuotationGeneratorTool })));
+const ReceiptGeneratorTool = lazy(() => import("./implementations/ReceiptGeneratorTool").then(m => ({ default: m.ReceiptGeneratorTool })));
+const SalaryCalculatorTool = lazy(() => import("./implementations/SalaryCalculatorTool").then(m => ({ default: m.SalaryCalculatorTool })));
+const SalarySlipGeneratorTool = lazy(() => import("./implementations/SalarySlipGeneratorTool").then(m => ({ default: m.SalarySlipGeneratorTool })));
+const BusinessMetricsTool = lazy(() => import("./implementations/BusinessMetricsTool").then(m => ({ default: m.BusinessMetricsTool })));
+const BusinessNameGeneratorTool = lazy(() => import("./implementations/BusinessNameGeneratorTool").then(m => ({ default: m.BusinessNameGeneratorTool })));
+const NdaGeneratorTool = lazy(() => import("./implementations/NdaGeneratorTool").then(m => ({ default: m.NdaGeneratorTool })));
+const UtmBuilderTool = lazy(() => import("./implementations/UtmBuilderTool").then(m => ({ default: m.UtmBuilderTool })));
+
+// ── AI tools ───────────────────────────────────────────────────────────────────
 const TextSummarizerTool = lazy(() => import("./implementations/TextSummarizerTool").then(m => ({ default: m.TextSummarizerTool })));
 const GrammarCheckerTool = lazy(() => import("./implementations/GrammarCheckerTool").then(m => ({ default: m.GrammarCheckerTool })));
 const ContentGeneratorTool = lazy(() => import("./implementations/ContentGeneratorTool").then(m => ({ default: m.ContentGeneratorTool })));
@@ -192,7 +203,7 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "meta-tag-analyzer": SeoAnalyzerTool,
   "title-tag-checker": SeoAnalyzerTool,
   "meta-description-checker": SeoAnalyzerTool,
-  "utm-builder": SeoAnalyzerTool,
+  "utm-builder": UtmBuilderTool,
   "serp-snippet-preview": SeoAnalyzerTool,
   "schema-validator": SeoAnalyzerTool,
   "robots-txt-tester": SeoAnalyzerTool,
@@ -243,7 +254,25 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "sip-calculator": FinanceCalculatorTool,
 
   // ── Business ──────────────────────────────────────────────────────────────────
-  "invoice-generator": InvoiceGeneratorTool,
+  "invoice-generator":            InvoiceGeneratorTool,
+  "gst-invoice-generator":        GstInvoiceGeneratorTool,
+  "quotation-generator":          QuotationGeneratorTool,
+  "proposal-generator":           QuotationGeneratorTool,
+  "receipt-generator":            ReceiptGeneratorTool,
+  "salary-calculator":            SalaryCalculatorTool,
+  "ctc-to-inhand-calculator":     SalaryCalculatorTool,
+  "salary-slip-generator":        SalarySlipGeneratorTool,
+  "profit-margin-calculator":     BusinessMetricsTool,
+  "discount-calculator":          BusinessMetricsTool,
+  "roi-calculator":               BusinessMetricsTool,
+  "freelance-rate-calculator":    BusinessMetricsTool,
+  "burn-rate-calculator":         BusinessMetricsTool,
+  "saas-mrr-calculator":          BusinessMetricsTool,
+  "cac-calculator":               BusinessMetricsTool,
+  "ltv-calculator":               BusinessMetricsTool,
+  "conversion-rate-calculator":   BusinessMetricsTool,
+  "business-name-generator":      BusinessNameGeneratorTool,
+  "nda-generator":                NdaGeneratorTool,
 
   // ── AI / Content ──────────────────────────────────────────────────────────────
   "text-summarizer": TextSummarizerTool,

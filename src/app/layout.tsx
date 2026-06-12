@@ -132,6 +132,23 @@ export default function RootLayout({
           <Toaster />
         </ThemeProvider>
 
+        {/* Google Analytics 4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-Y2VB10R753"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Y2VB10R753', {
+              page_path: window.location.pathname,
+              send_page_view: true
+            });
+          `}
+        </Script>
+
         {/* Google AdSense — loads after the page is interactive, never blocks rendering */}
         <Script
           async

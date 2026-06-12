@@ -18,6 +18,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ToolInterface } from "./ToolInterface";
+import { AdUnit } from "@/components/ads/AdUnit";
 import type { Tool, ToolCategory_Data, BreadcrumbItem } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -57,7 +58,7 @@ export function ToolPageClient({
           <div className="flex items-start gap-4">
             <div
               className={cn(
-                "w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br",
+                "w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-linear-to-br",
                 category.gradient
               )}
             >
@@ -113,6 +114,14 @@ export function ToolPageClient({
             <div>
               <ToolInterface tool={tool} />
             </div>
+
+            {/* In-article ad — sits between tool and How-to, high viewability */}
+            <AdUnit
+              slot="REPLACE_WITH_YOUR_SLOT_ID"
+              format="auto"
+              responsive
+              minHeight={100}
+            />
 
             {/* How to use */}
             {tool.howTo && tool.howTo.length > 0 && (
@@ -208,9 +217,15 @@ export function ToolPageClient({
 
           {/* Sidebar */}
           <aside className="space-y-6">
-            {/* Ad placeholder */}
-            <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-4 text-center min-h-[250px] flex flex-col items-center justify-center">
-              <p className="text-xs text-muted-foreground">Advertisement</p>
+            {/* Sidebar display ad — 300×250 equivalent, sticky on desktop */}
+            <div className="sticky top-20">
+              <AdUnit
+                slot="REPLACE_WITH_YOUR_SLOT_ID"
+                format="rectangle"
+                responsive={false}
+                minHeight={250}
+                className="w-full"
+              />
             </div>
 
             {/* Related tools */}

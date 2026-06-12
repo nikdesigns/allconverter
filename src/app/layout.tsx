@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/layout/Header";
@@ -130,6 +131,14 @@ export default function RootLayout({
           <Footer />
           <Toaster />
         </ThemeProvider>
+
+        {/* Google AdSense — loads after the page is interactive, never blocks rendering */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6648091987919638"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

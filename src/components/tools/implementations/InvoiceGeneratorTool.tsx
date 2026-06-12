@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -52,6 +52,24 @@ export function InvoiceGeneratorTool() {
   const [themeAccent, setThemeAccent] = useState(THEMES[0].accent);
   const [showPreview, setShowPreview] = useState(false);
   const logoRef = useRef<HTMLInputElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const previewTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!showPreview) return;
+    if (previewTimer.current) clearTimeout(previewTimer.current);
+    previewTimer.current = setTimeout(() => {
+      const iframe = iframeRef.current;
+      if (!iframe) return;
+      const doc = iframe.contentDocument;
+      if (!doc) return;
+      doc.open();
+      doc.write(buildHTML());
+      doc.close();
+    }, 150);
+    return () => { if (previewTimer.current) clearTimeout(previewTimer.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showPreview, from, to, meta, items, taxRate, discount, notes, logoBase64, themeAccent]);
 
   const setFrom_ = (k: string, v: string) => setFrom(p => ({ ...p, [k]: v }));
   const setTo_   = (k: string, v: string) => setTo(p => ({ ...p, [k]: v }));
@@ -474,10 +492,9 @@ tbody tr:last-child td{border-bottom:none}
             </p>
             <div className="rounded-xl border border-border overflow-hidden" style={{ height: 560 }}>
               <iframe
-                srcDoc={buildHTML()}
+                ref={iframeRef}
                 className="w-full h-full"
                 title="Invoice Preview"
-                sandbox="allow-same-origin"
               />
             </div>
           </div>

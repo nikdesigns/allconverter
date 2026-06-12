@@ -10,6 +10,8 @@ import {
   Activity, Calendar, Percent, TrendingUp, CreditCard, ShieldCheck, KeyRound,
   Ruler, Scale, Thermometer, Square, Gauge,
   FileSpreadsheet, Sparkles, SpellCheck, Image, ArrowRight, CheckCircle2,
+  ClipboardList, ShoppingBag, Briefcase,
+  Music, Music2, ListMusic, AudioLines, Volume2, Mic, FileAudio, FileAudio2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -31,6 +33,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Activity, Calendar, Percent, TrendingUp, CreditCard, ShieldCheck, KeyRound,
   Ruler, Scale, Thermometer, Square, Gauge,
   FileSpreadsheet, Sparkles, SpellCheck, Image,
+  ClipboardList, ShoppingBag, Briefcase,
+  Music, Music2, ListMusic, AudioLines, Volume2, Mic, FileAudio, FileAudio2,
 };
 
 interface ToolPageClientProps {

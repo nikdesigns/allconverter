@@ -1,13 +1,13 @@
 {
-  "name": "ToolsHub — Free Online Tools",
-  "short_name": "ToolsHub",
+  "name": "AllConverter.tools — Free Online Tools",
+  "short_name": "AllConverter",
   "description": "100+ free online tools for PDF, images, text, developer utilities, and more",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d0d10",
-  "theme_color": "#6366F1",
+  "background_color": "#0B0B0F",
+  "theme_color": "#0099DD",
   "icons": [
-    { "src": "/favicon-192x192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/favicon-512x512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }

@@ -8,7 +8,8 @@ export type ToolCategory =
   | "unit-converters"
   | "ai-tools"
   | "business-tools"
-  | "color-tools";
+  | "color-tools"
+  | "audio-tools";
 
 export interface Tool {
   slug: string;

@@ -98,6 +98,25 @@ const BusinessNameGeneratorTool = lazy(() => import("./implementations/BusinessN
 const NdaGeneratorTool = lazy(() => import("./implementations/NdaGeneratorTool").then(m => ({ default: m.NdaGeneratorTool })));
 const UtmBuilderTool = lazy(() => import("./implementations/UtmBuilderTool").then(m => ({ default: m.UtmBuilderTool })));
 
+// ── Audio tools ────────────────────────────────────────────────────────────────
+const Mp3CutterTool    = lazy(() => import("./implementations/Mp3CutterTool").then(m => ({ default: m.Mp3CutterTool })));
+const AudioJoinerTool  = lazy(() => import("./implementations/AudioJoinerTool").then(m => ({ default: m.AudioJoinerTool })));
+const TextToSpeechTool = lazy(() => import("./implementations/TextToSpeechTool").then(m => ({ default: m.TextToSpeechTool })));
+const AudioToTextTool  = lazy(() => import("./implementations/AudioToTextTool").then(m => ({ default: m.AudioToTextTool })));
+// slug-aware audio tools — each lazy wrapper captures the slug in a closure
+const AudioVolumeBooster = lazy(() => import("./implementations/AudioEffectsTool").then(m => ({ default: () => <m.AudioEffectsTool slug="audio-volume-booster" /> })));
+const AudioSpeedChanger  = lazy(() => import("./implementations/AudioEffectsTool").then(m => ({ default: () => <m.AudioEffectsTool slug="audio-speed-changer" /> })));
+const AudioCompressor    = lazy(() => import("./implementations/AudioEffectsTool").then(m => ({ default: () => <m.AudioEffectsTool slug="audio-compressor" /> })));
+const AudioMp3ToWav      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="mp3-to-wav" /> })));
+const AudioWavToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="wav-to-mp3" /> })));
+const AudioM4aToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="m4a-to-mp3" /> })));
+const AudioMp4ToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="mp4-to-mp3" /> })));
+const AudioVideoToAudio  = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="video-to-audio" /> })));
+
+// ── AI suite tools ─────────────────────────────────────────────────────────────
+const AiToolsSuite  = lazy(() => import("./implementations/AiToolsSuite").then(m => ({ default: m.AiToolsSuite })));
+const AiPdfChatTool = lazy(() => import("./implementations/AiPdfChatTool").then(m => ({ default: m.AiPdfChatTool })));
+
 // ── AI tools ───────────────────────────────────────────────────────────────────
 const TextSummarizerTool = lazy(() => import("./implementations/TextSummarizerTool").then(m => ({ default: m.TextSummarizerTool })));
 const GrammarCheckerTool = lazy(() => import("./implementations/GrammarCheckerTool").then(m => ({ default: m.GrammarCheckerTool })));
@@ -273,6 +292,32 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "conversion-rate-calculator":   BusinessMetricsTool,
   "business-name-generator":      BusinessNameGeneratorTool,
   "nda-generator":                NdaGeneratorTool,
+
+  // ── Audio ─────────────────────────────────────────────────────────────────────
+  "mp3-cutter":           Mp3CutterTool,
+  "audio-joiner":         AudioJoinerTool,
+  "audio-compressor":     AudioCompressor,
+  "audio-volume-booster": AudioVolumeBooster,
+  "audio-speed-changer":  AudioSpeedChanger,
+  "mp3-to-wav":           AudioMp3ToWav,
+  "wav-to-mp3":           AudioWavToMp3,
+  "m4a-to-mp3":           AudioM4aToMp3,
+  "mp4-to-mp3":           AudioMp4ToMp3,
+  "video-to-audio":       AudioVideoToAudio,
+  "text-to-speech":       TextToSpeechTool,
+  "audio-to-text":        AudioToTextTool,
+
+  // ── AI suite ──────────────────────────────────────────────────────────────────
+  "ai-pdf-chat":              AiPdfChatTool,
+  "ai-resume-analyzer":       AiToolsSuite,
+  "ai-seo-audit":             AiToolsSuite,
+  "ai-keyword-cluster":       AiToolsSuite,
+  "ai-proposal-generator":    AiToolsSuite,
+  "ai-sql-generator":         AiToolsSuite,
+  "ai-code-explainer":        AiToolsSuite,
+  "ai-business-plan":         AiToolsSuite,
+  "ai-product-description":   AiToolsSuite,
+  "ai-meeting-notes":         AiToolsSuite,
 
   // ── AI / Content ──────────────────────────────────────────────────────────────
   "text-summarizer": TextSummarizerTool,

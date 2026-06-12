@@ -81,6 +81,14 @@ export const categories: ToolCategory_Data[] = [
     color: "text-fuchsia-500",
     gradient: "from-fuchsia-500/10 to-pink-500/10",
   },
+  {
+    slug: "audio-tools",
+    name: "Audio Tools",
+    description: "Cut, join, convert, boost, and transcribe audio files — all in your browser.",
+    icon: "Music2",
+    color: "text-teal-500",
+    gradient: "from-teal-500/10 to-cyan-500/10",
+  },
 ];
 
 export function getCategoryBySlug(slug: string) {

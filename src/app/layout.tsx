@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { siteConfig } from '@/lib/seo-utils';
+import { AdBlockNotice } from '@/components/ads/AdBlockNotice';
 import './globals.css';
 
 // Using SF Pro (Apple's system font) via native stack for best performance and native feel on Apple devices.
@@ -74,7 +75,10 @@ export const metadata: Metadata = {
     images: [`${siteConfig.url}/og-default.png`],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: '16x16 32x32 48x48', type: 'image/x-icon' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
     apple: '/apple-touch-icon.png',
   },
 };
@@ -136,6 +140,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <Toaster />
+          <AdBlockNotice />
         </ThemeProvider>
 
         {/* Google Analytics 4 */}

@@ -3,11 +3,13 @@ import Link from "next/link";
 import {
   FileText, Image, Type, Code2, Search, Calculator,
   ArrowLeftRight, Sparkles, Briefcase, Music,
-  Globe, Palette, Map, ExternalLink,
+  Globe, Palette, Map, ExternalLink, BookOpen,
 } from "lucide-react";
 import { tools } from "@/lib/tools-data";
 import { categories } from "@/lib/categories";
 import { siteConfig } from "@/lib/seo-utils";
+import { allBlogPosts } from "@/data/blog-posts";
+import { blogCategories } from "@/data/blog-categories";
 
 export const metadata: Metadata = {
   title: "Sitemap — All Tools & Pages",
@@ -48,12 +50,16 @@ const categoryColorMap: Record<string, string> = {
 };
 
 const staticPages = [
-  { href: "/", label: "Home", desc: "Convert anything — all in one place" },
-  { href: "/tools/", label: "All Tools", desc: "Browse every tool on the platform" },
-  { href: "/security/", label: "Security", desc: "How we protect your data and privacy" },
-  { href: "/privacy/", label: "Privacy Policy", desc: "What we collect and how we use it" },
-  { href: "/terms/", label: "Terms of Service", desc: "Usage terms and conditions" },
-  { href: "/cookies/", label: "Cookie Policy", desc: "Our approach to cookies" },
+  { href: "/",           label: "Home",            desc: "Convert anything — all in one place" },
+  { href: "/tools/",     label: "All Tools",        desc: "Browse every tool on the platform" },
+  { href: "/blog/",      label: "Blog",             desc: "Guides, comparisons & tutorials" },
+  { href: "/about/",     label: "About",            desc: "The story behind AllConverter.tools" },
+  { href: "/changelog/", label: "Changelog",        desc: "Release history and what's new" },
+  { href: "/contact/",   label: "Contact",          desc: "Get in touch with us" },
+  { href: "/security/",  label: "Security",         desc: "How we protect your data and privacy" },
+  { href: "/privacy/",   label: "Privacy Policy",   desc: "What we collect and how we use it" },
+  { href: "/terms/",     label: "Terms of Service", desc: "Usage terms and conditions" },
+  { href: "/cookies/",   label: "Cookie Policy",    desc: "Our approach to cookies" },
 ];
 
 function CategorySection({
@@ -188,6 +194,46 @@ export default function SitemapPage() {
               </li>
             ))}
           </ul>
+        </section>
+
+        {/* Blog section */}
+        <section className="py-8 border-b border-[var(--border-default)]">
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen className="w-4 h-4 text-fg-brand" />
+            <h2 className="text-sm font-semibold text-(--heading) uppercase tracking-widest">
+              Blog &amp; Guides
+            </h2>
+            <span className="ml-auto text-xs text-(--body-subtle) bg-(--neutral-secondary-soft) border border-(--border-default) rounded-full px-2.5 py-0.5">
+              {allBlogPosts.length} articles
+            </span>
+          </div>
+          {blogCategories.map((cat) => {
+            const posts = allBlogPosts.filter((p) => p.category === cat.slug);
+            if (!posts.length) return null;
+            return (
+              <div key={cat.slug} className="mb-5">
+                <Link
+                  href={`/blog/${cat.slug}/`}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-fg-brand hover:underline mb-2"
+                >
+                  {cat.name}
+                  <ExternalLink className="w-3 h-3 opacity-60" />
+                </Link>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
+                  {posts.map((post) => (
+                    <li key={post.slug}>
+                      <Link
+                        href={`/blog/${post.category}/${post.slug}/`}
+                        className="text-sm text-(--body-subtle) hover:text-fg-brand transition-colors py-0.5 inline-block leading-snug"
+                      >
+                        {post.h1}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </section>
 
         {/* Tool categories */}

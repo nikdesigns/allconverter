@@ -89,6 +89,14 @@ export const categories: ToolCategory_Data[] = [
     color: "text-teal-500",
     gradient: "from-teal-500/10 to-cyan-500/10",
   },
+  {
+    slug: "network-tools",
+    name: "Network & Web Tools",
+    description: "Screenshot websites, lookup DNS & IP, check SSL certificates, and analyze page speed.",
+    icon: "Globe",
+    color: "text-blue-500",
+    gradient: "from-blue-500/10 to-indigo-500/10",
+  },
 ];
 
 export function getCategoryBySlug(slug: string) {

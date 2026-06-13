@@ -824,6 +824,159 @@ ${remainingLines.slice(10).map(l => `- ${l.replace(/^[-•*]\s*/,"")}`).join("\n
 *Distribution: All attendees*`;
 }
 
+function formatSql(raw: string): string {
+  if (!raw.trim()) return "Please paste SQL to format.";
+  const keywords = ["SELECT","FROM","WHERE","JOIN","LEFT JOIN","RIGHT JOIN","INNER JOIN","OUTER JOIN","ON","GROUP BY","ORDER BY","HAVING","LIMIT","OFFSET","INSERT INTO","VALUES","UPDATE","SET","DELETE FROM","CREATE TABLE","DROP TABLE","ALTER TABLE","WITH","UNION","UNION ALL","EXCEPT","INTERSECT","CASE","WHEN","THEN","ELSE","END","AND","OR","NOT","IN","IS NULL","IS NOT NULL","AS","DISTINCT","COUNT","SUM","AVG","MAX","MIN","COALESCE","NULLIF"];
+  let sql = raw.trim().replace(/\s+/g, " ");
+  const upper = keywords.reduce((s, kw) => s.replace(new RegExp(`\\b${kw}\\b`,"gi"), kw), sql);
+  const formatted = upper
+    .replace(/\b(SELECT)\b/g, "\nSELECT")
+    .replace(/\b(FROM)\b/g, "\nFROM")
+    .replace(/\b(WHERE)\b/g, "\nWHERE")
+    .replace(/\b((?:LEFT |RIGHT |INNER |OUTER )?JOIN)\b/g, "\n$1")
+    .replace(/\b(ON)\b/g, "\n  ON")
+    .replace(/\b(GROUP BY)\b/g, "\nGROUP BY")
+    .replace(/\b(ORDER BY)\b/g, "\nORDER BY")
+    .replace(/\b(HAVING)\b/g, "\nHAVING")
+    .replace(/\b(LIMIT|OFFSET)\b/g, "\n$1")
+    .replace(/,\s*/g, ",\n  ")
+    .replace(/\n\s*\n/g, "\n")
+    .trim();
+
+  return `-- Formatted SQL\n-- Original length: ${raw.length} chars → Formatted: ${formatted.length} chars\n\n${formatted}\n\n-- Formatting notes:\n-- • Keywords uppercased for readability\n-- • Each clause on its own line\n-- • SELECT columns indented 2 spaces each\n-- • JOIN conditions indented under their JOIN`;
+}
+
+function explainSql(sql: string): string {
+  if (!sql.trim()) return "Please paste a SQL query to explain.";
+  const s = sql.toUpperCase();
+
+  const clauses: string[] = [];
+  if (/\bSELECT\b/.test(s)) {
+    const distinct = /\bDISTINCT\b/.test(s) ? " (DISTINCT — duplicates removed)" : "";
+    const colMatch = sql.match(/SELECT\s+([\s\S]*?)\s+FROM/i);
+    const cols = colMatch ? colMatch[1].trim().slice(0, 150) : "*";
+    clauses.push(`**SELECT${distinct}** — Retrieves columns: \`${cols}\``);
+  }
+  if (/\bFROM\b/.test(s)) {
+    const fromMatch = sql.match(/FROM\s+([\w.,\s]+?)(?:\s+(?:WHERE|JOIN|GROUP|ORDER|LIMIT|HAVING|$))/i);
+    clauses.push(`**FROM** — Reads data from table(s): \`${fromMatch ? fromMatch[1].trim() : "[table]"}\``);
+  }
+  const joins = [...sql.matchAll(/(?:LEFT |RIGHT |INNER |OUTER )?JOIN\s+(\w+)/gi)];
+  for (const j of joins) {
+    const type = j[0].trim().split(" ")[0] === "JOIN" ? "INNER" : j[0].trim().split(" ")[0];
+    clauses.push(`**${type} JOIN** on \`${j[1]}\` — Combines rows from both tables where the ON condition matches. ${type === "LEFT" ? "All rows from the left table are kept even with no match." : type === "RIGHT" ? "All rows from the right table are kept." : "Only matching rows from both tables are returned."}`);
+  }
+  if (/\bWHERE\b/.test(s)) {
+    const whereMatch = sql.match(/WHERE\s+(.*?)(?:\s+(?:GROUP BY|ORDER BY|HAVING|LIMIT|$))/i);
+    clauses.push(`**WHERE** — Filters rows: \`${whereMatch ? whereMatch[1].trim().slice(0, 120) : "[condition]"}\``);
+  }
+  if (/\bGROUP BY\b/.test(s)) {
+    const grpMatch = sql.match(/GROUP BY\s+(.*?)(?:\s+(?:HAVING|ORDER BY|LIMIT|$))/i);
+    clauses.push(`**GROUP BY** — Groups rows by: \`${grpMatch ? grpMatch[1].trim() : "[columns]"}\`. Aggregates (COUNT, SUM, AVG) apply per group.`);
+  }
+  if (/\bHAVING\b/.test(s)) clauses.push("**HAVING** — Filters groups (like WHERE, but applied after GROUP BY). Used to filter on aggregate values.");
+  if (/\bORDER BY\b/.test(s)) {
+    const ordMatch = sql.match(/ORDER BY\s+(.*?)(?:\s+(?:LIMIT|$))/i);
+    clauses.push(`**ORDER BY** — Sorts results by: \`${ordMatch ? ordMatch[1].trim() : "[columns]"}\``);
+  }
+  if (/\bLIMIT\b/.test(s)) {
+    const limMatch = sql.match(/LIMIT\s+(\d+)/i);
+    clauses.push(`**LIMIT ${limMatch ? limMatch[1] : "N"}** — Returns only the first ${limMatch ? limMatch[1] : "N"} rows.`);
+  }
+
+  const aggFuncs = [...new Set([...sql.matchAll(/\b(COUNT|SUM|AVG|MAX|MIN)\s*\(/gi)].map(m => m[1].toUpperCase()))];
+
+  return `# SQL Query Explanation
+
+## What this query does
+This query ${/\bSELECT\b/.test(s) ? "retrieves" : /\bINSERT\b/.test(s) ? "inserts" : /\bUPDATE\b/.test(s) ? "updates" : "deletes"} data${joins.length > 0 ? ` by joining ${joins.length + 1} table${joins.length > 0 ? "s" : ""}` : ""}${/\bGROUP BY\b/.test(s) ? " and aggregates results into groups" : ""}${/\bORDER BY\b/.test(s) ? ", sorted by specified columns" : ""}${/\bLIMIT\b/.test(s) ? ", limited to a subset of rows" : ""}.
+
+## Clause-by-Clause Breakdown
+
+${clauses.map((c, i) => `### ${i + 1}. ${c}`).join("\n\n")}
+
+${aggFuncs.length > 0 ? `## Aggregate Functions Used\n${aggFuncs.map(f => `- **${f}()** — ${f === "COUNT" ? "Counts rows/non-null values" : f === "SUM" ? "Sums numeric values" : f === "AVG" ? "Computes average" : f === "MAX" ? "Returns highest value" : "Returns lowest value"}`).join("\n")}` : ""}
+
+## Execution Order
+SQL executes clauses in this order: FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT
+
+This matters: you can't reference SELECT aliases in WHERE, but you can in ORDER BY.`;
+}
+
+function optimizeSql(sql: string): string {
+  if (!sql.trim()) return "Please paste a SQL query to optimize.";
+  const s = sql.toUpperCase();
+  const issues: string[] = [];
+  const suggestions: string[] = [];
+
+  if (/SELECT\s+\*/i.test(sql)) {
+    issues.push("**SELECT \\*** — Fetching all columns is expensive.");
+    suggestions.push("Replace `SELECT *` with only the columns you need: `SELECT id, name, email`");
+  }
+  if (/WHERE.*LIKE\s+'%/i.test(sql)) {
+    issues.push("**Leading wildcard LIKE** (`LIKE '%value'`) — Cannot use indexes, causes full table scan.");
+    suggestions.push("Consider full-text search (`MATCH ... AGAINST` or `to_tsvector`) or restructure to avoid a leading wildcard.");
+  }
+  if (/WHERE.*LIKE\s+'[^%]/i.test(sql) && !/WHERE.*LIKE\s+'%/i.test(sql)) {
+    suggestions.push("Trailing wildcard LIKE (`LIKE 'value%'`) can use an index — ensure the column is indexed.");
+  }
+  if (/YEAR\s*\(|MONTH\s*\(|DAY\s*\(|DATEPART\s*\(/i.test(sql)) {
+    issues.push("**Function on indexed column** — Wrapping a column in YEAR(), MONTH(), etc. prevents index use.");
+    suggestions.push("Use range conditions instead: `created_at >= '2024-01-01' AND created_at < '2025-01-01'`");
+  }
+  if (/OR\b/i.test(sql) && /WHERE/i.test(sql)) {
+    issues.push("**OR in WHERE clause** — Can prevent index use depending on the optimizer.");
+    suggestions.push("Consider rewriting OR conditions as UNION: `SELECT ... WHERE cond1 UNION SELECT ... WHERE cond2`");
+  }
+  if (/NOT IN\s*\(/i.test(sql)) {
+    issues.push("**NOT IN with subquery** — Poor performance with NULL values; can misfire.");
+    suggestions.push("Replace `NOT IN (subquery)` with `NOT EXISTS (...)` — handles NULLs correctly and is often faster.");
+  }
+  if (/SELECT.*DISTINCT/i.test(sql)) {
+    suggestions.push("DISTINCT is expensive — consider whether a GROUP BY or a proper JOIN condition would eliminate duplicates instead.");
+  }
+  if (!/\bLIMIT\b/i.test(sql) && /SELECT/i.test(sql)) {
+    suggestions.push("Add LIMIT to restrict result set size during development and testing.");
+  }
+  if (!/\bINDEX\b/i.test(sql)) {
+    const whereMatch = sql.match(/WHERE\s+([\w.]+)\s*=/i);
+    if (whereMatch) suggestions.push(`Ensure \`${whereMatch[1]}\` has an index: \`CREATE INDEX idx_${whereMatch[1].replace(/\./g,"_")} ON table_name(${whereMatch[1].split(".").pop()});\``);
+  }
+  if (/COUNT\s*\(\s*\*\s*\)/i.test(sql)) {
+    suggestions.push("Consider `COUNT(1)` instead of `COUNT(*)` — slightly faster on some engines (MySQL). In PostgreSQL they're equivalent.");
+  }
+  if (/\bN\+1\b/i.test(sql) || (sql.match(/SELECT/gi) || []).length > 2) {
+    suggestions.push("Multiple nested SELECT statements detected — check for N+1 patterns; a single JOIN may be more efficient.");
+  }
+
+  const score = Math.max(0, 100 - issues.length * 20);
+
+  return `# SQL Optimization Report
+
+## Performance Score: ${score}/100
+
+${issues.length === 0 ? "✅ No major performance issues detected." : `## Issues Found (${issues.length})\n\n${issues.map((issue, i) => `### Issue ${i + 1}: ${issue}`).join("\n\n")}`}
+
+## Optimization Suggestions
+
+${suggestions.length > 0 ? suggestions.map((s, i) => `${i + 1}. ${s}`).join("\n\n") : "✅ Query looks well-optimized."}
+
+## General Best Practices
+
+1. **Indexing** — Add indexes on columns used in WHERE, JOIN ON, and ORDER BY. Run \`EXPLAIN ANALYZE\` to see if indexes are being used.
+2. **Avoid functions on indexed columns** — Use range conditions instead of wrapping columns in functions.
+3. **Use EXPLAIN/EXPLAIN ANALYZE** — Always profile before and after optimization changes.
+4. **Pagination** — Use keyset/cursor pagination instead of OFFSET for large datasets.
+5. **Connection pooling** — Use PgBouncer or similar to reduce connection overhead.
+6. **Read replicas** — Route SELECT queries to read replicas for heavy reporting loads.
+
+## Optimized Query
+
+\`\`\`sql
+${sql.replace(/SELECT\s+\*/i, "SELECT id, [specify columns]").replace(/YEAR\s*\(([^)]+)\)\s*=\s*(\d{4})/gi, "$1 >= '$2-01-01' AND $1 < '[NEXT_YEAR]-01-01'").trim()}
+\`\`\``;
+}
+
 // ────────────────────────────── tool registry ────────────────────────────────
 
 type Field =
@@ -948,6 +1101,27 @@ const TOOLS: Record<string, ToolDef> = {
     generate: (v) => meetingNotes(v.input ?? ""),
     buttonLabel: "Generate Meeting Notes",
     outputRows: 50,
+  },
+  "sql-formatter": {
+    title: "SQL Formatter",
+    description: "Paste minified or messy SQL and get it reformatted with consistent indentation and keyword casing.",
+    fields: [{ type: "textarea", key: "sql", label: "SQL to Format", placeholder: "select u.id,u.name,o.total from users u inner join orders o on u.id=o.user_id where o.status='active' order by o.total desc limit 10", rows: 8 }],
+    generate: (v) => formatSql(v.sql ?? ""),
+    buttonLabel: "Format SQL",
+  },
+  "sql-explainer": {
+    title: "SQL Explainer",
+    description: "Paste a SQL query and get a plain-English explanation of what it does, clause by clause.",
+    fields: [{ type: "textarea", key: "sql", label: "SQL Query", placeholder: "SELECT u.name, COUNT(o.id) AS total_orders\nFROM users u\nLEFT JOIN orders o ON u.id = o.user_id\nWHERE o.created_at > NOW() - INTERVAL '30 days'\nGROUP BY u.name\nHAVING COUNT(o.id) > 5\nORDER BY total_orders DESC\nLIMIT 20;", rows: 10 }],
+    generate: (v) => explainSql(v.sql ?? ""),
+    buttonLabel: "Explain SQL",
+  },
+  "sql-optimizer": {
+    title: "SQL Query Optimizer",
+    description: "Paste your SQL query and get optimization suggestions for better performance.",
+    fields: [{ type: "textarea", key: "sql", label: "SQL Query to Optimize", placeholder: "SELECT * FROM orders WHERE YEAR(created_at) = 2024 AND status = 'active'", rows: 8 }],
+    generate: (v) => optimizeSql(v.sql ?? ""),
+    buttonLabel: "Optimize SQL",
   },
 };
 

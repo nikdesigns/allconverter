@@ -278,6 +278,354 @@ function headlineContent(topic: string): string {
 • The Fastest Way to Improve Your ${topic} Performance`;
 }
 
+function youtubeTitles(topic: string): string {
+  return `# YouTube Titles: ${topic}
+
+## How-To / Tutorial
+• How to ${topic} — Complete Beginner's Guide (${new Date().getFullYear()})
+• How I Mastered ${topic} in 30 Days (Step-by-Step)
+• ${topic} Tutorial for Beginners — Everything You Need to Know
+• How to ${topic} FAST — The Only Guide You'll Need
+
+## Listicles
+• 10 ${topic} Tips That Actually Work
+• 7 Mistakes Everyone Makes with ${topic} (And How to Fix Them)
+• Top 5 ${topic} Strategies for ${new Date().getFullYear()}
+• The Ultimate ${topic} Checklist (Free Download)
+
+## Story / Curiosity
+• I Tried ${topic} for 30 Days — Here's What Happened
+• What Nobody Tells You About ${topic}
+• Why Your ${topic} Isn't Working (The Real Reason)
+• The ${topic} Secret That Changed Everything for Me
+
+## Vs / Comparison
+• ${topic} vs. Old Method — Which Is Better?
+• Best ${topic} Tools Compared — My Honest Review
+• Free vs. Paid ${topic}: Which Should You Choose?
+
+## Short / Punchy (Under 50 chars)
+• ${topic} Guide (${new Date().getFullYear()})
+• Master ${topic} Today
+• ${topic} — The Full Breakdown
+• ${topic} Explained Simply`;
+}
+
+function youtubeDescription(topic: string): string {
+  return `In this video, I'll show you exactly how to ${topic} — from scratch. Whether you're a complete beginner or looking to level up, this step-by-step guide has everything you need.
+
+📌 WHAT YOU'LL LEARN IN THIS VIDEO:
+✅ The basics of ${topic} explained simply
+✅ Common mistakes to avoid when getting started
+✅ My proven step-by-step process for ${topic}
+✅ Advanced tips to get faster results
+✅ The exact tools I use (free & paid options)
+
+⏱️ TIMESTAMPS:
+0:00 — Introduction
+1:30 — What is ${topic}?
+4:00 — Getting Started: Step 1
+8:30 — The Most Common Mistakes
+12:00 — Advanced Strategies
+16:30 — My Full Process Revealed
+20:00 — Results & Next Steps
+22:00 — Q&A and Wrap-Up
+
+🔗 RESOURCES MENTIONED:
+• Free ${topic} Checklist → [Link in comments]
+• Recommended Tools → [Link]
+• Free Course → [Link]
+
+👍 If this helped you, please LIKE and SUBSCRIBE — it means the world to me and helps more people find this content!
+
+💬 Drop a COMMENT below with your biggest ${topic} question — I read every one.
+
+📧 CONTACT & SOCIAL:
+• Instagram: @YourHandle
+• Twitter/X: @YourHandle
+• Email: hello@example.com
+
+#${topic.replace(/\s+/g,"")} #${topic.replace(/\s+/g,"")}Tips #HowTo #Tutorial #${new Date().getFullYear()}
+
+---
+DISCLAIMER: This video is for educational purposes only. Results may vary based on individual circumstances and effort applied.`;
+}
+
+function linkedinPost(topic: string): string {
+  return `I spent 3 years getting ${topic} completely wrong.
+
+Then one conversation changed everything.
+
+Here's what I learned (and what I wish someone had told me earlier):
+
+↳ Most people start with the wrong foundation.
+They focus on tactics before strategy. It never works.
+
+↳ The #1 thing that actually moves the needle:
+Consistency over intensity. 90 days of focused effort beats 1 year of scattered attempts.
+
+↳ What the top 1% do differently:
+They measure outcomes, not activity.
+Not "how many hours did I work" but "what result did I create?"
+
+The mindset shift that changed everything for me:
+
+Stop asking "How do I do ${topic}?"
+Start asking "What does success with ${topic} actually look like for me?"
+
+Once I got clear on the outcome, the path became obvious.
+
+Here's my simple 3-step framework:
+1️⃣ Define your specific goal
+2️⃣ Identify the 2–3 actions that drive 80% of results
+3️⃣ Eliminate everything else
+
+The uncomfortable truth: most people fail at ${topic} not because of lack of knowledge — but lack of focus.
+
+What's your biggest challenge with ${topic} right now?
+Drop it in the comments 👇 I'd love to help.
+
+—
+P.S. If this resonated, repost ♻️ to help someone in your network who's struggling with ${topic}.
+
+#${topic.replace(/\s+/g,"")} #Growth #Leadership #PersonalDevelopment #CareerAdvice`;
+}
+
+function hookContent(topic: string): string {
+  return `# Scroll-Stopping Hooks: ${topic}
+
+## Pattern Interrupt
+• "Nobody talks about this side of ${topic}…"
+• "Stop scrolling if you're struggling with ${topic}."
+• "Forget everything you've heard about ${topic}."
+• "This single ${topic} mistake cost me $10,000."
+
+## Bold Statement
+• "The way you're doing ${topic} is backwards."
+• "${topic} doesn't have to be this hard — here's proof."
+• "I cracked the code on ${topic} so you don't have to."
+• "Most ${topic} advice is wrong. Here's what actually works."
+
+## Curiosity Gap
+• "The one thing about ${topic} they never teach you…"
+• "What happens when you do ${topic} the right way? This:"
+• "I tested 12 ways to do ${topic}. Only one worked."
+• "The ${topic} secret hiding in plain sight:"
+
+## Relatable Problem
+• "Tired of ${topic} not working no matter what you try?"
+• "If ${topic} feels overwhelming, read this."
+• "I used to hate ${topic}. Then I tried this."
+• "Still struggling with ${topic}? It's not your fault."
+
+## Social Proof / Story
+• "I went from zero to results with ${topic} in 60 days. Here's how:"
+• "After talking to 500+ people about ${topic}, here's what I found:"
+• "My client doubled their results with this one ${topic} change:"
+• "5 years doing ${topic} wrong. 1 year doing it right. Here's the difference:"
+
+## Question Hook
+• "What if ${topic} was actually easy?"
+• "What's the real reason your ${topic} isn't working?"
+• "Are you making this common ${topic} mistake?"
+• "When was the last time ${topic} actually worked for you?"`;
+}
+
+function coldEmail(topic: string): string {
+  return `# Cold Email Templates: ${topic}
+
+---
+## Template 1: Short & Punchy (Best Open Rate)
+
+Subject: Quick question about your ${topic}
+
+Hi [First Name],
+
+I'll keep this short.
+
+I help [ICP — e.g., B2B SaaS companies] improve their ${topic} results.
+
+Most I speak to are dealing with [Pain Point 1] or [Pain Point 2].
+
+Does that sound familiar?
+
+If so, I have a specific idea that might help. Worth a 15-minute call?
+
+[Your Name]
+[Title] | [Company]
+
+---
+## Template 2: Value-First
+
+Subject: [Company]'s ${topic} — one quick idea
+
+Hi [First Name],
+
+I was looking at your [website/LinkedIn/content] and noticed [specific observation].
+
+Many companies in [their industry] are seeing strong results from [specific ${topic} approach] — typically [specific outcome like "20–30% improvement"].
+
+I put together a quick breakdown of how this might apply to [Company Name].
+
+Want me to send it over?
+
+[Your Name]
+
+---
+## Template 3: Problem-Led
+
+Subject: Are you seeing this with your ${topic}?
+
+Hi [First Name],
+
+Quick question: are you running into [specific ${topic} problem] at [Company]?
+
+It's the #1 thing I hear from [their role] at [company size] companies.
+
+We recently helped [similar company] solve this and they saw [result] in [timeframe].
+
+Open to a quick 10-minute call to see if we can do the same for you?
+
+[Your Name]
+
+---
+## Follow-Up (Day 3–5):
+
+Subject: Re: ${topic}
+
+Hi [First Name],
+
+Just bumping this in case it got buried.
+
+Happy to send over a quick case study showing exactly how we tackled this for [similar company].
+
+Worth a look?
+
+[Your Name]
+
+---
+Tips:
+• Personalize the first line for every email
+• Keep emails under 100 words — shorter = higher reply rate
+• One clear CTA only: "Worth a call?" or "Want me to send it over?"
+• Test subject lines — curiosity outperforms clever every time`;
+}
+
+function coverLetter(context: string): string {
+  return `# Cover Letter — ${context}
+
+---
+
+[Your Name]
+[Your Address]
+[City, State, PIN]
+[Email] | [Phone] | [LinkedIn]
+[Date]
+
+Hiring Manager
+${context}
+[Company Address]
+
+Dear Hiring Manager,
+
+I am writing to express my strong interest in the [Job Title] position at [Company Name]. With [X years] of experience in [relevant field/industry] and a proven track record of [key achievement], I am confident in my ability to contribute meaningfully to your team.
+
+In my current/previous role at [Previous Company], I [specific achievement 1 — quantified]. I also [specific achievement 2 — quantified]. These experiences have equipped me with [3 key skills relevant to the role], which I understand are central to this position.
+
+What excites me most about [Company Name] is [specific reason — product, mission, culture, growth]. I have followed your work on [specific project/product/initiative] and believe my background in [relevant area] would allow me to make an immediate impact.
+
+I am particularly skilled at:
+• [Skill 1] — demonstrated by [brief example]
+• [Skill 2] — demonstrated by [brief example]
+• [Skill 3] — demonstrated by [brief example]
+
+I would welcome the opportunity to discuss how my experience aligns with [Company Name]'s goals. I am available for an interview at your earliest convenience and can be reached at [phone/email].
+
+Thank you for considering my application. I look forward to the possibility of contributing to [Company Name].
+
+Sincerely,
+[Your Name]
+
+---
+📌 Tips for personalizing:
+• Replace all [brackets] with your actual details
+• Research the company and add 1 specific thing that excites you about them
+• Quantify achievements (e.g., "increased sales by 32%", "managed team of 8")
+• Keep to one page — ideally 3–4 paragraphs
+• Match keywords from the job description for ATS optimization`;
+}
+
+function linkedinOptimizer(context: string): string {
+  return `# LinkedIn Profile Optimization — ${context}
+
+---
+
+## 🎯 Headline (max 220 characters)
+
+**Option 1 (Role + Value):**
+[Job Title] | Helping [target audience] achieve [outcome] | [Key Skill] | [Industry]
+
+**Option 2 (Achievement-led):**
+[Job Title] @ [Company] | [X years] in [Industry] | [Key Strength] | Open to [opportunities]
+
+**Option 3 (Keyword-rich):**
+[Title] | [Skill 1] | [Skill 2] | [Industry] Expert | [Location or Remote]
+
+---
+
+## 📝 About Section (Summary)
+
+I'm a [job title] with [X years] of experience helping [target audience] [achieve specific outcome].
+
+Currently at [Company], I focus on [main responsibility]. My work has resulted in [achievement — quantified if possible].
+
+What I do best:
+✅ [Skill / service 1]
+✅ [Skill / service 2]
+✅ [Skill / service 3]
+
+I'm passionate about [relevant topic] and believe [brief philosophy or approach].
+
+Previously, I've worked with [types of companies/clients] to [solve what problem]. I bring a [unique angle — e.g., data-driven / creative / systems-thinking] approach to everything I do.
+
+📫 Open to: [freelance / full-time / consulting / speaking]
+📍 Based in: [City] | [Remote-friendly]
+
+---
+
+## 💼 Experience Bullet Points (for each role)
+
+Instead of writing duties, use this formula:
+**[Action verb] + [what you did] + [result/impact]**
+
+Examples:
+• Led redesign of [product/process], reducing [metric] by [X]%
+• Grew [channel/metric] from [X] to [Y] in [timeframe]
+• Built and managed a team of [X] people across [departments]
+• Closed [X] deals worth [₹/$ value] in [timeframe]
+• Launched [project] that [outcome] for [client/company]
+
+---
+
+## 🏷️ Skills to Add (for discoverability)
+
+Top 5 (shown on profile): [Skill 1], [Skill 2], [Skill 3], [Skill 4], [Skill 5]
+Additional: [10–15 more relevant skills from the job description]
+
+---
+
+## 📌 Quick wins checklist:
+☐ Professional headshot (increases profile views by 14×)
+☐ Custom banner image with your tagline
+☐ Custom LinkedIn URL (linkedin.com/in/yourname)
+☐ 500+ connections
+☐ Request recommendations from managers/clients
+☐ Post content 2–3× per week in your area of expertise
+☐ Add certifications and courses to show continuous learning
+
+Context provided: ${context}`;
+}
+
 function rewriteContent(text: string): string {
   if (!text.trim()) return "";
   const sentences = text.match(/[^.!?]+[.!?]+/g) ?? [text];
@@ -296,14 +644,21 @@ function rewriteContent(text: string): string {
 }
 
 const TOOLS: Record<string,{ title: string; hasTopicInput: boolean; generate: (v:string)=>string }> = {
-  "blog-outline-generator": { title:"Blog Outline Generator", hasTopicInput:true, generate: blogOutline },
-  "faq-generator": { title:"FAQ Generator", hasTopicInput:true, generate: faqContent },
-  "product-description-generator": { title:"Product Description Generator", hasTopicInput:true, generate: productDescription },
-  "social-post-generator": { title:"Social Post Generator", hasTopicInput:true, generate: socialPost },
-  "email-generator": { title:"Email Generator", hasTopicInput:true, generate: emailContent },
-  "subject-line-generator": { title:"Subject Line Generator", hasTopicInput:true, generate: subjectLines },
-  "headline-generator": { title:"Headline Generator", hasTopicInput:true, generate: headlineContent },
-  "rewrite-tool": { title:"Text Rewriter", hasTopicInput:false, generate: rewriteContent },
+  "blog-outline-generator":         { title:"Blog Outline Generator",          hasTopicInput:true,  generate: blogOutline },
+  "faq-generator":                  { title:"FAQ Generator",                   hasTopicInput:true,  generate: faqContent },
+  "product-description-generator":  { title:"Product Description Generator",   hasTopicInput:true,  generate: productDescription },
+  "social-post-generator":          { title:"Social Post Generator",           hasTopicInput:true,  generate: socialPost },
+  "email-generator":                { title:"Email Generator",                 hasTopicInput:true,  generate: emailContent },
+  "subject-line-generator":         { title:"Subject Line Generator",          hasTopicInput:true,  generate: subjectLines },
+  "headline-generator":             { title:"Headline Generator",              hasTopicInput:true,  generate: headlineContent },
+  "rewrite-tool":                   { title:"Text Rewriter",                   hasTopicInput:false, generate: rewriteContent },
+  "youtube-title-generator":        { title:"YouTube Title Generator",         hasTopicInput:true,  generate: youtubeTitles },
+  "youtube-description-generator":  { title:"YouTube Description Generator",   hasTopicInput:true,  generate: youtubeDescription },
+  "linkedin-post-generator":        { title:"LinkedIn Post Generator",         hasTopicInput:true,  generate: linkedinPost },
+  "hook-generator":                 { title:"Hook Generator",                  hasTopicInput:true,  generate: hookContent },
+  "cold-email-generator":           { title:"Cold Email Generator",            hasTopicInput:true,  generate: coldEmail },
+  "ai-cover-letter":                { title:"AI Cover Letter Generator",       hasTopicInput:true,  generate: coverLetter },
+  "ai-linkedin-optimizer":          { title:"AI LinkedIn Profile Optimizer",   hasTopicInput:true,  generate: linkedinOptimizer },
 };
 
 export function ContentGeneratorTool() {

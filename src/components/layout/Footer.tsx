@@ -7,15 +7,17 @@ const popularTools = getPopularTools(8);
 
 const companyLinks = [
   { href: "/about/", label: "About" },
-  { href: "/blog/", label: "Blog" },
   { href: "/changelog/", label: "Changelog" },
   { href: "/contact/", label: "Contact" },
+  { href: "/sitemap/", label: "Sitemap" },
 ];
 
 const legalLinks = [
   { href: "/privacy/", label: "Privacy Policy" },
   { href: "/terms/", label: "Terms of Service" },
   { href: "/cookies/", label: "Cookie Policy" },
+  { href: "/disclaimer/", label: "Disclaimer" },
+  { href: "/security/", label: "Security" },
 ];
 
 export function Footer() {

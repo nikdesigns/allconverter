@@ -7,12 +7,14 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const CONTENT_TYPES = [
-  { id: "url",   label: "URL",    icon: Link,           template: "https://allconverter.tools" },
-  { id: "email", label: "Email",  icon: Mail,           template: "mailto:hello@example.com" },
-  { id: "phone", label: "Phone",  icon: Phone,          template: "tel:+1234567890" },
-  { id: "sms",   label: "SMS",    icon: MessageSquare,  template: "sms:+1234567890?body=Hello" },
-  { id: "wifi",  label: "Wi-Fi",  icon: Wifi,           template: "WIFI:T:WPA;S:MyNetwork;P:password;;" },
-  { id: "vcard", label: "vCard",  icon: User,           template: "BEGIN:VCARD\nVERSION:3.0\nFN:John Doe\nEMAIL:john@example.com\nTEL:+1234567890\nEND:VCARD" },
+  { id: "url",       label: "URL",          icon: Link,           template: "https://allconverter.tools" },
+  { id: "email",     label: "Email",        icon: Mail,           template: "mailto:hello@example.com" },
+  { id: "phone",     label: "Phone",        icon: Phone,          template: "tel:+1234567890" },
+  { id: "sms",       label: "SMS",          icon: MessageSquare,  template: "sms:+1234567890?body=Hello" },
+  { id: "whatsapp",  label: "WhatsApp",     icon: MessageSquare,  template: "https://wa.me/919876543210?text=Hello%20there" },
+  { id: "wifi",      label: "Wi-Fi",        icon: Wifi,           template: "WIFI:T:WPA;S:MyNetwork;P:password;;" },
+  { id: "upi",       label: "UPI Pay",      icon: Link,           template: "upi://pay?pa=name@upi&pn=Name&am=100&cu=INR&tn=Payment" },
+  { id: "vcard",     label: "Business Card",icon: User,           template: "BEGIN:VCARD\nVERSION:3.0\nFN:John Doe\nORG:My Company\nEMAIL:john@example.com\nTEL:+1234567890\nURL:https://example.com\nEND:VCARD" },
 ];
 
 const COLOR_PRESETS = [

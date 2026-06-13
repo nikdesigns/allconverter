@@ -3,25 +3,25 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, ArrowRight, Zap, FileText, Image, Code2 } from "lucide-react";
+import { Search, ArrowRight, Zap, FileText, Image, Code2, Music, BrainCircuit, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { tools, searchTools } from "@/lib/tools-data";
 import { cn } from "@/lib/utils";
 
 const stats = [
-  { value: "100+", label: "Free Tools" },
+  { value: "250+", label: "Free Tools" },
+  { value: "12", label: "Tool Categories" },
   { value: "0", label: "Sign-ups Needed" },
-  { value: "100%", label: "Browser-based" },
 ];
 
 const quickLinks = [
   { label: "PDF Compressor", href: "/tools/pdf-compressor/", icon: FileText },
   { label: "Image Compressor", href: "/tools/image-compressor/", icon: Image },
+  { label: "AI Cover Letter", href: "/tools/ai-cover-letter/", icon: BrainCircuit },
+  { label: "GST Calculator", href: "/tools/gst-calculator/", icon: Calculator },
+  { label: "MP3 Cutter", href: "/tools/mp3-cutter/", icon: Music },
   { label: "JSON Formatter", href: "/tools/json-formatter/", icon: Code2 },
-  { label: "QR Code Generator", href: "/tools/qr-code-generator/", icon: Zap },
-  { label: "Word Counter", href: "/tools/word-counter/", icon: FileText },
-  { label: "Base64 Encoder", href: "/tools/base64-encoder/", icon: Code2 },
 ];
 
 export function HeroSection() {
@@ -68,7 +68,7 @@ export function HeroSection() {
               className="px-4 py-1.5 text-xs font-medium cursor-pointer gap-2"
             >
               <Zap className="w-3 h-3 fill-current" />
-              New: AI content &amp; CSS generator tools added
+              New: 50+ tools added — audio, PDF conversion, AI, business docs &amp; more
               <ArrowRight className="w-3 h-3" />
             </Badge>
           </Link>
@@ -83,8 +83,8 @@ export function HeroSection() {
 
         {/* Subheadline */}
         <p className="text-lg sm:text-xl text-[var(--body-subtle)] text-center max-w-2xl mx-auto mb-10 leading-relaxed">
-          Free online tools for PDF, images, text, audio, video, and more.
-          No sign-up. No limits. Just fast, reliable conversions.
+          250+ free tools for PDF, images, audio, AI content, SEO, developer utilities,
+          business documents, calculators, and more. No sign-up. No uploads. No limits.
         </p>
 
         {/* Search bar */}
@@ -106,7 +106,7 @@ export function HeroSection() {
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 150)}
-                placeholder='Search 100+ tools… try "compress PDF" or "image resizer"'
+                placeholder='Search 250+ tools… try "compress PDF", "AI cover letter" or "GST calculator"'
                 className="flex-1 pl-11 pr-4 py-4 text-sm bg-transparent outline-none text-[var(--heading)] placeholder:text-[var(--body-subtle)]"
               />
               <div className="pr-2">
@@ -150,7 +150,7 @@ export function HeroSection() {
           </Link>
           <Link href="/tools/">
             <Button size="lg" variant="outline" className="gap-2 h-11 px-6 text-sm font-semibold">
-              Browse All 100+ Tools
+              Browse All 250+ Tools
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
@@ -177,7 +177,7 @@ export function HeroSection() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto">
+        <div className="grid grid-cols-3 gap-4 max-w-xs mx-auto">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="text-2xl sm:text-3xl font-bold tracking-tight gradient-text">

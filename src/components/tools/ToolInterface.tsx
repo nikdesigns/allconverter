@@ -122,6 +122,33 @@ const TextSummarizerTool = lazy(() => import("./implementations/TextSummarizerTo
 const GrammarCheckerTool = lazy(() => import("./implementations/GrammarCheckerTool").then(m => ({ default: m.GrammarCheckerTool })));
 const ContentGeneratorTool = lazy(() => import("./implementations/ContentGeneratorTool").then(m => ({ default: m.ContentGeneratorTool })));
 
+// ── New AI tools ────────────────────────────────────────────────────────────────
+const AiSpreadsheetFormulaTool = lazy(() => import("./implementations/AiSpreadsheetFormulaTool").then(m => ({ default: m.AiSpreadsheetFormulaTool })));
+const AiRegexGeneratorTool     = lazy(() => import("./implementations/AiRegexGeneratorTool").then(m => ({ default: m.AiRegexGeneratorTool })));
+const AiResumeBuilderTool      = lazy(() => import("./implementations/AiResumeBuilderTool").then(m => ({ default: m.AiResumeBuilderTool })));
+const AiContractSummarizerTool = lazy(() => import("./implementations/AiContractSummarizerTool").then(m => ({ default: m.AiContractSummarizerTool })));
+const AiPdfSummarizerTool      = lazy(() => import("./implementations/AiPdfSummarizerTool").then(m => ({ default: m.AiPdfSummarizerTool })));
+
+// ── Design / Color tools ────────────────────────────────────────────────────────
+const ColorPaletteExtractorTool = lazy(() => import("./implementations/ColorPaletteExtractorTool").then(m => ({ default: m.ColorPaletteExtractorTool })));
+const ContrastCheckerTool       = lazy(() => import("./implementations/ContrastCheckerTool").then(m => ({ default: m.ContrastCheckerTool })));
+
+// ── SEO additions ───────────────────────────────────────────────────────────────
+const SchemaGeneratorTool = lazy(() => import("./implementations/SchemaGeneratorTool").then(m => ({ default: m.SchemaGeneratorTool })));
+
+// ── Network tools ───────────────────────────────────────────────────────────────
+const NetworkToolsSuite = lazy(() => import("./implementations/NetworkToolsSuite").then(m => ({ default: m.NetworkToolsSuite })));
+
+// ── New suites ─────────────────────────────────────────────────────────────────
+const TextUtilsSuite        = lazy(() => import("./implementations/TextUtilsSuite").then(m => ({ default: m.TextUtilsSuite })));
+const CodeFormatterSuite    = lazy(() => import("./implementations/CodeFormatterSuite").then(m => ({ default: m.CodeFormatterSuite })));
+const DateTimeSuite         = lazy(() => import("./implementations/DateTimeSuite").then(m => ({ default: m.DateTimeSuite })));
+const ImageConversionSuite  = lazy(() => import("./implementations/ImageConversionSuite").then(m => ({ default: m.ImageConversionSuite })));
+const PdfConversionSuite    = lazy(() => import("./implementations/PdfConversionSuite").then(m => ({ default: m.PdfConversionSuite })));
+const BusinessDocSuite      = lazy(() => import("./implementations/BusinessDocSuite").then(m => ({ default: m.BusinessDocSuite })));
+const SeoSchemaSuite        = lazy(() => import("./implementations/SeoSchemaSuite").then(m => ({ default: m.SeoSchemaSuite })));
+const AudioConversionSuite  = lazy(() => import("./implementations/AudioConversionSuite").then(m => ({ default: m.AudioConversionSuite })));
+
 // ── Slug → Component map ───────────────────────────────────────────────────────
 const toolComponentMap: Record<string, React.ComponentType> = {
   // ── PDF ──────────────────────────────────────────────────────────────────────
@@ -322,14 +349,109 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   // ── AI / Content ──────────────────────────────────────────────────────────────
   "text-summarizer": TextSummarizerTool,
   "grammar-checker": GrammarCheckerTool,
-  "blog-outline-generator": ContentGeneratorTool,
-  "faq-generator": ContentGeneratorTool,
+  "blog-outline-generator":        ContentGeneratorTool,
+  "faq-generator":                 ContentGeneratorTool,
   "product-description-generator": ContentGeneratorTool,
-  "social-post-generator": ContentGeneratorTool,
-  "email-generator": ContentGeneratorTool,
-  "subject-line-generator": ContentGeneratorTool,
-  "headline-generator": ContentGeneratorTool,
-  "rewrite-tool": ContentGeneratorTool,
+  "social-post-generator":         ContentGeneratorTool,
+  "email-generator":               ContentGeneratorTool,
+  "subject-line-generator":        ContentGeneratorTool,
+  "headline-generator":            ContentGeneratorTool,
+  "rewrite-tool":                  ContentGeneratorTool,
+  "youtube-title-generator":       ContentGeneratorTool,
+  "youtube-description-generator": ContentGeneratorTool,
+  "linkedin-post-generator":       ContentGeneratorTool,
+  "hook-generator":                ContentGeneratorTool,
+  "cold-email-generator":          ContentGeneratorTool,
+
+  // ── New AI tools ──────────────────────────────────────────────────────────
+  "ai-spreadsheet-formula": AiSpreadsheetFormulaTool,
+  "ai-regex-generator":     AiRegexGeneratorTool,
+  "ai-resume-builder":      AiResumeBuilderTool,
+  "ai-contract-summarizer": AiContractSummarizerTool,
+  "ai-pdf-summarizer":      AiPdfSummarizerTool,
+
+  // ── SQL sub-tools (extended AiToolsSuite) ─────────────────────────────────
+  "sql-formatter":  AiToolsSuite,
+  "sql-explainer":  AiToolsSuite,
+  "sql-optimizer":  AiToolsSuite,
+
+  // ── Design / Color ────────────────────────────────────────────────────────
+  "color-palette-extractor": ColorPaletteExtractorTool,
+  "contrast-checker":        ContrastCheckerTool,
+
+  // ── SEO ───────────────────────────────────────────────────────────────────
+  "schema-generator": SchemaGeneratorTool,
+
+  // ── Network tools ─────────────────────────────────────────────────────────
+  "website-screenshot":         NetworkToolsSuite,
+  "dns-lookup":                 NetworkToolsSuite,
+  "ip-lookup":                  NetworkToolsSuite,
+  "ssl-checker":                NetworkToolsSuite,
+  "website-metadata-extractor": NetworkToolsSuite,
+  "website-speed-checker":      NetworkToolsSuite,
+
+  // ── New PDF conversion tools ──────────────────────────────────────────────
+  "pdf-to-word":        PdfConversionSuite,
+  "word-to-pdf":        PdfConversionSuite,
+  "pdf-to-excel":       PdfConversionSuite,
+  "excel-to-pdf":       PdfConversionSuite,
+  "pdf-to-powerpoint":  PdfConversionSuite,
+  "powerpoint-to-pdf":  PdfConversionSuite,
+  "pdf-protector":      PdfConversionSuite,
+  "ocr-pdf":            PdfConversionSuite,
+  "pdf-watermark":      PdfConversionSuite,
+
+  // ── New image conversion tools ────────────────────────────────────────────
+  "heic-to-jpg":     ImageConversionSuite,
+  "heic-to-png":     ImageConversionSuite,
+  "image-to-base64": ImageConversionSuite,
+  "base64-to-image": ImageConversionSuite,
+
+  // ── New text utilities ────────────────────────────────────────────────────
+  "character-counter":      TextUtilsSuite,
+  "remove-duplicate-lines": TextUtilsSuite,
+  "sort-lines":             TextUtilsSuite,
+  "reverse-text":           TextUtilsSuite,
+  "slug-generator":         TextUtilsSuite,
+
+  // ── New code formatters ───────────────────────────────────────────────────
+  "json-validator":  CodeFormatterSuite,
+  "html-formatter":  CodeFormatterSuite,
+  "css-formatter":   CodeFormatterSuite,
+  "js-formatter":    CodeFormatterSuite,
+
+  // ── New business documents ────────────────────────────────────────────────
+  "proforma-invoice":       BusinessDocSuite,
+  "purchase-order":         BusinessDocSuite,
+  "delivery-challan":       BusinessDocSuite,
+  "expense-tracker":        BusinessDocSuite,
+  "profit-loss-calculator": BusinessDocSuite,
+
+  // ── New SEO schema tools ──────────────────────────────────────────────────
+  "faq-schema-generator":          SeoSchemaSuite,
+  "article-schema-generator":      SeoSchemaSuite,
+  "organization-schema-generator": SeoSchemaSuite,
+  "redirect-checker":              SeoSchemaSuite,
+  "canonical-tag-checker":         SeoSchemaSuite,
+
+  // ── New AI content tools ──────────────────────────────────────────────────
+  "ai-cover-letter":       ContentGeneratorTool,
+  "ai-linkedin-optimizer": ContentGeneratorTool,
+
+  // ── New audio conversion tools ────────────────────────────────────────────
+  "mp3-to-aac":          AudioConversionSuite,
+  "aac-to-mp3":          AudioConversionSuite,
+  "flac-to-mp3":         AudioConversionSuite,
+  "mp3-to-flac":         AudioConversionSuite,
+  "audio-noise-reducer": AudioConversionSuite,
+  "audio-normalizer":    AudioConversionSuite,
+
+  // ── New date/time tools ───────────────────────────────────────────────────
+  "date-calculator":            DateTimeSuite,
+  "date-difference-calculator": DateTimeSuite,
+  "timezone-converter":         DateTimeSuite,
+  "world-clock":                DateTimeSuite,
+  "countdown-timer":            DateTimeSuite,
 };
 
 function LoadingSkeleton() {

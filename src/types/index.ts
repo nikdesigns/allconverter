@@ -9,7 +9,8 @@ export type ToolCategory =
   | "ai-tools"
   | "business-tools"
   | "color-tools"
-  | "audio-tools";
+  | "audio-tools"
+  | "network-tools";
 
 export interface Tool {
   slug: string;

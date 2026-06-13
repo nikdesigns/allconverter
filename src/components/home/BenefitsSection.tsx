@@ -1,43 +1,43 @@
-import { Shield, Zap, Globe, Lock, RefreshCw, Sparkles } from "lucide-react";
+import { Shield, Zap, Globe, Lock, RefreshCw, Sparkles, LayoutGrid, MonitorSmartphone } from "lucide-react";
 
 const benefits = [
   {
     icon: Zap,
     title: "Lightning Fast",
     description:
-      "All tools are optimized for speed. Most operations complete in under 2 seconds, even for large files.",
+      "Tools load instantly and run in your browser — no upload queues, no server lag. Most operations finish in under two seconds.",
     color: "text-amber-500",
     gradient: "from-amber-500/10 to-yellow-500/10",
   },
   {
     icon: Lock,
-    title: "Private & Secure",
+    title: "Private by Design",
     description:
-      "Your files are processed entirely in your browser. Nothing is ever uploaded to our servers.",
+      "Your files never leave your device. All processing happens locally in your browser, so we never see what you work on.",
     color: "text-emerald-500",
     gradient: "from-emerald-500/10 to-teal-500/10",
   },
   {
     icon: Globe,
-    title: "100% Free",
+    title: "100% Free, Always",
     description:
-      "Every tool is completely free to use with no hidden limits, watermarks, or subscription fees.",
+      "Every one of our 250+ tools is free with no hidden limits, no watermarks, and no subscription fees — ever.",
     color: "text-sky-500",
     gradient: "from-sky-500/10 to-blue-500/10",
   },
   {
     icon: Shield,
-    title: "No Registration",
+    title: "No Account Needed",
     description:
-      "Start using any tool instantly. No accounts, no email verification, no personal data required.",
+      "Open any tool and start immediately. No sign-up, no email verification, no personal data required.",
     color: "text-violet-500",
     gradient: "from-violet-500/10 to-purple-500/10",
   },
   {
-    icon: RefreshCw,
-    title: "Always Updated",
+    icon: LayoutGrid,
+    title: "250+ Tools, 12 Categories",
     description:
-      "Tools are continuously improved with new features and optimizations based on user feedback.",
+      "PDF, images, audio, AI content, SEO, developer utilities, business documents, calculators, and more — all in one place.",
     color: "text-rose-500",
     gradient: "from-rose-500/10 to-pink-500/10",
   },
@@ -45,7 +45,7 @@ const benefits = [
     icon: Sparkles,
     title: "Professional Quality",
     description:
-      "Built to the same standard as paid tools. Output quality you can use in professional workflows.",
+      "Built to the same standard as paid software. Output you can use directly in professional and business workflows.",
     color: "text-indigo-500",
     gradient: "from-indigo-500/10 to-blue-500/10",
   },
@@ -60,8 +60,7 @@ export function BenefitsSection() {
             Why choose <span className="gradient-text">AllConverter.tools</span>?
           </h2>
           <p className="text-[var(--body-subtle)] text-base max-w-xl mx-auto">
-            We built the conversion experience we always wanted — fast, private, and
-            professional quality. No trade-offs.
+            250+ tools across 12 categories — built to be fast, private, and professional. No trade-offs, no paywalls.
           </p>
         </div>
 

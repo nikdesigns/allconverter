@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Copy, Check, Trash2, Link2, ExternalLink } from "lucide-react";
@@ -36,8 +36,10 @@ export function UtmBuilderTool() {
   const [term, setTerm]             = useState("");
   const [content, setContent]       = useState("");
   const [copied, setCopied]         = useState(false);
-  const [history, setHistory]       = useState<HistoryItem[]>(loadHistory);
+  const [history, setHistory]       = useState<HistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+
+  useEffect(() => { setHistory(loadHistory()); }, []);
 
   const utmUrl = useMemo(() => {
     try {

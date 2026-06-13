@@ -8,6 +8,47 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
+// ─── HTML fetch + parse helpers ───────────────────────────────────────────────
+
+async function fetchPageHtml(targetUrl: string): Promise<string> {
+  const proxies = [
+    (u: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    (u: string) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+  ];
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy(targetUrl), { signal: AbortSignal.timeout(12000) });
+      if (!res.ok) continue;
+      const html = await res.text();
+      if (html.length > 200) return html;
+    } catch { /* try next */ }
+  }
+  throw new Error("Could not fetch page. The site may block external crawlers.");
+}
+
+function parseMeta(html: string) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const meta  = (name: string) => doc.querySelector(`meta[name="${name}"]`)?.getAttribute("content") ?? "—";
+  const og    = (prop: string) => doc.querySelector(`meta[property="og:${prop}"]`)?.getAttribute("content") ?? "—";
+  const tw    = (name: string) => doc.querySelector(`meta[name="twitter:${name}"]`)?.getAttribute("content") ?? "—";
+  const link  = (rel: string) => doc.querySelector(`link[rel="${rel}"]`)?.getAttribute("href") ?? "—";
+  const h1s   = Array.from(doc.querySelectorAll("h1")).map(el => el.textContent?.trim()).filter(Boolean).slice(0, 3).join(" · ") || "—";
+  return {
+    title:         doc.title || "—",
+    description:   meta("description"),
+    ogTitle:       og("title"),
+    ogDescription: og("description"),
+    ogImage:       og("image"),
+    canonical:     link("canonical"),
+    h1s,
+    keywords:      meta("keywords"),
+    robots:        meta("robots"),
+    viewport:      meta("viewport"),
+    twitterCard:   tw("card"),
+    favicon:       link("icon") || link("shortcut icon"),
+  };
+}
+
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
 function cleanDomain(url: string): string {
@@ -451,30 +492,10 @@ function WebsiteMetadata() {
     setError("");
     setResult(null);
     try {
-      const proxyUrl = `https://api.microlink.io/?url=${encodeURIComponent(clean)}&screenshot=false&meta=true`;
-      const res = await fetch(proxyUrl);
-      const json = await res.json();
-      if (json.status !== "success") {
-        setError("Could not fetch metadata. The site may block crawlers.");
-        return;
-      }
-      const d = json.data;
-      setResult({
-        title:          d.title || "—",
-        description:    d.description || "—",
-        ogTitle:        d.title || "—",
-        ogDescription:  d.description || "—",
-        ogImage:        d.image?.url || "—",
-        canonical:      d.url || clean,
-        h1s:            "See page source",
-        keywords:       "—",
-        robots:         "—",
-        viewport:       "—",
-        twitterCard:    "—",
-        favicon:        d.logo?.url || "—",
-      });
-    } catch {
-      setError("Failed to fetch metadata. Try a different URL.");
+      const html = await fetchPageHtml(clean);
+      setResult(parseMeta(html));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to fetch metadata. Try a different URL.");
     } finally {
       setLoading(false);
     }

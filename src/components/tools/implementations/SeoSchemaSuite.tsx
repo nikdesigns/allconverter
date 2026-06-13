@@ -253,6 +253,40 @@ function RedirectChecker() {
 
 // ─── Canonical Tag Checker ────────────────────────────────────────────────────
 
+// Tries two CORS proxies in sequence; returns raw HTML text or throws.
+async function fetchHtml(targetUrl: string): Promise<{ html: string; finalUrl: string }> {
+  const proxies = [
+    (u: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    (u: string) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+  ];
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy(targetUrl), { signal: AbortSignal.timeout(12000) });
+      if (!res.ok) continue;
+      const html = await res.text();
+      if (html.length > 100) return { html, finalUrl: res.url.includes("?url=") ? targetUrl : res.url };
+    } catch { /* try next */ }
+  }
+  throw new Error("Could not fetch URL.");
+}
+
+function parseCanonical(html: string): string {
+  // Use DOMParser when available (browser), regex as fallback
+  try {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.querySelector('link[rel="canonical"]')?.getAttribute("href") ?? "";
+  } catch {
+    const m = html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)
+           ?? html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i);
+    return m?.[1] ?? "";
+  }
+}
+
+function normalise(u: string) {
+  try { const p = new URL(u); p.search = ""; p.hash = ""; return p.href.replace(/\/$/, "").toLowerCase(); }
+  catch { return u.toLowerCase().replace(/\/$/, ""); }
+}
+
 function CanonicalTagChecker() {
   const [url, setUrl]     = useState("");
   const [result, setResult] = useState<{ canonical: string; isSelf: boolean; found: boolean; finalUrl: string } | null>(null);
@@ -264,14 +298,13 @@ function CanonicalTagChecker() {
     if (!u) return;
     setLoading(true); setError(""); setResult(null);
     try {
-      const res  = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(u)}&timeout=15000`);
-      const data = await res.json();
-      if (data.status !== "success") { setError("Could not fetch URL. Ensure it is publicly accessible."); return; }
-      const canonical = (data.data?.links?.canonical as string) ?? "";
-      const finalUrl  = (data.data?.url as string) ?? u;
-      setResult({ canonical, found: !!canonical, isSelf: canonical ? canonical.split("?")[0] === u.split("?")[0] : false, finalUrl });
-    } catch { setError("Failed to fetch. The page may be blocking external requests."); }
-    finally { setLoading(false); }
+      const { html, finalUrl } = await fetchHtml(u);
+      const canonical = parseCanonical(html);
+      const isSelf = !!canonical && normalise(canonical) === normalise(u);
+      setResult({ canonical, found: !!canonical, isSelf, finalUrl });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to fetch. The page may be blocking external requests.");
+    } finally { setLoading(false); }
   };
 
   return (

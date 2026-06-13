@@ -91,7 +91,11 @@ export function SEOContentBlock() {
               GST invoices
             </Link>
             , proforma invoices, purchase orders, delivery challans, quotations, salary slips, and
-            NDAs — all printable directly from the browser. Financial tools include a{" "}
+            NDAs — all printable directly from the browser. Generate a{" "}
+            <Link href="/tools/upi-qr-generator/" className="text-fg-brand hover:underline">
+              UPI QR code
+            </Link>
+            {" "}for Google Pay, PhonePe, Paytm, and BHIM — with logo overlay and brand colors. Financial tools include a{" "}
             <Link href="/tools/profit-margin-calculator/" className="text-[var(--fg-brand)] hover:underline">
               profit margin calculator
             </Link>

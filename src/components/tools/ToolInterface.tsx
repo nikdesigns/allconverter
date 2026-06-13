@@ -148,6 +148,7 @@ const PdfConversionSuite    = lazy(() => import("./implementations/PdfConversion
 const BusinessDocSuite      = lazy(() => import("./implementations/BusinessDocSuite").then(m => ({ default: m.BusinessDocSuite })));
 const SeoSchemaSuite        = lazy(() => import("./implementations/SeoSchemaSuite").then(m => ({ default: m.SeoSchemaSuite })));
 const AudioConversionSuite  = lazy(() => import("./implementations/AudioConversionSuite").then(m => ({ default: m.AudioConversionSuite })));
+const UpiQrGeneratorTool    = lazy(() => import("./implementations/UpiQrGeneratorTool").then(m => ({ default: m.UpiQrGeneratorTool })));
 
 // ── Slug → Component map ───────────────────────────────────────────────────────
 const toolComponentMap: Record<string, React.ComponentType> = {
@@ -305,6 +306,7 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "quotation-generator":          QuotationGeneratorTool,
   "proposal-generator":           QuotationGeneratorTool,
   "receipt-generator":            ReceiptGeneratorTool,
+  "upi-qr-generator":             UpiQrGeneratorTool,
   "salary-calculator":            SalaryCalculatorTool,
   "ctc-to-inhand-calculator":     SalaryCalculatorTool,
   "salary-slip-generator":        SalarySlipGeneratorTool,

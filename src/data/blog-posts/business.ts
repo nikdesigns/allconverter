@@ -85,7 +85,7 @@ export const businessPosts: BlogPost[] = [
       { question: "Can I charge interest on late payments?", answer: "Yes, if your invoice or contract specifies it. A late payment clause like '1.5% per month on overdue balances' is legally enforceable. State it clearly on the invoice. Under the MSME Development Act, MSMEs can claim interest at 3× the RBI bank rate on overdue payments from larger companies." },
       { question: "What is the difference between an invoice and a bill?", answer: "Legally there is no difference — both are demands for payment. 'Invoice' is standard in B2B commercial contexts; 'bill' is more common in retail and hospitality (restaurant bill). In practice, 'invoice' implies more formal documentation with sequential numbering, which matters for GST compliance and accounting." },
     ],
-    relatedToolSlugs: ["invoice-generator", "gst-invoice-generator", "quotation-generator", "receipt-generator"],
+    relatedToolSlugs: ["invoice-generator", "gst-invoice-generator", "quotation-generator", "receipt-generator", "upi-qr-generator"],
     relatedArticleSlugs: ["gst-complete-guide", "freelance-pricing-guide"],
   },
 

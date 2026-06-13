@@ -31,6 +31,33 @@ export interface RoadmapItem {
 
 export const releases: Release[] = [
   {
+    version: "v2.6.0",
+    date: "June 2026",
+    summary:
+      "Launched UPI QR Code Generator — a premium fintech tool for merchants and freelancers to generate branded UPI QR codes compatible with all UPI apps. Added UX and SEO improvements across the platform.",
+    highlight:
+      "UPI QR Generator supports Google Pay, PhonePe, Paytm, BHIM, and Amazon Pay — with logo overlay, brand color customisation, PNG/SVG download, and a live payment link. All processing happens in the browser; UPI IDs are never sent to a server.",
+    changes: [
+      { type: "tool", text: "UPI QR Code Generator (/tools/upi-qr-generator/) — generate UPI QR codes for any UPI ID with real-time preview" },
+      { type: "feature", text: "App-theme presets for Google Pay, PhonePe, Paytm, BHIM, Amazon Pay — one click applies matching brand colors" },
+      { type: "feature", text: "Logo overlay — upload PNG/SVG logo to embed in QR centre; error correction auto-upgrades to H" },
+      { type: "feature", text: "Fixed amount mode — set a locked amount so the payer cannot edit it (required for invoice payments)" },
+      { type: "feature", text: "Download as PNG (print/web) or SVG (vector); copy UPI payment link; Web Share API share button" },
+      { type: "feature", text: "Custom color pickers + 6 preset themes for full QR branding control" },
+      { type: "bug", text: "Fixed World Clock hydration mismatch — server/client time diff at midnight (24:xx vs 00:xx) via hourCycle h23" },
+      { type: "bug", text: "Fixed World Clock city dropdown clipped by overflow-hidden parent — switched to fixed positioning via getBoundingClientRect" },
+      { type: "seo", text: "Organization schema @graph added to site layout — links WebSite, founder (Nitin Kaushik), and Organization for Google Knowledge Panel" },
+      { type: "feature", text: "Blog added to main nav and mobile menu — direct access to 33+ guides" },
+      { type: "feature", text: "Latest Articles section added to homepage — 6 featured posts with category badges and quick-link pills" },
+      { type: "feature", text: "Author profile page at /author/nitin/ — bio, skills, articles, and linked Person + ProfilePage schema" },
+      { type: "feature", text: "Category hub 'Explore all →' button on each category card on the homepage" },
+      { type: "feature", text: "Tool request CTA in Founder section — mailto link for user suggestions" },
+      { type: "feature", text: "Homepage hero expanded from 3 to 5 stats: 250+ Tools, 12 Categories, 100% Free, 0 Sign-ups, Weekly New Tools" },
+      { type: "infra", text: "IndexNow bulk URL submission script (npm run indexnow) — submits all 337+ URLs to Bing and Yandex" },
+      { type: "infra", text: "Support page at /support/ — PayPal donation CTA, cost breakdown, trust indicators, FAQs" },
+    ],
+  },
+  {
     version: "v2.5.0",
     date: "June 2026",
     summary:
@@ -319,6 +346,11 @@ export const roadmap = {
     { text: "Additional AI tools — AI LinkedIn post generator, AI job description writer" },
   ],
   completed: [
+    { text: "UPI QR Code Generator — branded QR with logo overlay, app presets, PNG/SVG download" },
+    { text: "Organization + WebSite @graph schema — Google Knowledge Panel optimisation" },
+    { text: "Author profile page /author/nitin/ — Person schema, articles, E-E-A-T" },
+    { text: "Blog in main nav — Latest Articles section on homepage" },
+    { text: "IndexNow bulk URL submission — 337+ URLs to Bing and Yandex" },
     { text: "250+ free tools across 12 categories" },
     { text: "Blog architecture — 9 categories, 33 articles, structured data on every page" },
     { text: "Auto-generated FAQs and tool introductions for all tool pages" },
@@ -329,7 +361,7 @@ export const roadmap = {
     { text: "Founder & Mission section — E-E-A-T and transparency improvements" },
     { text: "XML sitemap and robots.txt" },
     { text: "Audio Tools category — 10+ tools" },
-    { text: "Business Tools category — 25+ tools including GST invoice and NDA" },
+    { text: "Business Tools category — 25+ tools including GST invoice, NDA, and UPI QR generator" },
     { text: "AI Tools category — 15+ tools, no API key required" },
     { text: "Static export — all 319 pages pre-rendered at build time" },
   ],

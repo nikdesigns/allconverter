@@ -398,14 +398,17 @@ function WorldClock() {
     }).format(now);
   };
 
-  const fmtDate = (tz: string) => new Intl.DateTimeFormat("en", {
-    timeZone: tz, weekday: "short", month: "short", day: "numeric",
-  }).format(now);
+  const fmtDate = (tz: string) => {
+    if (!now) return "---";
+    return new Intl.DateTimeFormat("en", {
+      timeZone: tz, weekday: "short", month: "short", day: "numeric",
+    }).format(now);
+  };
 
   const fmtOffset = (tz: string) => {
     try {
       const parts = new Intl.DateTimeFormat("en", { timeZone: tz, timeZoneName: "shortOffset" })
-        .formatToParts(now);
+        .formatToParts(now ?? new Date());
       return parts.find(p => p.type === "timeZoneName")?.value ?? "";
     } catch { return ""; }
   };

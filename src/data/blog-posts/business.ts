@@ -86,7 +86,7 @@ export const businessPosts: BlogPost[] = [
       { question: "What is the difference between an invoice and a bill?", answer: "Legally there is no difference — both are demands for payment. 'Invoice' is standard in B2B commercial contexts; 'bill' is more common in retail and hospitality (restaurant bill). In practice, 'invoice' implies more formal documentation with sequential numbering, which matters for GST compliance and accounting." },
     ],
     relatedToolSlugs: ["invoice-generator", "gst-invoice-generator", "quotation-generator", "receipt-generator"],
-    relatedArticleSlugs: ["gst-complete-guide", "freelance-pricing-guide", "nda-guide"],
+    relatedArticleSlugs: ["gst-complete-guide", "freelance-pricing-guide"],
   },
 
   {
@@ -141,7 +141,7 @@ export const businessPosts: BlogPost[] = [
       { question: "Should I charge Indian clients less than international clients?", answer: "This is a common dilemma. Many freelancers maintain a single rate; others use location-adjusted pricing. If you're serving global clients via platforms like Upwork, charge international rates. For Indian domestic clients, market rates are lower but so are costs. Never discount below your cost floor regardless of client location." },
     ],
     relatedToolSlugs: ["freelance-rate-calculator", "invoice-generator", "profit-margin-calculator"],
-    relatedArticleSlugs: ["invoice-complete-guide", "nda-guide"],
+    relatedArticleSlugs: ["invoice-complete-guide", "gst-complete-guide"],
     pillarSlug: "invoice-complete-guide",
   },
 ];

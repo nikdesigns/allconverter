@@ -281,7 +281,7 @@ export const seoToolsPosts: BlogPost[] = [
       { question: "Should I include all my pages in the sitemap?", answer: "No. Only include pages you want indexed: canonical pages, primary content pages, and important resources. Exclude: paginated pages (beyond page 1), search result pages, thank-you and confirmation pages, admin pages, thin or duplicate content pages, and any URL with noindex directive." },
     ],
     relatedToolSlugs: ["sitemap-generator", "robots-txt-generator", "meta-tag-generator"],
-    relatedArticleSlugs: ["technical-seo-guide", "meta-tags-complete-guide", "robots-txt-guide"],
+    relatedArticleSlugs: ["technical-seo-guide", "meta-tags-complete-guide"],
     pillarSlug: "technical-seo-guide",
   },
 ];

@@ -91,7 +91,7 @@ export const developerToolsPosts: BlogPost[] = [
       { question: "How do I handle special characters in JSON strings?", answer: "Use backslash escape sequences: \\\" for double quote, \\\\ for backslash, \\n for newline, \\t for tab, \\r for carriage return, \\/ for forward slash (optional), \\uXXXX for Unicode characters." },
     ],
     relatedToolSlugs: ["json-formatter", "base64-encoder", "url-encoder"],
-    relatedArticleSlugs: ["base64-encoding-explained", "url-encoding-guide"],
+    relatedArticleSlugs: ["base64-encoding-explained", "regex-beginners-guide"],
   },
 
   {
@@ -151,7 +151,7 @@ export const developerToolsPosts: BlogPost[] = [
       { question: "How do I convert a file to Base64?", answer: "Upload the file to our Base64 Encoder tool and it converts it to a Base64 data URI. Alternatively, in JavaScript use FileReader.readAsDataURL() for browser-side conversion, or Buffer.from(data).toString('base64') in Node.js." },
     ],
     relatedToolSlugs: ["base64-encoder", "json-formatter", "url-encoder"],
-    relatedArticleSlugs: ["json-complete-guide", "url-encoding-guide"],
+    relatedArticleSlugs: ["json-complete-guide", "what-is-json"],
     pillarSlug: "json-complete-guide",
   },
 

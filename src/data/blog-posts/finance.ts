@@ -128,7 +128,7 @@ export const financePosts: BlogPost[] = [
       { question: "Is there a maximum or minimum SIP amount?", answer: "Most mutual funds accept SIPs from ₹100–500 minimum per month with no maximum. AMCs set their own minimums — most are ₹100–500. Platforms like Zerodha Coin, Groww, and Kuvera allow SIPs from ₹100." },
     ],
     relatedToolSlugs: ["sip-calculator", "compound-interest-calculator", "loan-calculator"],
-    relatedArticleSlugs: ["emi-home-loan-guide", "compound-interest-guide", "cagr-guide"],
+    relatedArticleSlugs: ["emi-home-loan-guide", "compound-interest-guide"],
     pillarSlug: "emi-home-loan-guide",
   },
 

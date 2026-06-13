@@ -4,12 +4,35 @@ import { CategoriesGrid } from "@/components/home/CategoriesGrid";
 import { PopularTools } from "@/components/home/PopularTools";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
 import { FAQSection } from "@/components/home/FAQSection";
+import { FounderSection } from "@/components/home/FounderSection";
+import { SupportSection } from "@/components/home/SupportSection";
 import { SEOContentBlock } from "@/components/home/SEOContentBlock";
 import {
   generateOrganizationSchema,
   generateWebsiteSchema,
   siteConfig,
 } from "@/lib/seo-utils";
+
+const founderSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Nitin Kaushik",
+  jobTitle: "Frontend Developer",
+  description: "Frontend developer and founder of AllConverter.tools — a free browser-based utility platform with 250+ tools for PDF, image, audio, AI content, SEO, developer, and business tasks.",
+  url: `${siteConfig.url}/about/`,
+  worksFor: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+  },
+  knowsAbout: [
+    "Web Development",
+    "Frontend Engineering",
+    "Online Productivity Tools",
+    "Browser-based Applications",
+    "Privacy-friendly Software",
+  ],
+};
 
 export const metadata: Metadata = {
   title: `${siteConfig.name} — ${siteConfig.tagline}`,
@@ -32,11 +55,17 @@ export default function HomePage() {
           __html: JSON.stringify(generateWebsiteSchema()),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
+      />
       <HeroSection />
       <CategoriesGrid />
       <PopularTools />
       <BenefitsSection />
       <FAQSection />
+      <FounderSection />
+      <SupportSection />
       <SEOContentBlock />
     </>
   );

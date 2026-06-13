@@ -81,7 +81,7 @@ export function BenefitsSection() {
                   >
                     <Icon className={`w-5 h-5 ${benefit.color}`} />
                   </div>
-                  <h3 className="font-semibold text-[var(--heading)] mb-2">
+                  <h3 className="text-sm font-semibold text-(--heading) mb-2">
                     {benefit.title}
                   </h3>
                   <p className="text-sm text-[var(--body-subtle)] leading-relaxed">

@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { siteConfig } from '@/lib/seo-utils';
 import { AdBlockNotice } from '@/components/ads/AdBlockNotice';
+import { MobileAnchorAd } from '@/components/ads/MobileAnchorAd';
 import './globals.css';
 
 // Using SF Pro (Apple's system font) via native stack for best performance and native feel on Apple devices.
@@ -141,6 +142,7 @@ export default function RootLayout({
           <Footer />
           <Toaster />
           <AdBlockNotice />
+          <MobileAnchorAd />
         </ThemeProvider>
 
         {/* Google Analytics 4 */}

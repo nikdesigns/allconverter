@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getToolBySlug, getRelatedTools, getAllSlugs } from "@/lib/tools-data";
+import { getToolBySlug, getRelatedTools, getAllSlugs, tools } from "@/lib/tools-data";
 import { getCategoryBySlug } from "@/lib/categories";
 import {
   generateToolMetadata,
@@ -11,6 +11,7 @@ import {
   generateHowToSchema,
   siteConfig,
 } from "@/lib/seo-utils";
+import { getEnrichedTool } from "@/lib/tool-content-gen";
 import { ToolPageClient } from "@/components/tools/ToolPageClient";
 
 interface Props {
@@ -38,12 +39,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ToolPage({ params }: Props) {
   const { slug } = await params;
-  const tool = getToolBySlug(slug);
-  if (!tool) notFound();
+  const rawTool = getToolBySlug(slug);
+  if (!rawTool) notFound();
 
-  const category = getCategoryBySlug(tool.category);
+  // Enrich with generated FAQs, howTo, benefits, useCases, introduction
+  const tool = getEnrichedTool(rawTool, tools);
+
+  const category    = getCategoryBySlug(tool.category);
   const relatedTools = getRelatedTools(tool, 4);
-  const breadcrumbs = generateBreadcrumbs(tool, category);
+  const breadcrumbs  = generateBreadcrumbs(tool, category);
 
   const schemas = [
     generateToolSchema(tool),

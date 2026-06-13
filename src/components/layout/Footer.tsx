@@ -7,6 +7,7 @@ const popularTools = getPopularTools(8);
 
 const companyLinks = [
   { href: "/about/", label: "About" },
+  { href: "/blog/", label: "Blog" },
   { href: "/changelog/", label: "Changelog" },
   { href: "/contact/", label: "Contact" },
   { href: "/sitemap/", label: "Sitemap" },

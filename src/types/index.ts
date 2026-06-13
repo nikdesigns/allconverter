@@ -17,6 +17,8 @@ export interface Tool {
   name: string;
   tagline: string;
   description: string;
+  /** Generated 100-150 word introduction rendered above the tool interface. Falls back to description if absent. */
+  introduction?: string;
   category: ToolCategory;
   icon: string;
   tags: string[];

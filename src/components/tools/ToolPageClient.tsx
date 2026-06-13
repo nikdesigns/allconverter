@@ -110,8 +110,15 @@ export function ToolPageClient({
           {/* Main content */}
           <div className="space-y-8 min-w-0 overflow-hidden">
             {/* Introduction */}
-            <div className="prose-tool">
-              <p className="text-base leading-relaxed">{tool.description}</p>
+            <div className="prose-tool space-y-3">
+              {tool.introduction
+                ? tool.introduction.split("\n\n").map((para, i) => (
+                    <p key={i} className="text-base leading-relaxed text-muted-foreground">
+                      {para}
+                    </p>
+                  ))
+                : <p className="text-base leading-relaxed text-muted-foreground">{tool.description}</p>
+              }
             </div>
 
             {/* Tool interface */}
@@ -121,7 +128,7 @@ export function ToolPageClient({
 
             {/* In-article ad — sits between tool and How-to, high viewability */}
             <AdUnit
-              slot="REPLACE_WITH_YOUR_SLOT_ID"
+              slot="1096054855"
               format="auto"
               responsive
               minHeight={100}
@@ -221,10 +228,10 @@ export function ToolPageClient({
 
           {/* Sidebar */}
           <aside className="space-y-6">
-            {/* Sidebar display ad — 300×250 equivalent, sticky on desktop */}
+            {/* Sidebar display ad — 300×250, sticky on desktop */}
             <div className="sticky top-20">
               <AdUnit
-                slot="REPLACE_WITH_YOUR_SLOT_ID"
+                slot="8443766688"
                 format="rectangle"
                 responsive={false}
                 minHeight={250}

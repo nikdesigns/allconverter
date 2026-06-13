@@ -1,4 +1,5 @@
 import type { Tool, ToolCategory_Data, BreadcrumbItem } from "@/types";
+import { getApplicationCategory } from "@/lib/tool-content-gen";
 
 const SITE_NAME = "AllConverter.tools";
 const SITE_URL = "https://allconverter.tools";
@@ -122,23 +123,37 @@ export function generateWebsiteSchema() {
 }
 
 export function generateToolSchema(tool: Tool) {
+  // Build featureList from benefits if available, otherwise fall back to tags
+  const featureList: string[] = tool.benefits?.length
+    ? tool.benefits.slice(0, 6)
+    : tool.tags.map(t => t.charAt(0).toUpperCase() + t.slice(1)).slice(0, 6);
+
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: tool.name,
     description: tool.description,
     url: `${SITE_URL}/tools/${tool.slug}/`,
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Web",
+    applicationCategory: getApplicationCategory(tool.category),
+    operatingSystem: "Any — runs in a web browser (Chrome, Firefox, Safari, Edge)",
+    browserRequirements: "Requires JavaScript. Compatible with all modern evergreen browsers.",
+    featureList: featureList.join(", "),
+    keywords: tool.tags.join(", "),
+    isAccessibleForFree: true,
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
     },
     provider: {
       "@type": "Organization",
       name: SITE_NAME,
       url: SITE_URL,
+    },
+    softwareHelp: {
+      "@type": "CreativeWork",
+      url: `${SITE_URL}/tools/${tool.slug}/`,
     },
   };
 }

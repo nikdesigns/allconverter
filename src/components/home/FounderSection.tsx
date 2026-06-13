@@ -98,12 +98,12 @@ export function FounderSection() {
             </p>
 
             {/* Founder CTA */}
-            <div className="mt-auto pt-2 border-t border-[var(--border-default)]">
-              <Link
-                href="/about/"
-                className="text-xs font-medium text-[var(--fg-brand)] hover:underline"
-              >
-                More about the project →
+            <div className="mt-auto pt-2 border-t border-(--border-default) flex items-center gap-4">
+              <Link href="/author/nitin/" className="text-xs font-medium text-fg-brand hover:underline">
+                Author profile →
+              </Link>
+              <Link href="/about/" className="text-xs font-medium text-(--body-subtle) hover:underline">
+                About the project →
               </Link>
             </div>
           </div>
@@ -164,28 +164,42 @@ export function FounderSection() {
         </div>
 
         {/* ── CTA Bar ── */}
-        <div className="rounded-[var(--radius-base)] border border-[var(--border-default)] bg-[var(--neutral-secondary-soft)] px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <p className="font-semibold text-[var(--heading)] text-sm">
-              Start using any tool — no sign-up, no payment, no catch.
-            </p>
-            <p className="text-xs text-[var(--body-subtle)] mt-0.5">
-              250+ tools available right now. New tools added every week.
-            </p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div className="rounded-(--radius-base) border border-(--border-default) bg-(--neutral-secondary-soft) px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold text-(--heading) text-sm">
+                Start using any tool — no sign-up, no catch.
+              </p>
+              <p className="text-xs text-(--body-subtle) mt-0.5">
+                250+ tools available right now. New tools added weekly.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/tools/"
+                className="rounded-(--radius-default) bg-fg-brand text-white text-sm font-semibold px-5 py-2.5 hover:opacity-90 transition-opacity"
+              >
+                Browse all tools
+              </Link>
+            </div>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <Link
-              href="/tools/"
-              className="rounded-[var(--radius-default)] bg-[var(--fg-brand)] text-white text-sm font-semibold px-5 py-2.5 hover:opacity-90 transition-opacity"
+
+          {/* Tool Request CTA */}
+          <div className="rounded-(--radius-base) border border-border-brand bg-brand-soft px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold text-(--heading) text-sm">
+                Can't find the tool you need?
+              </p>
+              <p className="text-xs text-(--body-subtle) mt-0.5">
+                Suggest it — popular requests ship within days.
+              </p>
+            </div>
+            <a
+              href="mailto:feedback@allconverter.tools?subject=Tool%20Request"
+              className="rounded-(--radius-default) border border-border-brand text-fg-brand text-sm font-semibold px-5 py-2.5 hover:bg-(--neutral-secondary-soft) transition-colors shrink-0"
             >
-              Browse all tools
-            </Link>
-            <Link
-              href="/about/"
-              className="rounded-[var(--radius-default)] border border-[var(--border-default)] bg-[var(--neutral-primary-soft)] text-sm font-medium px-5 py-2.5 text-[var(--heading)] hover:border-[var(--border-brand)] transition-colors"
-            >
-              About the project
-            </Link>
+              Request a tool →
+            </a>
           </div>
         </div>
 

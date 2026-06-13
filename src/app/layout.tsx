@@ -112,18 +112,68 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'WebSite',
-              name: siteConfig.name,
-              url: siteConfig.url,
-              description: siteConfig.description,
-              potentialAction: {
-                '@type': 'SearchAction',
-                target: {
-                  '@type': 'EntryPoint',
-                  urlTemplate: `${siteConfig.url}/tools/?q={search_term_string}`,
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': `${siteConfig.url}/#organization`,
+                  name: siteConfig.name,
+                  alternateName: 'AllConverter',
+                  url: siteConfig.url,
+                  logo: {
+                    '@type': 'ImageObject',
+                    '@id': `${siteConfig.url}/#logo`,
+                    url: `${siteConfig.url}/logo.png`,
+                    contentUrl: `${siteConfig.url}/logo.png`,
+                    caption: siteConfig.name,
+                  },
+                  description: siteConfig.description,
+                  email: 'support@allconverter.tools',
+                  foundingDate: '2024',
+                  founder: {
+                    '@type': 'Person',
+                    '@id': `${siteConfig.url}/#founder`,
+                    name: 'Nitin Kaushik',
+                    jobTitle: 'Founder',
+                    url: `${siteConfig.url}/about/`,
+                  },
+                  address: {
+                    '@type': 'PostalAddress',
+                    addressLocality: 'Mumbai',
+                    addressRegion: 'Maharashtra',
+                    addressCountry: 'IN',
+                  },
+                  sameAs: [
+                    'https://twitter.com/allconvertertools',
+                    'https://github.com/allconvertertools',
+                  ],
+                  knowsAbout: [
+                    'PDF conversion tools',
+                    'Image editing and compression',
+                    'Developer utilities',
+                    'SEO tools',
+                    'AI content generation',
+                    'Online calculators',
+                    'Business document tools',
+                    'Audio conversion tools',
+                  ],
                 },
-                'query-input': 'required name=search_term_string',
-              },
+                {
+                  '@type': 'WebSite',
+                  '@id': `${siteConfig.url}/#website`,
+                  url: siteConfig.url,
+                  name: siteConfig.name,
+                  description: siteConfig.description,
+                  publisher: { '@id': `${siteConfig.url}/#organization` },
+                  potentialAction: {
+                    '@type': 'SearchAction',
+                    target: {
+                      '@type': 'EntryPoint',
+                      urlTemplate: `${siteConfig.url}/tools/?q={search_term_string}`,
+                    },
+                    'query-input': 'required name=search_term_string',
+                  },
+                },
+              ],
             }),
           }}
         />

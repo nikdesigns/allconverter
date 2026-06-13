@@ -70,7 +70,7 @@ export const aiToolsPosts: BlogPost[] = [
       { question: "Will employers know if I used AI to write my cover letter?", answer: "AI detection tools exist but are unreliable — they produce significant false positives and false negatives. The practical answer is: if you personalise the AI output with specific experiences and achievements that only you could write, the result is genuinely yours. The concern is not tool use but authenticity of the content. Always add your real experiences." },
       { question: "Are AI writing tools safe for confidential business content?", answer: "Our AI tools run template-based generation entirely in your browser — no data is sent to external AI APIs. For tools that do use external AI APIs (OpenAI, Claude, etc.), do not input confidential client data, unreleased product information, or personally identifiable information unless you have reviewed and accepted those services' data policies." },
     ],
-    relatedToolSlugs: ["ai-cover-letter", "ai-linkedin-optimizer", "ai-cold-email", "nda-generator"],
+    relatedToolSlugs: ["ai-cover-letter", "ai-linkedin-optimizer", "cold-email-generator", "nda-generator"],
     relatedArticleSlugs: ["ai-cover-letter-guide", "ai-content-writing-guide"],
   },
 
@@ -196,7 +196,7 @@ export const aiToolsPosts: BlogPost[] = [
       { question: "Will Google penalise AI-generated content?", answer: "Google penalises 'spammy' or 'low-quality' content — whether written by humans or AI is irrelevant. High-quality, accurate, helpful AI-assisted content that demonstrates E-E-A-T is treated the same as equivalent human content. The risk is publishing large volumes of low-quality AI content that provides no unique value — that has been penalised in manual and algorithmic updates." },
       { question: "How do I make AI content sound more human?", answer: "The most effective techniques: add specific personal or research-based details, use contractions (it's, you're, we'll), vary sentence length dramatically, include an opinion or recommendation the AI couldn't have (based on experience), and cut any sentence that could apply to any article on the topic — make every sentence specific to your context." },
     ],
-    relatedToolSlugs: ["ai-cover-letter", "ai-blog-outline", "ai-cold-email"],
+    relatedToolSlugs: ["ai-cover-letter", "blog-outline-generator", "cold-email-generator"],
     relatedArticleSlugs: ["ai-productivity-guide", "ai-cover-letter-guide"],
     pillarSlug: "ai-productivity-guide",
   },

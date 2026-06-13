@@ -22,6 +22,53 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteConfig.url}/about/` },
 };
 
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": `${siteConfig.url}/about/#webpage`,
+      url: `${siteConfig.url}/about/`,
+      name: "About AllConverter.tools",
+      description:
+        "AllConverter.tools is a free browser-based platform with 250+ online tools for PDF, image, developer, SEO, AI, business, and audio tasks — built and maintained by Nitin Kaushik in Mumbai, India.",
+      isPartOf: { "@id": `${siteConfig.url}/#website` },
+      about: { "@id": `${siteConfig.url}/#organization` },
+      breadcrumb: {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+          { "@type": "ListItem", position: 2, name: "About", item: `${siteConfig.url}/about/` },
+        ],
+      },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteConfig.url}/#founder`,
+      name: "Nitin Kaushik",
+      jobTitle: "Founder & Developer",
+      worksFor: { "@id": `${siteConfig.url}/#organization` },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Mumbai",
+        addressRegion: "Maharashtra",
+        addressCountry: "IN",
+      },
+      url: `${siteConfig.url}/about/`,
+      email: "support@allconverter.tools",
+      knowsAbout: [
+        "Web development",
+        "Next.js",
+        "TypeScript",
+        "PDF tools",
+        "Image processing",
+        "SEO tools",
+        "AI content tools",
+      ],
+    },
+  ],
+};
+
 const pillars = [
   {
     icon: <Timer className="w-5 h-5" />,
@@ -71,6 +118,10 @@ const categories = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen pt-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
 
       {/* Hero */}
       <section className="border-b border-[var(--border-default)] bg-[var(--neutral-primary-soft)] py-16">

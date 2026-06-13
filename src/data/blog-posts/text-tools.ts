@@ -193,7 +193,7 @@ export const textToolsPosts: BlogPost[] = [
       { question: "Is Markdown the same on all platforms?", answer: "No. There is a standard Markdown spec, but most platforms implement a superset with their own extensions. GitHub Flavored Markdown (GFM) adds tables, task lists, and @ mentions. CommonMark is a standardised strict spec. Pandoc Markdown adds citations and other academic extensions. The core syntax (headings, bold, italic, links) is consistent across all platforms; extended features vary." },
       { question: "Can I use HTML inside Markdown?", answer: "In most Markdown parsers, yes — raw HTML is allowed within Markdown and is passed through to the output. This means you can use HTML elements not supported by Markdown syntax (e.g., <div>, <span>, <sup>). However, HTML within Markdown is processed differently on some platforms (GitHub strips most HTML for security). Check your specific platform's documentation." },
     ],
-    relatedToolSlugs: ["markdown-to-html", "text-formatter"],
+    relatedToolSlugs: ["markdown-to-html", "text-cleaner"],
     relatedArticleSlugs: ["content-length-guide", "word-count-seo-guide"],
     pillarSlug: "content-length-guide",
   },

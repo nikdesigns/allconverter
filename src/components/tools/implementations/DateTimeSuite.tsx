@@ -216,54 +216,233 @@ function TimezoneConverter() {
 
 // ─── World Clock ──────────────────────────────────────────────────────────────
 
+const CITY_TZ_DB: { city: string; country: string; tz: string }[] = [
+  // Americas
+  { city: "New York",        country: "US", tz: "America/New_York" },
+  { city: "Los Angeles",     country: "US", tz: "America/Los_Angeles" },
+  { city: "Chicago",         country: "US", tz: "America/Chicago" },
+  { city: "Denver",          country: "US", tz: "America/Denver" },
+  { city: "Phoenix",         country: "US", tz: "America/Phoenix" },
+  { city: "Houston",         country: "US", tz: "America/Chicago" },
+  { city: "Miami",           country: "US", tz: "America/New_York" },
+  { city: "Seattle",         country: "US", tz: "America/Los_Angeles" },
+  { city: "San Francisco",   country: "US", tz: "America/Los_Angeles" },
+  { city: "Las Vegas",       country: "US", tz: "America/Los_Angeles" },
+  { city: "Boston",          country: "US", tz: "America/New_York" },
+  { city: "Atlanta",         country: "US", tz: "America/New_York" },
+  { city: "Washington DC",   country: "US", tz: "America/New_York" },
+  { city: "Toronto",         country: "CA", tz: "America/Toronto" },
+  { city: "Vancouver",       country: "CA", tz: "America/Vancouver" },
+  { city: "Montreal",        country: "CA", tz: "America/Toronto" },
+  { city: "Calgary",         country: "CA", tz: "America/Edmonton" },
+  { city: "Mexico City",     country: "MX", tz: "America/Mexico_City" },
+  { city: "São Paulo",       country: "BR", tz: "America/Sao_Paulo" },
+  { city: "Buenos Aires",    country: "AR", tz: "America/Argentina/Buenos_Aires" },
+  { city: "Bogotá",          country: "CO", tz: "America/Bogota" },
+  { city: "Lima",            country: "PE", tz: "America/Lima" },
+  { city: "Santiago",        country: "CL", tz: "America/Santiago" },
+  { city: "Caracas",         country: "VE", tz: "America/Caracas" },
+  { city: "Honolulu",        country: "US", tz: "Pacific/Honolulu" },
+  { city: "Anchorage",       country: "US", tz: "America/Anchorage" },
+  // Europe
+  { city: "London",          country: "GB", tz: "Europe/London" },
+  { city: "Paris",           country: "FR", tz: "Europe/Paris" },
+  { city: "Berlin",          country: "DE", tz: "Europe/Berlin" },
+  { city: "Madrid",          country: "ES", tz: "Europe/Madrid" },
+  { city: "Rome",            country: "IT", tz: "Europe/Rome" },
+  { city: "Amsterdam",       country: "NL", tz: "Europe/Amsterdam" },
+  { city: "Brussels",        country: "BE", tz: "Europe/Brussels" },
+  { city: "Zurich",          country: "CH", tz: "Europe/Zurich" },
+  { city: "Vienna",          country: "AT", tz: "Europe/Vienna" },
+  { city: "Warsaw",          country: "PL", tz: "Europe/Warsaw" },
+  { city: "Prague",          country: "CZ", tz: "Europe/Prague" },
+  { city: "Stockholm",       country: "SE", tz: "Europe/Stockholm" },
+  { city: "Oslo",            country: "NO", tz: "Europe/Oslo" },
+  { city: "Copenhagen",      country: "DK", tz: "Europe/Copenhagen" },
+  { city: "Helsinki",        country: "FI", tz: "Europe/Helsinki" },
+  { city: "Athens",          country: "GR", tz: "Europe/Athens" },
+  { city: "Lisbon",          country: "PT", tz: "Europe/Lisbon" },
+  { city: "Dublin",          country: "IE", tz: "Europe/Dublin" },
+  { city: "Moscow",          country: "RU", tz: "Europe/Moscow" },
+  { city: "Istanbul",        country: "TR", tz: "Europe/Istanbul" },
+  { city: "Kyiv",            country: "UA", tz: "Europe/Kiev" },
+  { city: "Bucharest",       country: "RO", tz: "Europe/Bucharest" },
+  { city: "Budapest",        country: "HU", tz: "Europe/Budapest" },
+  // Africa
+  { city: "Cairo",           country: "EG", tz: "Africa/Cairo" },
+  { city: "Lagos",           country: "NG", tz: "Africa/Lagos" },
+  { city: "Nairobi",         country: "KE", tz: "Africa/Nairobi" },
+  { city: "Johannesburg",    country: "ZA", tz: "Africa/Johannesburg" },
+  { city: "Cape Town",       country: "ZA", tz: "Africa/Johannesburg" },
+  { city: "Casablanca",      country: "MA", tz: "Africa/Casablanca" },
+  { city: "Accra",           country: "GH", tz: "Africa/Accra" },
+  { city: "Addis Ababa",     country: "ET", tz: "Africa/Addis_Ababa" },
+  { city: "Dar es Salaam",   country: "TZ", tz: "Africa/Dar_es_Salaam" },
+  // Middle East
+  { city: "Dubai",           country: "AE", tz: "Asia/Dubai" },
+  { city: "Abu Dhabi",       country: "AE", tz: "Asia/Dubai" },
+  { city: "Riyadh",          country: "SA", tz: "Asia/Riyadh" },
+  { city: "Doha",            country: "QA", tz: "Asia/Qatar" },
+  { city: "Kuwait City",     country: "KW", tz: "Asia/Kuwait" },
+  { city: "Manama",          country: "BH", tz: "Asia/Bahrain" },
+  { city: "Muscat",          country: "OM", tz: "Asia/Muscat" },
+  { city: "Baghdad",         country: "IQ", tz: "Asia/Baghdad" },
+  { city: "Tehran",          country: "IR", tz: "Asia/Tehran" },
+  { city: "Beirut",          country: "LB", tz: "Asia/Beirut" },
+  { city: "Tel Aviv",        country: "IL", tz: "Asia/Jerusalem" },
+  { city: "Amman",           country: "JO", tz: "Asia/Amman" },
+  // Asia
+  { city: "Mumbai",          country: "IN", tz: "Asia/Kolkata" },
+  { city: "Delhi",           country: "IN", tz: "Asia/Kolkata" },
+  { city: "Bangalore",       country: "IN", tz: "Asia/Kolkata" },
+  { city: "Chennai",         country: "IN", tz: "Asia/Kolkata" },
+  { city: "Hyderabad",       country: "IN", tz: "Asia/Kolkata" },
+  { city: "Kolkata",         country: "IN", tz: "Asia/Kolkata" },
+  { city: "Pune",            country: "IN", tz: "Asia/Kolkata" },
+  { city: "Karachi",         country: "PK", tz: "Asia/Karachi" },
+  { city: "Lahore",          country: "PK", tz: "Asia/Karachi" },
+  { city: "Islamabad",       country: "PK", tz: "Asia/Karachi" },
+  { city: "Dhaka",           country: "BD", tz: "Asia/Dhaka" },
+  { city: "Colombo",         country: "LK", tz: "Asia/Colombo" },
+  { city: "Kathmandu",       country: "NP", tz: "Asia/Kathmandu" },
+  { city: "Kabul",           country: "AF", tz: "Asia/Kabul" },
+  { city: "Tashkent",        country: "UZ", tz: "Asia/Tashkent" },
+  { city: "Bangkok",         country: "TH", tz: "Asia/Bangkok" },
+  { city: "Jakarta",         country: "ID", tz: "Asia/Jakarta" },
+  { city: "Ho Chi Minh City",country: "VN", tz: "Asia/Ho_Chi_Minh" },
+  { city: "Hanoi",           country: "VN", tz: "Asia/Bangkok" },
+  { city: "Kuala Lumpur",    country: "MY", tz: "Asia/Kuala_Lumpur" },
+  { city: "Singapore",       country: "SG", tz: "Asia/Singapore" },
+  { city: "Manila",          country: "PH", tz: "Asia/Manila" },
+  { city: "Hong Kong",       country: "HK", tz: "Asia/Hong_Kong" },
+  { city: "Shanghai",        country: "CN", tz: "Asia/Shanghai" },
+  { city: "Beijing",         country: "CN", tz: "Asia/Shanghai" },
+  { city: "Shenzhen",        country: "CN", tz: "Asia/Shanghai" },
+  { city: "Guangzhou",       country: "CN", tz: "Asia/Shanghai" },
+  { city: "Chengdu",         country: "CN", tz: "Asia/Shanghai" },
+  { city: "Tokyo",           country: "JP", tz: "Asia/Tokyo" },
+  { city: "Osaka",           country: "JP", tz: "Asia/Tokyo" },
+  { city: "Seoul",           country: "KR", tz: "Asia/Seoul" },
+  { city: "Taipei",          country: "TW", tz: "Asia/Taipei" },
+  { city: "Ulaanbaatar",     country: "MN", tz: "Asia/Ulaanbaatar" },
+  { city: "Yangon",          country: "MM", tz: "Asia/Rangoon" },
+  // Pacific & Oceania
+  { city: "Sydney",          country: "AU", tz: "Australia/Sydney" },
+  { city: "Melbourne",       country: "AU", tz: "Australia/Melbourne" },
+  { city: "Brisbane",        country: "AU", tz: "Australia/Brisbane" },
+  { city: "Perth",           country: "AU", tz: "Australia/Perth" },
+  { city: "Adelaide",        country: "AU", tz: "Australia/Adelaide" },
+  { city: "Auckland",        country: "NZ", tz: "Pacific/Auckland" },
+  { city: "Fiji",            country: "FJ", tz: "Pacific/Fiji" },
+  // UTC
+  { city: "UTC",             country: "",   tz: "UTC" },
+];
+
 const DEFAULT_CITIES = [
-  { city: "New York",   tz: "America/New_York" },
-  { city: "London",     tz: "Europe/London" },
-  { city: "Dubai",      tz: "Asia/Dubai" },
-  { city: "Mumbai",     tz: "Asia/Kolkata" },
-  { city: "Singapore",  tz: "Asia/Singapore" },
-  { city: "Tokyo",      tz: "Asia/Tokyo" },
-  { city: "Sydney",     tz: "Australia/Sydney" },
-  { city: "Los Angeles",tz: "America/Los_Angeles" },
+  { city: "New York",    country: "US", tz: "America/New_York" },
+  { city: "London",      country: "GB", tz: "Europe/London" },
+  { city: "Dubai",       country: "AE", tz: "Asia/Dubai" },
+  { city: "Mumbai",      country: "IN", tz: "Asia/Kolkata" },
+  { city: "Singapore",   country: "SG", tz: "Asia/Singapore" },
+  { city: "Tokyo",       country: "JP", tz: "Asia/Tokyo" },
+  { city: "Sydney",      country: "AU", tz: "Australia/Sydney" },
+  { city: "Los Angeles", country: "US", tz: "America/Los_Angeles" },
 ];
 
 function WorldClock() {
-  const [cities, setCities]   = useState(DEFAULT_CITIES);
-  const [now, setNow]         = useState(new Date());
-  const [addTz, setAddTz]     = useState("");
-  const [addCity, setAddCity] = useState("");
+  const [cities, setCities]     = useState(DEFAULT_CITIES);
+  const [now, setNow]           = useState<Date | null>(null);
+  const [query, setQuery]       = useState("");
+  const [suggestions, setSuggestions] = useState<typeof CITY_TZ_DB>([]);
+  const [open, setOpen]         = useState(false);
+  const [dropPos, setDropPos]   = useState({ top: 0, left: 0, width: 0 });
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropRef  = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const fmtTime = (tz: string) => new Intl.DateTimeFormat("en", {
-    timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
-  }).format(now);
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (!dropRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) { setSuggestions([]); setOpen(false); return; }
+    const matches = CITY_TZ_DB.filter(
+      ({ city, country }) =>
+        city.toLowerCase().includes(q) || country.toLowerCase().includes(q)
+    ).slice(0, 8);
+    setSuggestions(matches);
+    if (matches.length > 0 && inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [query]);
+
+  const fmtTime = (tz: string) => {
+    if (!now) return "--:--:--";
+    return new Intl.DateTimeFormat("en-GB", {
+      timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23",
+    }).format(now);
+  };
 
   const fmtDate = (tz: string) => new Intl.DateTimeFormat("en", {
     timeZone: tz, weekday: "short", month: "short", day: "numeric",
   }).format(now);
 
-  const addCity_ = () => {
-    if (!addTz || !addCity.trim()) return;
-    setCities(c => [...c, { city: addCity.trim(), tz: addTz }]);
-    setAddCity(""); setAddTz("");
+  const fmtOffset = (tz: string) => {
+    try {
+      const parts = new Intl.DateTimeFormat("en", { timeZone: tz, timeZoneName: "shortOffset" })
+        .formatToParts(now);
+      return parts.find(p => p.type === "timeZoneName")?.value ?? "";
+    } catch { return ""; }
   };
+
+  const addCity = (entry: typeof CITY_TZ_DB[number]) => {
+    if (cities.find(c => c.tz === entry.tz && c.city === entry.city)) return;
+    setCities(c => [...c, entry]);
+    setQuery("");
+    setOpen(false);
+    inputRef.current?.focus();
+  };
+
+  const removeCity = (i: number) => setCities(cs => cs.filter((_, j) => j !== i));
 
   return (
     <div className="space-y-4">
+      {/* City cards */}
       <div className="grid sm:grid-cols-2 gap-3">
         {cities.map((c, i) => (
-          <div key={i} className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
+          <div key={i} className="flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 group">
             <div>
-              <div className="text-xs text-muted-foreground">{c.city}</div>
-              <div className="font-mono font-bold text-xl tracking-tight">{fmtTime(c.tz)}</div>
-              <div className="text-xs text-muted-foreground">{fmtDate(c.tz)}</div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="text-xs font-semibold text-foreground">{c.city}</span>
+                {c.country && (
+                  <span className="text-[10px] text-muted-foreground font-medium">{c.country}</span>
+                )}
+              </div>
+              <div className="font-mono font-bold text-2xl tracking-tight leading-none">{fmtTime(c.tz)}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">
+                {fmtDate(c.tz)} · {fmtOffset(c.tz)}
+              </div>
             </div>
             {i >= DEFAULT_CITIES.length && (
-              <button onClick={() => setCities(cs => cs.filter((_, j) => j !== i))} className="text-muted-foreground hover:text-rose-400 ml-2">
+              <button
+                onClick={() => removeCity(i)}
+                className="text-muted-foreground hover:text-rose-400 ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
                 <X className="w-4 h-4" />
               </button>
             )}
@@ -271,18 +450,62 @@ function WorldClock() {
         ))}
       </div>
 
-      <div className="flex gap-2 flex-wrap">
-        <Input value={addCity} onChange={e => setAddCity(e.target.value)} placeholder="City name" className="h-9 text-sm w-36" />
-        <select value={addTz} onChange={e => setAddTz(e.target.value)}
-          className="h-9 rounded-xl border border-border bg-background px-2 text-sm flex-1 min-w-[160px] focus:outline-none">
-          <option value="">Select timezone</option>
-          {TIMEZONES.filter(tz => !cities.find(c => c.tz === tz)).map(tz => (
-            <option key={tz} value={tz}>{tz.replace(/_/g, " ")}</option>
-          ))}
-        </select>
-        <Button size="sm" onClick={addCity_} disabled={!addTz || !addCity.trim()} className="h-9 gap-1">
-          <Plus className="w-3.5 h-3.5" /> Add
-        </Button>
+      {/* City search — single input, auto-resolves timezone */}
+      <div ref={dropRef}>
+        <Input
+          ref={inputRef}
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          onFocus={() => {
+            if (suggestions.length > 0 && inputRef.current) {
+              const rect = inputRef.current.getBoundingClientRect();
+              setDropPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+              setOpen(true);
+            }
+          }}
+          placeholder="Type a city name to add… e.g. Tokyo, Paris, Mumbai"
+          className="h-10 text-sm w-full"
+        />
+
+        {open && (
+          <div
+            className="fixed z-9999 rounded-xl border border-border bg-popover shadow-xl overflow-hidden"
+            style={{ top: dropPos.top, left: dropPos.left, width: dropPos.width }}
+          >
+            {suggestions.map((entry, i) => {
+              const alreadyAdded = cities.some(c => c.tz === entry.tz && c.city === entry.city);
+              return (
+                <button
+                  key={i}
+                  onMouseDown={e => { e.preventDefault(); if (!alreadyAdded) addCity(entry); }}
+                  disabled={alreadyAdded}
+                  className={cn(
+                    "w-full flex items-center justify-between px-4 py-2.5 text-sm text-left hover:bg-muted transition-colors",
+                    alreadyAdded && "opacity-40 cursor-default"
+                  )}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{entry.city}</span>
+                    {entry.country && (
+                      <span className="text-xs text-muted-foreground">{entry.country}</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-xs text-muted-foreground font-mono">{fmtTime(entry.tz)}</span>
+                    {alreadyAdded
+                      ? <span className="text-[10px] text-muted-foreground">added</span>
+                      : <Plus className="w-3.5 h-3.5 text-muted-foreground" />
+                    }
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <p className="text-xs text-muted-foreground mt-2">
+          Search from 120+ cities worldwide — timezone is resolved automatically.
+        </p>
       </div>
     </div>
   );
@@ -360,7 +583,7 @@ function CountdownTimer() {
           {remaining.total > 0 ? (
             <div className="flex justify-center gap-4">
               {[{label:"Days",val:remaining.d},{label:"Hours",val:remaining.h},{label:"Minutes",val:remaining.m},{label:"Seconds",val:remaining.s}].map(u => (
-                <div key={u.label} className="min-w-[60px]">
+                <div key={u.label} className="min-w-15">
                   <div className="text-4xl font-black font-mono tabular-nums">{pad(u.val)}</div>
                   <div className="text-[10px] text-muted-foreground uppercase mt-1">{u.label}</div>
                 </div>

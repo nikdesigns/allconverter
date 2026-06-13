@@ -7,6 +7,7 @@ import { FAQSection } from "@/components/home/FAQSection";
 import { FounderSection } from "@/components/home/FounderSection";
 import { SupportSection } from "@/components/home/SupportSection";
 import { SEOContentBlock } from "@/components/home/SEOContentBlock";
+import { LatestArticles } from "@/components/home/LatestArticles";
 import {
   generateOrganizationSchema,
   generateWebsiteSchema,
@@ -62,6 +63,7 @@ export default function HomePage() {
       <HeroSection />
       <CategoriesGrid />
       <PopularTools />
+      <LatestArticles />
       <BenefitsSection />
       <FAQSection />
       <FounderSection />

@@ -7,7 +7,7 @@ import {
   Menu, X, Sun, Moon, Zap, ChevronDown, Search,
   FileText, Image as ImageIcon, Type, Code2, SearchCheck,
   Calculator, ArrowLeftRight, Sparkles, Briefcase, Palette,
-  ArrowRight, LayoutGrid,
+  ArrowRight, LayoutGrid, Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -28,6 +28,7 @@ const catIconMap: Record<string, React.ElementType> = {
 };
 
 const quickNavLinks = [
+  { href: "/blog/", label: "Blog" },
   { href: "/pdf-tools/", label: "PDF Tools" },
   { href: "/developer-tools/", label: "Developer" },
   { href: "/calculators/", label: "Calculators" },
@@ -229,6 +230,15 @@ export function Header() {
               <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
 
+            {/* Donate */}
+            <Link
+              href="/support/"
+              title="Support the project"
+              className="hidden sm:flex items-center justify-center w-8 h-8 rounded-(--radius-default) text-rose-400 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
+            >
+              <Heart className="w-4 h-4" />
+            </Link>
+
             {/* CTA */}
             <Link href="/tools/" className="hidden sm:block">
               <Button size="sm" className="h-8 px-4 text-xs font-semibold gap-1.5">
@@ -296,10 +306,29 @@ export function Header() {
                     })}
                   </nav>
 
+                  <div className="px-3 pb-2 border-t border-(--border-default) pt-2">
+                    <p className="px-3 py-1.5 text-[10px] uppercase tracking-wider font-semibold text-(--body-subtle)">
+                      More
+                    </p>
+                    <Link
+                      href="/blog/"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-(--neutral-secondary-soft) transition-colors"
+                    >
+                      <div className="w-8 h-8 rounded-(--radius-default) flex items-center justify-center shrink-0 border border-(--border-default) bg-(--neutral-secondary-soft)">
+                        <Search className="w-4 h-4 text-fg-brand" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-(--heading)">Blog & Guides</p>
+                        <p className="text-xs text-(--body-subtle)">Tips, tutorials, and tool guides</p>
+                      </div>
+                    </Link>
+                  </div>
+
                   <div className="p-4 border-t border-[var(--border-default)]">
                     <Link href="/tools/" onClick={() => setMobileOpen(false)}>
                       <Button className="w-full gap-2">
-                        Browse All 100+ Tools
+                        Browse All 250+ Tools
                         <ArrowRight className="w-4 h-4" />
                       </Button>
                     </Link>

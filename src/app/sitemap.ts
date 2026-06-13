@@ -18,6 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteConfig.url}/changelog/`, lastModified: now, changeFrequency: "weekly",  priority: 0.6 },
     { url: `${siteConfig.url}/contact/`,   lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteConfig.url}/sitemap/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.5 },
+    { url: `${siteConfig.url}/support/`,       lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${siteConfig.url}/author/nitin/`,  lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteConfig.url}/privacy/`,   lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${siteConfig.url}/terms/`,     lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${siteConfig.url}/cookies/`,   lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
@@ -48,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogPostPages: MetadataRoute.Sitemap = allBlogPosts.map((post) => ({
     url: `${siteConfig.url}/blog/${post.category}/${post.slug}/`,
-    lastModified: new Date(post.updatedAt ?? post.publishedAt),
+    lastModified: now,
     changeFrequency: "monthly",
     priority: post.isPillar ? 0.8 : post.isFeatured ? 0.75 : 0.65,
   }));

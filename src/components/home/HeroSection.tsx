@@ -11,8 +11,10 @@ import { cn } from "@/lib/utils";
 
 const stats = [
   { value: "250+", label: "Free Tools" },
-  { value: "12", label: "Tool Categories" },
-  { value: "0", label: "Sign-ups Needed" },
+  { value: "12", label: "Categories" },
+  { value: "100%", label: "Free Forever" },
+  { value: "0", label: "Sign-ups" },
+  { value: "Weekly", label: "New Tools" },
 ];
 
 const quickLinks = [
@@ -53,10 +55,10 @@ export function HeroSection() {
       {/* Subtle grid */}
       <div className="absolute inset-0 grid-pattern opacity-40 pointer-events-none" />
 
-      {/* Glow orbs — teal/blue palette */}
-      <div className="absolute top-16 left-1/2 -translate-x-1/2 w-[700px] h-[420px] bg-[#00BFFF]/8 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-32 right-1/4 w-[260px] h-[260px] bg-[#4B0082]/15 rounded-full blur-2xl pointer-events-none" />
-      <div className="absolute bottom-10 left-1/4 w-[200px] h-[200px] bg-[#00897B]/10 rounded-full blur-2xl pointer-events-none" />
+      {/* Glow orbs */}
+      <div className="absolute top-16 left-1/2 -translate-x-1/2 w-175 h-105 bg-[#00BFFF]/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-32 right-1/4 w-65 h-65 bg-[#4B0082]/15 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute bottom-10 left-1/4 w-50 h-50 bg-[#00897B]/10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="container-xl relative z-10">
 
@@ -75,14 +77,14 @@ export function HeroSection() {
         </div>
 
         {/* Main headline */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-center mb-5 leading-[1.08] text-[var(--heading)]">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-center mb-5 leading-[1.08] text-(--heading)">
           Convert Anything.{" "}
           <br className="hidden sm:block" />
           <span className="gradient-text">All in One Place.</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-lg sm:text-xl text-[var(--body-subtle)] text-center max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p className="text-lg sm:text-xl text-(--body-subtle) text-center max-w-2xl mx-auto mb-10 leading-relaxed">
           250+ free tools for PDF, images, audio, AI content, SEO, developer utilities,
           business documents, calculators, and more. No sign-up. No uploads. No limits.
         </p>
@@ -92,13 +94,13 @@ export function HeroSection() {
           <form onSubmit={handleSubmit}>
             <div
               className={cn(
-                "relative flex items-center rounded-2xl border bg-[var(--neutral-primary)] transition-all duration-200 shadow-[var(--shadow-md)]",
+                "relative flex items-center rounded-2xl border bg-(--neutral-primary) transition-all duration-200 shadow-md",
                 focused
-                  ? "border-[var(--border-brand)] ring-2 ring-[var(--brand)]/30"
-                  : "border-[var(--border-default)] hover:border-[var(--border-default-strong)]"
+                  ? "border-border-brand ring-2 ring-(--brand)/30"
+                  : "border-(--border-default) hover:border-(--border-default-strong)"
               )}
             >
-              <Search className="absolute left-4 w-4 h-4 text-[var(--body-subtle)] pointer-events-none" />
+              <Search className="absolute left-4 w-4 h-4 text-(--body-subtle) pointer-events-none" />
               <input
                 ref={inputRef}
                 type="text"
@@ -107,7 +109,7 @@ export function HeroSection() {
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 150)}
                 placeholder='Search 250+ tools… try "compress PDF", "AI cover letter" or "GST calculator"'
-                className="flex-1 pl-11 pr-4 py-4 text-sm bg-transparent outline-none text-[var(--heading)] placeholder:text-[var(--body-subtle)]"
+                className="flex-1 pl-11 pr-4 py-4 text-sm bg-transparent outline-none text-(--heading) placeholder:text-(--body-subtle)"
               />
               <div className="pr-2">
                 <Button type="submit" size="sm" className="rounded-full h-9 px-5">
@@ -119,21 +121,21 @@ export function HeroSection() {
 
           {/* Search results dropdown */}
           {results.length > 0 && focused && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--neutral-primary-soft)] border border-[var(--border-default)] rounded-2xl shadow-[var(--shadow-lg)] overflow-hidden z-50">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-(--neutral-primary-soft) border border-(--border-default) rounded-2xl shadow-lg overflow-hidden z-50">
               {results.map((tool) => (
                 <Link
                   key={tool.slug}
                   href={`/tools/${tool.slug}/`}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--neutral-secondary-medium)] transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-(--neutral-secondary-medium) transition-colors"
                 >
-                  <div className="w-7 h-7 rounded-[var(--radius-default)] bg-[var(--brand-softer)] flex items-center justify-center shrink-0">
-                    <Zap className="w-3.5 h-3.5 text-[var(--fg-brand)]" />
+                  <div className="w-7 h-7 rounded-(--radius-default) bg-brand-softer flex items-center justify-center shrink-0">
+                    <Zap className="w-3.5 h-3.5 text-fg-brand" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-[var(--heading)]">{tool.name}</p>
-                    <p className="text-xs text-[var(--body-subtle)]">{tool.tagline}</p>
+                    <p className="text-sm font-medium text-(--heading)">{tool.name}</p>
+                    <p className="text-xs text-(--body-subtle)">{tool.tagline}</p>
                   </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-[var(--body-subtle)] ml-auto shrink-0" />
+                  <ArrowRight className="w-3.5 h-3.5 text-(--body-subtle) ml-auto shrink-0" />
                 </Link>
               ))}
             </div>
@@ -157,7 +159,7 @@ export function HeroSection() {
         </div>
 
         {/* Trust line */}
-        <p className="text-center text-xs text-[var(--body-subtle)] mb-12 tracking-wide">
+        <p className="text-center text-xs text-(--body-subtle) mb-12 tracking-wide">
           Trusted by thousands&nbsp;&nbsp;·&nbsp;&nbsp;Secure &amp; Private&nbsp;&nbsp;·&nbsp;&nbsp;Works on any device
         </p>
 
@@ -167,7 +169,7 @@ export function HeroSection() {
             <Link key={item.href} href={item.href}>
               <Badge
                 variant="secondary"
-                className="px-3 py-1.5 text-xs hover:bg-[var(--neutral-tertiary-soft)] hover:border-[var(--border-brand-subtle)] transition-all cursor-pointer gap-1.5"
+                className="px-3 py-1.5 text-xs hover:bg-neutral-tertiary-soft hover:border-(--border-brand-subtle) transition-all cursor-pointer gap-1.5"
               >
                 <item.icon className="w-3 h-3 opacity-60" />
                 {item.label}
@@ -176,14 +178,14 @@ export function HeroSection() {
           ))}
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 max-w-xs mx-auto">
+        {/* Stats — 5 across */}
+        <div className="grid grid-cols-5 gap-4 max-w-lg mx-auto">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight gradient-text">
+              <p className="text-xl sm:text-2xl font-bold tracking-tight gradient-text">
                 {stat.value}
               </p>
-              <p className="text-xs text-[var(--body-subtle)] mt-0.5">{stat.label}</p>
+              <p className="text-[10px] text-(--body-subtle) mt-0.5 leading-tight">{stat.label}</p>
             </div>
           ))}
         </div>

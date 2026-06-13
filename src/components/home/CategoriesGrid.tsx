@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   FileText, Image, Type, Code2, Search, Calculator, ArrowLeftRight,
-  Sparkles, Briefcase,
+  Sparkles, Briefcase, ArrowRight,
 } from "lucide-react";
 import { categories } from "@/lib/categories";
 import { getToolsByCategory } from "@/lib/tools-data";
@@ -60,9 +60,15 @@ export function CategoriesGrid() {
                   <p className="text-xs text-[var(--body-subtle)] leading-relaxed line-clamp-2 mb-3">
                     {cat.description}
                   </p>
-                  <span className="text-xs font-medium text-[var(--body-subtle)]">
-                    {toolCount} {toolCount === 1 ? "tool" : "tools"}
-                  </span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-(--body-subtle)">
+                      {toolCount} {toolCount === 1 ? "tool" : "tools"}
+                    </span>
+                    <span className="text-xs font-medium text-fg-brand opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                      Explore all
+                      <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </div>
                 </div>
               </Link>
             );

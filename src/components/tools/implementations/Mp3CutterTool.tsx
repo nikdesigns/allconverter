@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Scissors, Upload, Download, Loader2, CheckCircle2, X, Play, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { decodeAudioFile, sliceAudioBuffer, audioBufferToWav, downloadBlob, fmtTime } from "@/lib/audio-utils";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 export function Mp3CutterTool() {
   const [file, setFile] = useState<File | null>(null);
@@ -20,6 +22,8 @@ export function Mp3CutterTool() {
   const inputRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const previewUrlRef = useRef<string | null>(null);
+
+  const proc = useProcessing({ category: "audio" });
 
   async function handleFile(f: File) {
     setFile(f);
@@ -74,14 +78,24 @@ export function Mp3CutterTool() {
     if (!buffer || !file) return;
     setProcessing(true);
     setError("");
+    await proc.setFile(file);
+    proc.advance("processing");
     try {
       const sliced = sliceAudioBuffer(buffer, startSec, endSec);
+      proc.advance("optimizing");
       const wav = audioBufferToWav(sliced);
       const outName = file.name.replace(/\.[^.]+$/, "") + `_cut.wav`;
       downloadBlob(wav, outName);
       setDone(true);
+      proc.complete([
+        { label: "Original Duration", after: fmtTime(buffer.duration) },
+        { label: "Cut Duration", after: fmtTime(endSec - startSec), highlight: true },
+        { label: "Range", after: `${fmtTime(startSec)} → ${fmtTime(endSec)}` },
+      ]);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Processing failed.");
+      const msg = e instanceof Error ? e.message : "Processing failed.";
+      setError(msg);
+      proc.error(msg);
     } finally {
       setProcessing(false);
     }
@@ -93,6 +107,7 @@ export function Mp3CutterTool() {
     setBuffer(null);
     setDone(false);
     setError("");
+    proc.reset();
   }
 
   const duration = buffer?.duration ?? 0;
@@ -214,7 +229,13 @@ export function Mp3CutterTool() {
             </Button>
           </div>
 
-          {done && (
+          <AnimatePresence>
+            {proc.state.stage !== "idle" && (
+              <ProcessingStatus state={proc.state} config={proc.config} onRetry={cut} showFileCard={false} showSteps={false} />
+            )}
+          </AnimatePresence>
+
+          {done && proc.state.stage !== "complete" && (
             <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
               Download started — output is a WAV file.

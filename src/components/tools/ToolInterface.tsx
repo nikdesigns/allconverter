@@ -149,7 +149,7 @@ const BusinessDocSuite      = lazy(() => import("./implementations/BusinessDocSu
 const SeoSchemaSuite        = lazy(() => import("./implementations/SeoSchemaSuite").then(m => ({ default: m.SeoSchemaSuite })));
 const AudioConversionSuite  = lazy(() => import("./implementations/AudioConversionSuite").then(m => ({ default: m.AudioConversionSuite })));
 const UpiQrGeneratorTool    = lazy(() => import("./implementations/UpiQrGeneratorTool").then(m => ({ default: m.UpiQrGeneratorTool })));
-
+const VideoToolsSuite       = lazy(() => import("./implementations/VideoToolsSuite").then(m => ({ default: m.VideoToolsSuite })));
 // ── Slug → Component map ───────────────────────────────────────────────────────
 const toolComponentMap: Record<string, React.ComponentType> = {
   // ── PDF ──────────────────────────────────────────────────────────────────────
@@ -307,6 +307,15 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "proposal-generator":           QuotationGeneratorTool,
   "receipt-generator":            ReceiptGeneratorTool,
   "upi-qr-generator":             UpiQrGeneratorTool,
+
+  // ── Video ─────────────────────────────────────────────────────────────────────
+  "video-audio-extractor":        VideoToolsSuite,
+  "video-trimmer":                VideoToolsSuite,
+  "video-compressor":             VideoToolsSuite,
+  "mp4-to-gif":                   VideoToolsSuite,
+  "video-thumbnail":              VideoToolsSuite,
+  "screen-recorder":              VideoToolsSuite,
+
   "salary-calculator":            SalaryCalculatorTool,
   "ctc-to-inhand-calculator":     SalaryCalculatorTool,
   "salary-slip-generator":        SalarySlipGeneratorTool,

@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteConfig.url}/changelog/`, lastModified: now, changeFrequency: "weekly",  priority: 0.6 },
     { url: `${siteConfig.url}/contact/`,   lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteConfig.url}/sitemap/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.5 },
+    { url: `${siteConfig.url}/video-tools/`,    lastModified: now, changeFrequency: "weekly",  priority: 0.85 },
     { url: `${siteConfig.url}/support/`,       lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteConfig.url}/author/nitin/`,  lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteConfig.url}/privacy/`,   lastModified: now, changeFrequency: "yearly",  priority: 0.3 },

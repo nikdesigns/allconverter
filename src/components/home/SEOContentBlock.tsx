@@ -102,6 +102,28 @@ export function SEOContentBlock() {
             , ROI calculator, SaaS MRR and CAC calculators, and an expense tracker.
           </p>
 
+          <h2>Video Tools — Extract, Trim, Compress, and Convert</h2>
+          <p>
+            The{" "}
+            <Link href="/video-tools/" className="text-fg-brand hover:underline">
+              video tools
+            </Link>{" "}
+            category lets you work with video files entirely in your browser — no upload, no server. Extract
+            audio from MP4 or WebM files with the{" "}
+            <Link href="/tools/video-to-audio/" className="text-fg-brand hover:underline">
+              video to audio extractor
+            </Link>
+            , trim clips to a precise start and end time, reduce file size with the{" "}
+            <Link href="/tools/video-compressor/" className="text-fg-brand hover:underline">
+              video compressor
+            </Link>
+            {" "}(360p/480p/720p), convert short clips to animated GIF with{" "}
+            <Link href="/tools/mp4-to-gif/" className="text-fg-brand hover:underline">
+              MP4 to GIF
+            </Link>
+            , extract frame thumbnails, or record your screen without any software install.
+          </p>
+
           <h2>Financial Calculators — EMI, SIP, GST, CAGR, and More</h2>
           <p>
             Our{" "}

@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
 import { Download, RefreshCw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { formatBytes2 } from "@/components/tools/shared/FileUploadZone";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 interface ConvertedFile { name: string; url: string; blob: Blob; }
 
@@ -50,24 +52,44 @@ export function ImageFormatConverterTool() {
   const [results, setResults] = useState<ConvertedFile[]>([]);
   const [processing, setProcessing] = useState(false);
 
+  const proc = useProcessing({ category: "image" });
+
   const handleFiles = (newFiles: File[]) => {
     setFiles((prev) => [...prev, ...newFiles]);
     setResults([]);
+    proc.reset();
   };
 
   const convert = async () => {
+    if (!files.length) return;
     setProcessing(true);
+    await proc.setFile(files[0]);
+    proc.advance("analyzing");
     const out: ConvertedFile[] = [];
-    for (const f of files) {
-      try {
-        const blob = await convertImage(f, cfg.mimeOut, cfg.quality);
-        const name = f.name.replace(/\.[^.]+$/, `.${cfg.ext}`);
-        out.push({ name, url: URL.createObjectURL(blob), blob });
-      } catch { toast.error(`Failed to convert ${f.name}`); }
+    try {
+      proc.advance("processing");
+      for (let i = 0; i < files.length; i++) {
+        proc.setProgress(52 + Math.round(((i + 0.5) / files.length) * 38));
+        const f = files[i];
+        try {
+          const blob = await convertImage(f, cfg.mimeOut, cfg.quality);
+          const name = f.name.replace(/\.[^.]+$/, `.${cfg.ext}`);
+          out.push({ name, url: URL.createObjectURL(blob), blob });
+        } catch { toast.error(`Failed to convert ${f.name}`); }
+      }
+      setResults(out);
+      const totalSize = out.reduce((s, r) => s + r.blob.size, 0);
+      proc.complete([
+        { label: "Files Converted", after: `${out.length}` },
+        { label: "Output Format", after: cfg.to },
+        { label: "Total Output Size", after: formatBytes2(totalSize), highlight: true },
+      ]);
+      if (out.length) toast.success(`Converted ${out.length} file${out.length > 1 ? "s" : ""}`);
+    } catch {
+      proc.error("Conversion failed");
+    } finally {
+      setProcessing(false);
     }
-    setResults(out);
-    setProcessing(false);
-    if (out.length) toast.success(`Converted ${out.length} file${out.length > 1 ? "s" : ""}`);
   };
 
   const downloadAll = () => results.forEach((r) => { const a = document.createElement("a"); a.href = r.url; a.download = r.name; a.click(); });
@@ -127,6 +149,12 @@ export function ImageFormatConverterTool() {
                 </Button>
               )}
             </div>
+
+            <AnimatePresence>
+              {proc.state.stage !== "idle" && (
+                <ProcessingStatus state={proc.state} config={proc.config} onRetry={convert} showFileCard={false} />
+              )}
+            </AnimatePresence>
           </>
         )}
       </div>

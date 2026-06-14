@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
 import { Download, Maximize2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 type ResizeMode = "pixels" | "percent" | "preset";
 const PRESETS = [
@@ -36,10 +38,13 @@ export function ImageResizerTool() {
   const [processing, setProcessing] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const proc = useProcessing({ category: "image" });
+
   const handleFile = (files: File[]) => {
     const f = files[0];
     setFile(f);
     setOutputUrl("");
+    proc.reset();
     const url = URL.createObjectURL(f);
     const img = new Image();
     img.onload = () => {
@@ -70,6 +75,7 @@ export function ImageResizerTool() {
 
   const resize = async (f: File, ow: number, oh: number) => {
     setProcessing(true);
+    proc.advance("processing");
     try {
       let targetW: number, targetH: number;
       if (mode === "pixels") {
@@ -99,6 +105,11 @@ export function ImageResizerTool() {
             if (blob) {
               setOutputUrl(URL.createObjectURL(blob));
               setOutputDims({ w: targetW, h: targetH });
+              proc.complete([
+                { label: "Original", after: `${ow}×${oh}px` },
+                { label: "Resized To", after: `${targetW}×${targetH}px`, highlight: true },
+                { label: "Output Size", after: `${(blob.size / 1024).toFixed(1)} KB` },
+              ]);
             }
             resolve();
           }, f.type || "image/jpeg", 0.92);
@@ -106,6 +117,7 @@ export function ImageResizerTool() {
         img.src = src;
       });
     } catch {
+      proc.error("Resize failed");
       toast.error("Resize failed");
     } finally {
       setProcessing(false);
@@ -209,6 +221,12 @@ export function ImageResizerTool() {
                 </div>
               )}
             </div>
+
+            <AnimatePresence>
+              {proc.state.stage !== "idle" && (
+                <ProcessingStatus state={proc.state} config={proc.config} showFileCard={false} showSteps={false} />
+              )}
+            </AnimatePresence>
 
             {outputUrl && (
               <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 flex items-center gap-4">

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { AnimatePresence } from "framer-motion";
 import { ListMusic, Plus, Download, Loader2, CheckCircle2, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { decodeAudioFile, joinAudioBuffers, audioBufferToWav, downloadBlob, fmtTime } from "@/lib/audio-utils";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 interface AudioItem {
   id: string;
@@ -18,6 +20,8 @@ export function AudioJoinerTool() {
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const proc = useProcessing({ category: "audio" });
 
   async function addFiles(files: FileList | File[]) {
     setLoading(true);
@@ -62,13 +66,22 @@ export function AudioJoinerTool() {
     if (items.length < 2) return;
     setProcessing(true);
     setError("");
+    await proc.setFile(items[0].file);
+    proc.advance("processing");
     try {
       const joined = joinAudioBuffers(items.map((i) => i.buffer));
+      proc.advance("optimizing");
       const wav = audioBufferToWav(joined);
       downloadBlob(wav, "joined_audio.wav");
       setDone(true);
+      proc.complete([
+        { label: "Files Joined", after: `${items.length}` },
+        { label: "Total Duration", after: fmtTime(joined.duration), highlight: true },
+      ]);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Join failed.");
+      const msg = e instanceof Error ? e.message : "Join failed.";
+      setError(msg);
+      proc.error(msg);
     } finally {
       setProcessing(false);
     }
@@ -167,7 +180,13 @@ export function AudioJoinerTool() {
         <p className="text-xs text-amber-600 dark:text-amber-400">Add at least 2 files to join.</p>
       )}
 
-      {done && (
+      <AnimatePresence>
+        {proc.state.stage !== "idle" && (
+          <ProcessingStatus state={proc.state} config={proc.config} onRetry={join} showFileCard={false} showSteps={false} />
+        )}
+      </AnimatePresence>
+
+      {done && proc.state.stage !== "complete" && (
         <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
           <CheckCircle2 className="w-4 h-4" />
           Download started — output saved as joined_audio.wav

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FileUploadZone, formatBytes2 } from "@/components/tools/shared/FileUploadZone";
 import { Download, Scissors, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 interface SplitResult { name: string; url: string; size: number; pages: string; }
 
@@ -17,8 +19,10 @@ export function PdfSplitterTool() {
   const [results, setResults] = useState<SplitResult[]>([]);
   const [processing, setProcessing] = useState(false);
 
+  const proc = useProcessing({ category: "pdf" });
+
   const handleFile = async (files: File[]) => {
-    const f = files[0]; setFile(f); setResults([]);
+    const f = files[0]; setFile(f); setResults([]); proc.reset();
     try {
       const { PDFDocument } = await import("pdf-lib");
       const bytes = await f.arrayBuffer();
@@ -39,21 +43,30 @@ export function PdfSplitterTool() {
   const split = async () => {
     if (!file || !pageCount) return;
     setProcessing(true);
+    await proc.setFile(file);
+    proc.advance("analyzing");
     try {
       const { PDFDocument } = await import("pdf-lib");
       const bytes = await file.arrayBuffer();
       const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
+      proc.advance("processing");
 
       let ranges: Array<number[]>;
       if (mode === "each") {
         ranges = Array.from({ length: pageCount }, (_, i) => [i]);
       } else {
         ranges = parseRanges(rangeInput, pageCount);
-        if (!ranges.length) { toast.error("No valid page ranges"); setProcessing(false); return; }
+        if (!ranges.length) {
+          proc.error("No valid page ranges");
+          toast.error("No valid page ranges");
+          setProcessing(false);
+          return;
+        }
       }
 
       const out: SplitResult[] = [];
       for (let i = 0; i < ranges.length; i++) {
+        proc.setProgress(52 + Math.round(((i + 0.5) / ranges.length) * 38));
         const indices = ranges[i];
         const doc = await PDFDocument.create();
         const pages = await doc.copyPages(src, indices);
@@ -64,8 +77,17 @@ export function PdfSplitterTool() {
         out.push({ name: `${file.name.replace(".pdf","")}_${pageLabel}.pdf`, url: URL.createObjectURL(blob), size: blob.size, pages: indices.map(n=>n+1).join(", ") });
       }
       setResults(out);
+      const totalSize = out.reduce((s, r) => s + r.size, 0);
+      proc.complete([
+        { label: "Parts Created", after: `${out.length}` },
+        { label: "Source Pages", after: `${pageCount}` },
+        { label: "Total Output Size", after: formatBytes2(totalSize), highlight: true },
+      ]);
       toast.success(`Split into ${out.length} PDF${out.length>1?"s":""}`);
-    } catch { toast.error("Failed to split PDF"); }
+    } catch {
+      proc.error("Failed to split PDF");
+      toast.error("Failed to split PDF");
+    }
     finally { setProcessing(false); }
   };
 
@@ -118,6 +140,12 @@ export function PdfSplitterTool() {
             <Button onClick={split} disabled={processing} className="w-full gap-2">
               {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Splitting…</> : "Split PDF"}
             </Button>
+
+            <AnimatePresence>
+              {proc.state.stage !== "idle" && (
+                <ProcessingStatus state={proc.state} config={proc.config} onRetry={split} showFileCard={false} />
+              )}
+            </AnimatePresence>
 
             {results.length > 0 && (
               <div className="space-y-2">

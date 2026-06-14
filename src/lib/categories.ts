@@ -90,6 +90,14 @@ export const categories: ToolCategory_Data[] = [
     gradient: "from-teal-500/10 to-cyan-500/10",
   },
   {
+    slug: "video-tools",
+    name: "Video Tools",
+    description: "Extract audio, trim, compress, convert to GIF, and grab thumbnails from video files.",
+    icon: "Video",
+    color: "text-pink-500",
+    gradient: "from-pink-500/10 to-rose-500/10",
+  },
+  {
     slug: "network-tools",
     name: "Network & Web Tools",
     description: "Screenshot websites, lookup DNS & IP, check SSL certificates, and analyze page speed.",

@@ -31,6 +31,22 @@ export interface RoadmapItem {
 
 export const releases: Release[] = [
   {
+    version: "v2.7.0",
+    date: "June 2026",
+    summary: "Launched Video Tools — a new category with 6 browser-native video tools covering audio extraction, trimming, compression, GIF conversion, thumbnail capture, and screen recording.",
+    highlight: "All 6 video tools run entirely in the browser using the MediaRecorder, Screen Capture, and Canvas APIs. No server upload, no software install.",
+    changes: [
+      { type: "tool", text: "Video to Audio Extractor (/tools/video-to-audio/) — extract audio track from any video file as WebM audio" },
+      { type: "tool", text: "Video Trimmer (/tools/video-trimmer/) — cut any video to a start/end timestamp, download as WebM" },
+      { type: "tool", text: "Video Compressor (/tools/video-compressor/) — reduce video resolution to 360p/480p/720p using canvas rendering" },
+      { type: "tool", text: "MP4 to GIF (/tools/mp4-to-gif/) — convert video clips to animated GIF with FPS and width controls" },
+      { type: "tool", text: "Video Thumbnail Extractor (/tools/video-thumbnail/) — seek to any timestamp and save the frame as PNG" },
+      { type: "tool", text: "Screen Recorder (/tools/screen-recorder/) — record screen/window/tab with optional mic audio, download as WebM" },
+      { type: "feature", text: "New Video Tools category with category hub page at /video-tools/" },
+      { type: "infra", text: "gifenc package added for client-side GIF encoding (frame quantize + palette + LZW compression)" },
+    ],
+  },
+  {
     version: "v2.6.0",
     date: "June 2026",
     summary:
@@ -346,6 +362,7 @@ export const roadmap = {
     { text: "Additional AI tools — AI LinkedIn post generator, AI job description writer" },
   ],
   completed: [
+    { text: "Video Tools category — 6 browser-native tools: audio extract, trim, compress, GIF, thumbnail, screen record" },
     { text: "UPI QR Code Generator — branded QR with logo overlay, app presets, PNG/SVG download" },
     { text: "Organization + WebSite @graph schema — Google Knowledge Panel optimisation" },
     { text: "Author profile page /author/nitin/ — Person schema, articles, E-E-A-T" },

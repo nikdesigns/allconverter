@@ -82,8 +82,7 @@ function buildConclusions(text: string): string {
 
 async function extractTextFromPdf(file: File): Promise<{ text: string; pageCount: number }> {
   const pdfjsLib = await import("pdfjs-dist");
-  const pdfWorkerUrl = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).toString();
-  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;

@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone, formatBytes2 } from "@/components/tools/shared/FileUploadZone";
 import { Download, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 export function PdfCompressorTool() {
   const [file, setFile] = useState<File | null>(null);
@@ -13,25 +15,27 @@ export function PdfCompressorTool() {
   const [level, setLevel] = useState<"low" | "medium" | "high">("medium");
   const [processing, setProcessing] = useState(false);
 
-  const handleFile = (files: File[]) => { setFile(files[0]); setOutputUrl(""); };
+  const proc = useProcessing({ category: "pdf" });
+
+  const handleFile = (files: File[]) => { setFile(files[0]); setOutputUrl(""); proc.reset(); };
 
   const compress = async () => {
     if (!file) return;
     setProcessing(true);
+    await proc.setFile(file);
+    proc.advance("analyzing");
     try {
       const { PDFDocument } = await import("pdf-lib");
       const bytes = await file.arrayBuffer();
       const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+      proc.advance("processing");
 
-      // pdf-lib doesn't do true compression but we can save with different settings
-      // For a real compressor we'd strip metadata and optimize streams
       const saveOptions = level === "high"
         ? { useObjectStreams: false, addDefaultPage: false, objectsPerTick: 50 }
         : level === "medium"
         ? { useObjectStreams: true, addDefaultPage: false }
         : { useObjectStreams: true };
 
-      // Strip metadata for higher compression
       if (level !== "low") {
         doc.setTitle("");
         doc.setAuthor("");
@@ -46,8 +50,14 @@ export function PdfCompressorTool() {
       setOutputUrl(URL.createObjectURL(blob));
       setOutputSize(blob.size);
       const saved = Math.round((1 - blob.size / file.size) * 100);
+      proc.complete([
+        { label: "Original Size", after: formatBytes2(file.size) },
+        { label: "Compressed Size", after: formatBytes2(blob.size), warn: blob.size >= file.size },
+        { label: "Space Saved", after: saved > 0 ? `${saved}%` : "~0%", highlight: saved > 0 },
+      ]);
       toast.success(`Compressed! ${saved > 0 ? `Saved ${saved}%` : "File optimized"}`);
     } catch {
+      proc.error("Failed to compress PDF.");
       toast.error("Failed to compress PDF.");
     } finally {
       setProcessing(false);
@@ -94,6 +104,12 @@ export function PdfCompressorTool() {
             <Button onClick={compress} disabled={processing} className="w-full gap-2">
               {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Compressing…</> : "Compress PDF"}
             </Button>
+
+            <AnimatePresence>
+              {proc.state.stage !== "idle" && (
+                <ProcessingStatus state={proc.state} config={proc.config} onRetry={compress} showFileCard={false} />
+              )}
+            </AnimatePresence>
 
             {outputUrl && (
               <div className="flex items-center gap-4 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5">

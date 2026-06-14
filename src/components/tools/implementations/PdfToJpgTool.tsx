@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone, formatBytes2 } from "@/components/tools/shared/FileUploadZone";
 import { Download, ImageIcon, Info } from "lucide-react";
 import { toast } from "sonner";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 export function PdfToJpgTool() {
   const [file, setFile] = useState<File | null>(null);
@@ -12,22 +14,27 @@ export function PdfToJpgTool() {
   const [results, setResults] = useState<Array<{ url: string; name: string; size: number }>>([]);
   const [scale, setScale] = useState(2);
 
-  const handleFile = (files: File[]) => { setFile(files[0]); setResults([]); };
+  const proc = useProcessing({ category: "pdf" });
+
+  const handleFile = (files: File[]) => { setFile(files[0]); setResults([]); proc.reset(); };
 
   const convert = async () => {
     if (!file) return;
     setProcessing(true);
     setResults([]);
+    await proc.setFile(file);
+    proc.advance("analyzing");
     try {
-      // Use PDF.js via CDN for rendering
       const pdfjsLib = await import("pdfjs-dist");
       pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
       const bytes = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+      proc.advance("processing");
       const out: typeof results = [];
 
       for (let p = 1; p <= pdf.numPages; p++) {
+        proc.setProgress(28 + Math.round(((p - 0.5) / pdf.numPages) * 62));
         const page = await pdf.getPage(p);
         const viewport = page.getViewport({ scale });
         const canvas = document.createElement("canvas");
@@ -36,7 +43,6 @@ export function PdfToJpgTool() {
         const ctx = canvas.getContext("2d")!;
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // pdfjs RenderParameters requires a canvas element reference
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await page.render({ canvasContext: ctx as any, viewport, canvas } as any).promise;
         const blob = await new Promise<Blob>((res, rej) => canvas.toBlob(b => b ? res(b) : rej(), "image/jpeg", 0.92));
@@ -44,8 +50,15 @@ export function PdfToJpgTool() {
       }
 
       setResults(out);
+      const totalSize = out.reduce((s, r) => s + r.size, 0);
+      proc.complete([
+        { label: "Pages Converted", after: `${pdf.numPages}` },
+        { label: "Total Output Size", after: formatBytes2(totalSize), highlight: true },
+        { label: "Resolution", after: scale === 1 ? "72 dpi" : scale === 2 ? "144 dpi" : "216 dpi" },
+      ]);
       toast.success(`Converted ${pdf.numPages} page${pdf.numPages>1?"s":""} to JPG`);
-    } catch (e) {
+    } catch {
+      proc.error("Failed to convert. Make sure it's a valid PDF.");
       toast.error("Failed to convert. Make sure it's a valid PDF.");
     } finally {
       setProcessing(false);
@@ -96,6 +109,12 @@ export function PdfToJpgTool() {
             <Button onClick={convert} disabled={processing} className="w-full gap-2">
               {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Converting…</> : "Convert to JPG"}
             </Button>
+
+            <AnimatePresence>
+              {proc.state.stage !== "idle" && (
+                <ProcessingStatus state={proc.state} config={proc.config} onRetry={convert} showFileCard={false} />
+              )}
+            </AnimatePresence>
 
             {results.length > 0 && (
               <div className="space-y-2">

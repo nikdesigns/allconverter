@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { AnimatePresence } from "framer-motion";
 import { FileAudio, Upload, Download, Loader2, CheckCircle2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { decodeAudioFile, audioBufferToWav, downloadBlob } from "@/lib/audio-utils";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 const ACCEPT: Record<string, string> = {
   "mp4-to-mp3":      "video/mp4,audio/mp4,.mp4",
@@ -30,12 +32,14 @@ export function AudioConverterTool({ slug = "mp3-to-wav" }: Props) {
   const [progress, setProgress] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const proc = useProcessing({ category: "audio" });
   const info = LABEL[slug] ?? LABEL["mp3-to-wav"];
 
   function handleFile(f: File) {
     setFile(f);
     setStatus("idle");
     setError("");
+    proc.reset();
   }
 
   function onDrop(e: React.DragEvent) {
@@ -49,16 +53,26 @@ export function AudioConverterTool({ slug = "mp3-to-wav" }: Props) {
     setStatus("processing");
     setProgress("Decoding audio…");
     setError("");
+    await proc.setFile(file);
+    proc.advance("analyzing");
     try {
       const buffer = await decodeAudioFile(file);
       setProgress("Encoding WAV…");
+      proc.advance("processing");
       const wav = audioBufferToWav(buffer);
       const outName = file.name.replace(/\.[^.]+$/, "") + ".wav";
       downloadBlob(wav, outName);
       setStatus("done");
+      proc.complete([
+        { label: "Input Format", after: info.from },
+        { label: "Output Format", after: "WAV", highlight: true },
+        { label: "Duration", after: `${buffer.duration.toFixed(1)}s` },
+      ]);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not decode file. Is this a supported audio/video format?");
+      const msg = e instanceof Error ? e.message : "Could not decode file. Is this a supported audio/video format?";
+      setError(msg);
       setStatus("error");
+      proc.error(msg);
     }
   }
 
@@ -113,13 +127,19 @@ export function AudioConverterTool({ slug = "mp3-to-wav" }: Props) {
         )}
       </div>
 
-      {status === "done" && (
+      <AnimatePresence>
+        {proc.state.stage !== "idle" && (
+          <ProcessingStatus state={proc.state} config={proc.config} onRetry={convert} showFileCard={false} showSteps={false} />
+        )}
+      </AnimatePresence>
+
+      {status === "done" && proc.state.stage !== "complete" && (
         <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
           <CheckCircle2 className="w-4 h-4" />
           Download started — check your Downloads folder.
         </div>
       )}
-      {status === "error" && (
+      {status === "error" && proc.state.stage !== "error" && (
         <p className="text-sm text-destructive">{error}</p>
       )}
 

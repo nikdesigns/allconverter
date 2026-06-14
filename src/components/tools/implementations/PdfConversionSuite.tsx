@@ -12,8 +12,7 @@ import { cn } from "@/lib/utils";
 
 async function getPdfText(file: File): Promise<{ text: string; pageCount: number; pages: string[] }> {
   const pdfjsLib = await import("pdfjs-dist");
-  const pdfWorkerUrl = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).toString();
-  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
   const ab  = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
   const pages: string[] = [];

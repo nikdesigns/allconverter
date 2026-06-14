@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
 import { Download, FilePlus2, Trash2, GripVertical, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { formatBytes2 } from "@/components/tools/shared/FileUploadZone";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 export function PdfMergerTool() {
   const [files, setFiles] = useState<File[]>([]);
@@ -13,9 +15,12 @@ export function PdfMergerTool() {
   const [outputSize, setOutputSize] = useState(0);
   const [processing, setProcessing] = useState(false);
 
+  const proc = useProcessing({ category: "pdf" });
+
   const handleFiles = (newFiles: File[]) => {
     setFiles(prev => [...prev, ...newFiles]);
     setOutputUrl("");
+    proc.reset();
   };
 
   const moveUp = (i: number) => {
@@ -30,21 +35,33 @@ export function PdfMergerTool() {
   const merge = async () => {
     if (files.length < 2) { toast.error("Add at least 2 PDF files"); return; }
     setProcessing(true);
+    await proc.setFile(files[0]);
+    proc.advance("analyzing");
     try {
       const { PDFDocument } = await import("pdf-lib");
       const merged = await PDFDocument.create();
-      for (const file of files) {
-        const bytes = await file.arrayBuffer();
+      let totalPages = 0;
+      for (let i = 0; i < files.length; i++) {
+        proc.setProgress(28 + Math.round(((i + 0.5) / files.length) * 44));
+        const bytes = await files[i].arrayBuffer();
         const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
         const pages = await merged.copyPages(doc, doc.getPageIndices());
         pages.forEach(p => merged.addPage(p));
+        totalPages += doc.getPageCount();
       }
+      proc.advance("processing");
       const bytes = await merged.save();
       const blob = new Blob([bytes as unknown as BlobPart], { type: "application/pdf" });
       setOutputUrl(URL.createObjectURL(blob));
       setOutputSize(blob.size);
+      proc.complete([
+        { label: "Files Merged", after: `${files.length}` },
+        { label: "Total Pages", after: `${totalPages}` },
+        { label: "Output Size", after: formatBytes2(blob.size), highlight: true },
+      ]);
       toast.success(`Merged ${files.length} PDFs successfully`);
-    } catch (e) {
+    } catch {
+      proc.error("Failed to merge PDFs. Make sure all files are valid.");
       toast.error("Failed to merge PDFs. Make sure all files are valid.");
     } finally {
       setProcessing(false);
@@ -103,6 +120,12 @@ export function PdfMergerTool() {
             <Button onClick={merge} disabled={processing || files.length < 2} className="w-full gap-2">
               {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Merging…</> : `Merge ${files.length} PDFs`}
             </Button>
+
+            <AnimatePresence>
+              {proc.state.stage !== "idle" && (
+                <ProcessingStatus state={proc.state} config={proc.config} onRetry={merge} showFileCard={false} />
+              )}
+            </AnimatePresence>
 
             {outputUrl && (
               <div className="flex items-center gap-4 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5">

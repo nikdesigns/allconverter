@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone, formatBytes2 } from "@/components/tools/shared/FileUploadZone";
 import { Download, ImageIcon, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
+import { ProcessingStatus, useProcessing } from "@/components/processing";
 
 export function JpgToPdfTool() {
   const [files, setFiles] = useState<File[]>([]);
@@ -13,19 +15,26 @@ export function JpgToPdfTool() {
   const [processing, setProcessing] = useState(false);
   const [pageSize, setPageSize] = useState<"fit" | "a4">("fit");
 
-  const handleFiles = (newFiles: File[]) => { setFiles(p => [...p, ...newFiles]); setOutputUrl(""); };
-  const remove = (i: number) => { setFiles(p => p.filter((_,j) => j !== i)); setOutputUrl(""); };
+  const proc = useProcessing({ category: "pdf" });
+
+  const handleFiles = (newFiles: File[]) => { setFiles(p => [...p, ...newFiles]); setOutputUrl(""); proc.reset(); };
+  const remove = (i: number) => { setFiles(p => p.filter((_,j) => j !== i)); setOutputUrl(""); proc.reset(); };
   const moveUp = (i: number) => { if (!i) return; setFiles(p => { const a=[...p]; [a[i-1],a[i]]=[a[i],a[i-1]]; return a; }); };
   const moveDown = (i: number) => { setFiles(p => { if (i>=p.length-1) return p; const a=[...p]; [a[i],a[i+1]]=[a[i+1],a[i]]; return a; }); };
 
   const convert = async () => {
     if (!files.length) return;
     setProcessing(true);
+    await proc.setFile(files[0]);
+    proc.advance("analyzing");
     try {
       const { PDFDocument } = await import("pdf-lib");
       const doc = await PDFDocument.create();
+      proc.advance("processing");
 
-      for (const file of files) {
+      for (let i = 0; i < files.length; i++) {
+        proc.setProgress(52 + Math.round(((i + 0.5) / files.length) * 38));
+        const file = files[i];
         const bytes = await file.arrayBuffer();
         let img;
         if (file.type === "image/png") {
@@ -48,12 +57,19 @@ export function JpgToPdfTool() {
       }
 
       const saved = await doc.save();
-      // pdf-lib returns Uint8Array<ArrayBufferLike> — cast for Blob constructor compat
       const blob = new Blob([saved as unknown as BlobPart], { type: "application/pdf" });
       setOutputUrl(URL.createObjectURL(blob));
       setOutputSize(blob.size);
+      proc.complete([
+        { label: "Images Embedded", after: `${files.length}` },
+        { label: "Page Size", after: pageSize === "a4" ? "A4" : "Fit to Image" },
+        { label: "Output Size", after: formatBytes2(blob.size), highlight: true },
+      ]);
       toast.success(`Created PDF with ${files.length} page${files.length>1?"s":""}`);
-    } catch { toast.error("Failed to create PDF"); }
+    } catch {
+      proc.error("Failed to create PDF");
+      toast.error("Failed to create PDF");
+    }
     finally { setProcessing(false); }
   };
 
@@ -108,6 +124,12 @@ export function JpgToPdfTool() {
             <Button onClick={convert} disabled={processing} className="w-full gap-2">
               {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Creating PDF…</> : `Create PDF from ${files.length} image${files.length>1?"s":""}`}
             </Button>
+
+            <AnimatePresence>
+              {proc.state.stage !== "idle" && (
+                <ProcessingStatus state={proc.state} config={proc.config} onRetry={convert} showFileCard={false} />
+              )}
+            </AnimatePresence>
 
             {outputUrl && (
               <div className="flex items-center gap-4 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5">

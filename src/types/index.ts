@@ -10,6 +10,7 @@ export type ToolCategory =
   | "business-tools"
   | "color-tools"
   | "audio-tools"
+  | "video-tools"
   | "network-tools";
 
 export interface Tool {

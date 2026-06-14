@@ -87,7 +87,7 @@ export default function AuthorPage() {
         <div className="container-xl max-w-3xl">
           <div className="flex items-start gap-6">
             {/* Avatar */}
-            <div className="h-20 w-20 rounded-full bg-gradient-to-br from-fg-brand to-violet-500 flex items-center justify-center text-white font-bold text-2xl shrink-0 select-none shadow-lg">
+            <div className="h-20 w-20 rounded-full bg-linear-to-br from-fg-brand to-violet-500 flex items-center justify-center text-white font-bold text-2xl shrink-0 select-none shadow-lg">
               NK
             </div>
             <div className="flex-1 min-w-0">
@@ -153,10 +153,10 @@ export default function AuthorPage() {
         {/* Platform stats */}
         <section>
           <h2 className="text-base font-bold text-(--heading) mb-4">The Platform</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px rounded-(--radius-base) overflow-hidden border border-(--border-default) bg-(--border-default)">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px rounded-lg overflow-hidden border border-(--border-default) bg-(--border-default)">
             {[
               { value: "250+", label: "Free tools" },
-              { value: "12", label: "Categories" },
+              { value: "13", label: "Categories" },
               { value: "55+", label: "Guides written" },
               { value: "0", label: "Accounts needed" },
             ].map((stat) => (
@@ -190,7 +190,7 @@ export default function AuthorPage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.category}/${post.slug}/`}
-                className="flex items-center justify-between gap-4 rounded-(--radius-base) border border-(--border-default) bg-(--neutral-primary-soft) px-4 py-3 hover:border-(--border-brand) hover:bg-(--neutral-secondary-soft) transition-all group"
+                className="flex items-center justify-between gap-4 rounded-lg border border-(--border-default) bg-(--neutral-primary-soft) px-4 py-3 hover:border-border-brand hover:bg-(--neutral-secondary-soft) transition-all group"
               >
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-(--heading) group-hover:text-fg-brand transition-colors line-clamp-1">
@@ -207,7 +207,7 @@ export default function AuthorPage() {
         </section>
 
         {/* Tools CTA */}
-        <section className="rounded-(--radius-base) border border-(--border-brand) bg-(--brand-soft) px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <section className="rounded-lg border border-border-brand bg-brand-soft px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
             <Wrench className="w-4 h-4 text-fg-brand mt-0.5 shrink-0" />
             <div>
@@ -219,7 +219,7 @@ export default function AuthorPage() {
           </div>
           <Link
             href="/tools/"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-fg-brand border border-(--border-brand) rounded-(--radius-default) px-4 py-2 hover:bg-(--neutral-secondary-soft) transition-colors shrink-0"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-fg-brand border border-border-brand rounded-(--radius-default) px-4 py-2 hover:bg-(--neutral-secondary-soft) transition-colors shrink-0"
           >
             Browse all tools <ArrowRight className="w-3.5 h-3.5" />
           </Link>

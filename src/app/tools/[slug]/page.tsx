@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: meta.title,
     description: meta.description,
+    keywords: meta.keywords,
     alternates: { canonical: `${siteConfig.url}/tools/${tool.slug}/` },
     openGraph: meta.openGraph,
     twitter: meta.twitter,

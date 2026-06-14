@@ -28,6 +28,7 @@ const PdfAdvancedTool = lazy(() => import("./implementations/PdfAdvancedTool").t
 const PdfPasswordRemoverTool = lazy(() => import("./implementations/PdfPasswordRemoverTool").then(m => ({ default: m.PdfPasswordRemoverTool })));
 
 // ── Image tools ────────────────────────────────────────────────────────────────
+const ImageEnhancerTool = lazy(() => import("./implementations/ImageEnhancerTool").then(m => ({ default: m.ImageEnhancerTool })));
 const ImageCompressorTool = lazy(() => import("./implementations/ImageCompressorTool").then(m => ({ default: m.ImageCompressorTool })));
 const ImageResizerTool = lazy(() => import("./implementations/ImageResizerTool").then(m => ({ default: m.ImageResizerTool })));
 const ImageFormatConverterTool = lazy(() => import("./implementations/ImageFormatConverterTool").then(m => ({ default: m.ImageFormatConverterTool })));
@@ -166,6 +167,7 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "pdf-password-remover": PdfPasswordRemoverTool,
 
   // ── Image ────────────────────────────────────────────────────────────────────
+  "image-enhancer": ImageEnhancerTool,
   "image-compressor": ImageCompressorTool,
   "image-resizer": ImageResizerTool,
   "jpg-to-png": ImageFormatConverterTool,

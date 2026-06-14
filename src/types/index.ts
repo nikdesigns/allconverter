@@ -23,6 +23,12 @@ export interface Tool {
   category: ToolCategory;
   icon: string;
   tags: string[];
+  /** Target keyword list used in meta keywords tag and schema. Overrides auto-generated list from tags. */
+  keywords?: string[];
+  /** Override the auto-generated <title> tag for this tool page. */
+  metaTitle?: string;
+  /** Override the auto-generated meta description for this tool page (max 160 chars). */
+  metaDescription?: string;
   isNew?: boolean;
   isTrending?: boolean;
   isPopular?: boolean;

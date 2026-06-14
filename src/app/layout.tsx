@@ -27,17 +27,37 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
-    'free online tools',
-    'pdf tools',
-    'image tools',
-    'developer tools',
-    'text tools',
-    'seo tools',
-    'calculators',
-    'unit converters',
-    'file converter',
-    'image compressor',
-    'pdf compressor',
+    // Core brand
+    'allconverter tools', 'free online tools', 'all in one online tools',
+    // PDF
+    'pdf tools', 'pdf compressor', 'pdf merger', 'pdf splitter', 'pdf to jpg', 'jpg to pdf',
+    'compress pdf online free', 'merge pdf online', 'split pdf online',
+    // Image
+    'image tools', 'image compressor', 'image resizer', 'compress image online free',
+    'jpg to png', 'png to jpg', 'png to webp', 'webp to jpg', 'background remover',
+    'heic to jpg', 'svg to png', 'bulk image converter',
+    // Audio
+    'audio tools', 'mp3 cutter', 'audio converter', 'audio joiner', 'mp3 to wav',
+    // Developer
+    'developer tools', 'json formatter', 'base64 encoder', 'url encoder', 'uuid generator',
+    'regex tester', 'css minifier', 'json validator', 'html formatter',
+    // Text
+    'text tools', 'word counter', 'case converter', 'lorem ipsum generator', 'character counter',
+    // SEO
+    'seo tools', 'meta tag generator', 'robots txt generator', 'keyword density checker',
+    'sitemap generator', 'faq schema generator', 'redirect checker',
+    // Calculators
+    'calculators', 'bmi calculator', 'age calculator', 'compound interest calculator',
+    'loan calculator', 'date calculator', 'timezone converter', 'percentage calculator',
+    // AI
+    'ai tools', 'ai content generator', 'ai cover letter', 'ai blog writer',
+    // Business
+    'business tools', 'invoice generator', 'gst invoice', 'expense tracker',
+    // Unit converters
+    'unit converters', 'length converter', 'weight converter', 'temperature converter',
+    // Value props
+    'no sign up', 'no registration', 'browser based', '100% free', 'no file upload',
+    'file converter', 'online converter',
   ],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,

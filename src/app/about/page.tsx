@@ -204,7 +204,7 @@ export default function AboutPage() {
             <h2 className="text-xl font-bold text-[var(--heading)]">What We Offer</h2>
           </div>
           <p className="text-sm text-[var(--body-subtle)] mb-6 leading-relaxed">
-            The platform currently covers 100+ tools across 12 categories — and grows based on what
+            The platform currently covers 250+ tools across 13 categories — and grows based on what
             users ask for. Here is what you will find today:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

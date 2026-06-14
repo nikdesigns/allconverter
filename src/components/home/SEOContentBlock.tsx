@@ -9,7 +9,7 @@ export function SEOContentBlock() {
           <h2>250+ Free Online Tools — All in One Place</h2>
           <p>
             AllConverter.tools is a comprehensive browser-based utility platform with over 250 free tools
-            across 12 categories — built for developers, designers, writers, marketers, business owners,
+            across 13 categories — built for developers, designers, writers, marketers, business owners,
             students, and anyone who needs to get things done without installing software or creating
             an account. Every tool runs directly in your browser, so your files stay on your device
             and results are instant.

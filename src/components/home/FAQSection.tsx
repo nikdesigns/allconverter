@@ -26,7 +26,7 @@ const faqs = [
   {
     question: "What kinds of tools are available?",
     answer:
-      "We cover 12 categories: PDF tools (compress, merge, split, convert), image tools (resize, compress, convert HEIC/WebP/AVIF), audio tools (cut, convert, normalise), AI content tools (cover letters, emails, blog outlines), SEO tools (meta tags, schema generators, redirect checkers), developer tools (JSON formatter, hash generators, regex tester), business tools (invoice generators, expense tracker), financial calculators (EMI, SIP, GST, CAGR), text utilities, unit converters, color and CSS tools, and network tools.",
+      "We cover 13 categories: PDF tools (compress, merge, split, convert), image tools (resize, compress, convert HEIC/WebP/AVIF), audio tools (cut, join, convert), video tools (trim, compress, screen record, GIF), AI content tools (cover letters, emails, blog outlines), SEO tools (meta tags, schema generators, redirect checkers), developer tools (JSON formatter, hash generators, regex tester), business tools (invoice generators, GST invoices, UPI QR), financial calculators (EMI, SIP, GST, CAGR), text utilities, unit converters, color and CSS tools, and network tools.",
   },
   {
     question: "Do the AI tools require an API key?",
@@ -68,7 +68,7 @@ export function FAQSection() {
             {faqs.map((faq, i) => (
               <AccordionItem
                 key={i}
-                className="border border-[var(--border-default)] rounded-[var(--radius-base)] bg-[var(--neutral-primary-soft)] px-5 py-1"
+                className="border border-[var(--border-default)] rounded-lg bg-(--neutral-primary-soft) px-5 py-1"
               >
                 <AccordionTrigger className="text-sm font-medium text-left hover:no-underline py-4 text-[var(--heading)]">
                   {faq.question}

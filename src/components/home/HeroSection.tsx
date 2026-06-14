@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 const stats = [
   { value: "250+", label: "Free Tools" },
-  { value: "12", label: "Categories" },
+  { value: "13", label: "Categories" },
   { value: "100%", label: "Free Forever" },
   { value: "0", label: "Sign-ups" },
   { value: "Weekly", label: "New Tools" },

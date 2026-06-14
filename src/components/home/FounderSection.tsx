@@ -36,7 +36,7 @@ const trustStats = [
   { value: "250+", label: "Free tools" },
   { value: "0", label: "Files uploaded to our servers" },
   { value: "0", label: "Accounts required" },
-  { value: "12", label: "Tool categories" },
+  { value: "13", label: "Tool categories" },
 ];
 
 export function FounderSection() {

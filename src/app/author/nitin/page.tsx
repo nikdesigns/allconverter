@@ -26,7 +26,7 @@ const authorSchema = {
   url: `${siteConfig.url}/author/nitin/`,
   name: "Nitin Kaushik — Author Profile",
   isPartOf: { "@id": `${siteConfig.url}/#website` },
-  about: {
+  mainEntity: {
     "@type": "Person",
     "@id": `${siteConfig.url}/#founder`,
     name: "Nitin Kaushik",

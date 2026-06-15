@@ -1,13 +1,13 @@
 import { ImageResponse } from "next/og";
 
+export const dynamic = "force-static";
 export const alt = "AllConverter.tools — 250+ Free Online Tools";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const categories = [
   "PDF Tools", "Image Tools", "Audio Tools", "Video Tools",
-  "AI Tools", "Developer Tools", "SEO Tools", "Calculators",
-  "Business Tools", "Text Tools", "Unit Converters", "Color Tools", "Network Tools",
+  "AI Tools", "Developer Tools", "SEO Tools", "Business Tools",
 ];
 
 export default function Image() {
@@ -35,6 +35,7 @@ export default function Image() {
             height: 480,
             borderRadius: "50%",
             background: "radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%)",
+            display: "flex",
           }}
         />
         {/* Accent glow bottom-left */}
@@ -47,6 +48,7 @@ export default function Image() {
             height: 360,
             borderRadius: "50%",
             background: "radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)",
+            display: "flex",
           }}
         />
 
@@ -73,29 +75,41 @@ export default function Image() {
           </span>
         </div>
 
-        {/* Main headline */}
+        {/* Main headline — line 1 */}
         <div
           style={{
+            display: "flex",
             fontSize: 68,
             fontWeight: 800,
             color: "#ffffff",
             lineHeight: 1.05,
             letterSpacing: "-0.03em",
-            marginBottom: 24,
-            maxWidth: 800,
+            marginBottom: 8,
           }}
         >
-          250+ Free Online
-          <br />
-          <span style={{ background: "linear-gradient(90deg, #6366f1, #a78bfa)", backgroundClip: "text", color: "transparent" }}>
-            Tools
-          </span>{" "}
-          — One Platform
+          250+ Free Online Tools
+        </div>
+
+        {/* Main headline — line 2 with gradient span */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            fontSize: 68,
+            fontWeight: 800,
+            lineHeight: 1.05,
+            letterSpacing: "-0.03em",
+            marginBottom: 28,
+          }}
+        >
+          <span style={{ color: "#6366f1" }}>All in One Place.</span>
         </div>
 
         {/* Sub-tagline */}
         <div
           style={{
+            display: "flex",
             fontSize: 24,
             color: "rgba(255,255,255,0.55)",
             fontWeight: 400,
@@ -108,10 +122,11 @@ export default function Image() {
 
         {/* Category pills */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-          {categories.slice(0, 8).map((cat) => (
+          {categories.map((cat) => (
             <div
               key={cat}
               style={{
+                display: "flex",
                 padding: "8px 18px",
                 borderRadius: 999,
                 background: "rgba(255,255,255,0.06)",
@@ -137,7 +152,7 @@ export default function Image() {
             gap: 10,
           }}
         >
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#4ade80" }} />
+          <div style={{ display: "flex", width: 8, height: 8, borderRadius: "50%", background: "#4ade80" }} />
           <span style={{ color: "rgba(255,255,255,0.45)", fontSize: 16 }}>
             No sign-up · 100% free · Browser-based
           </span>

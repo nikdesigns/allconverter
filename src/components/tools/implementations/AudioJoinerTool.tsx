@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { ListMusic, Plus, Download, Loader2, CheckCircle2, Trash2, ArrowUp, ArrowDown } from "lucide-react";
@@ -92,7 +94,7 @@ export function AudioJoinerTool() {
   return (
     <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
       {/* Drop zone */}
-      <div
+      <div role="button" tabIndex={0} onKeyDown={activateOnKey}
         className="border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors"
         onClick={() => inputRef.current?.click()}
         onDrop={onDrop}
@@ -102,7 +104,7 @@ export function AudioJoinerTool() {
         <p className="text-sm font-medium mb-1">Add audio files</p>
         <p className="text-xs text-muted-foreground">MP3, WAV, M4A, OGG — drag multiple or click to browse</p>
         {loading && <p className="text-xs mt-2 text-primary animate-pulse">Loading…</p>}
-        <input
+        <input aria-label="Choose file"
           ref={inputRef}
           type="file"
           multiple

@@ -211,7 +211,7 @@ export function ImageCompressorTool() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Output format</label>
-                <select
+                <select aria-label="Output format"
                   value={outputFormat}
                   onChange={e => setOutputFormat(e.target.value)}
                   className="w-full h-9 px-3 rounded-xl border border-input bg-background text-sm"
@@ -221,7 +221,7 @@ export function ImageCompressorTool() {
               </div>
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Max width (px)</label>
-                <input
+                <input aria-label="Max width (px)"
                   type="number" value={maxWidth}
                   onChange={e => setMaxWidth(e.target.value)}
                   placeholder="Keep original"
@@ -249,7 +249,7 @@ export function ImageCompressorTool() {
                   )}
                 </div>
               </div>
-              <input type="range" min={5} max={100} value={quality}
+              <input aria-label="Quality" type="range" min={5} max={100} value={quality}
                 onChange={e => setQuality(Number(e.target.value))}
                 className="w-full accent-primary h-1.5" />
               <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
@@ -318,7 +318,7 @@ export function ImageCompressorTool() {
                           </Button>
                         </a>
                       )}
-                      <button onClick={() => removeFile(i)}
+                      <button aria-label="Remove" onClick={() => removeFile(i)}
                         className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all shrink-0">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>

@@ -86,7 +86,7 @@ export function SvgToPngTool() {
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Background</label>
             <div className="flex gap-2 items-center">
-              <input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)}
+              <input aria-label="Background" type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)}
                 disabled={transparent} className="w-10 h-10 rounded-lg border border-input cursor-pointer disabled:opacity-40" />
               <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer">
                 <input type="checkbox" checked={transparent} onChange={(e) => setTransparent(e.target.checked)} className="accent-primary" />

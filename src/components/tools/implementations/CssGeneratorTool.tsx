@@ -158,11 +158,11 @@ function AnimationGenerator() {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">Timing function</label>
-          <select value={timing} onChange={e=>setTiming(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
+          <select aria-label="Timing function" value={timing} onChange={e=>setTiming(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
             {["ease","linear","ease-in","ease-out","ease-in-out","cubic-bezier(0.4,0,0.2,1)"].map(t=><option key={t}>{t}</option>)}
           </select></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Fill mode</label>
-          <select value={fill} onChange={e=>setFill(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
+          <select aria-label="Fill mode" value={fill} onChange={e=>setFill(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
             {["both","forwards","backwards","none"].map(t=><option key={t}>{t}</option>)}
           </select></div>
       </div>
@@ -297,11 +297,11 @@ function CssUnitConverter() {
         <div className="flex-1"><label className="text-xs text-muted-foreground mb-1 block">Value</label>
           <Input value={value} onChange={e=>setValue(e.target.value)} className="font-mono text-sm" /></div>
         <div className="w-24"><label className="text-xs text-muted-foreground mb-1 block">From</label>
-          <select value={fromUnit} onChange={e=>setFromUnit(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-mono">
+          <select aria-label="From" value={fromUnit} onChange={e=>setFromUnit(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-mono">
             {UNITS.map(u=><option key={u}>{u}</option>)}
           </select></div>
         <div className="w-24"><label className="text-xs text-muted-foreground mb-1 block">To</label>
-          <select value={toUnit} onChange={e=>setToUnit(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-mono">
+          <select aria-label="To" value={toUnit} onChange={e=>setToUnit(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-mono">
             {UNITS.map(u=><option key={u}>{u}</option>)}
           </select></div>
       </div>

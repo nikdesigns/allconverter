@@ -1,5 +1,7 @@
 "use client";
 
+
+import { localPdfWorkerUrl } from "@/lib/pdf-worker";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -26,7 +28,7 @@ export function PdfToJpgTool() {
     proc.advance("analyzing");
     try {
       const pdfjsLib = await import("pdfjs-dist");
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
 
       const bytes = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
@@ -133,7 +135,7 @@ export function PdfToJpgTool() {
                       <div className="p-2 flex items-center justify-between bg-muted/20">
                         <span className="text-xs text-muted-foreground">Page {i+1}</span>
                         <a href={r.url} download={r.name}>
-                          <button className="p-1 rounded hover:bg-muted"><Download className="w-3.5 h-3.5" /></button>
+                          <button aria-label="Download" className="p-1 rounded hover:bg-muted"><Download className="w-3.5 h-3.5" /></button>
                         </a>
                       </div>
                     </div>

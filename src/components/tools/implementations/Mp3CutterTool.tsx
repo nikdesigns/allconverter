@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Scissors, Upload, Download, Loader2, CheckCircle2, X, Play, Square } from "lucide-react";
@@ -116,7 +118,7 @@ export function Mp3CutterTool() {
   return (
     <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
       {!buffer ? (
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-xl p-10 text-center cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors"
           onClick={() => inputRef.current?.click()}
           onDrop={onDrop}
@@ -125,7 +127,7 @@ export function Mp3CutterTool() {
           <Scissors className="w-10 h-10 mx-auto mb-3 text-muted-foreground/60" />
           <p className="font-medium text-sm mb-1">Drop your audio file here</p>
           <p className="text-xs text-muted-foreground">MP3, WAV, M4A, OGG supported</p>
-          <input
+          <input aria-label="Choose file"
             ref={inputRef}
             type="file"
             className="hidden"
@@ -147,7 +149,7 @@ export function Mp3CutterTool() {
             <div className="space-y-2">
               <Label className="text-xs">Start time</Label>
               <div className="flex items-center gap-3">
-                <input
+                <input aria-label="Start time"
                   type="range"
                   min={0}
                   max={duration}
@@ -175,7 +177,7 @@ export function Mp3CutterTool() {
             <div className="space-y-2">
               <Label className="text-xs">End time</Label>
               <div className="flex items-center gap-3">
-                <input
+                <input aria-label="End time"
                   type="range"
                   min={0}
                   max={duration}

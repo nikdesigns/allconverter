@@ -70,6 +70,7 @@ export function Footer() {
               {categories.slice(0, 5).map((cat) => (
                 <li key={cat.slug}>
                   <Link
+                    prefetch={false}
                     href={`/${cat.slug}/`}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
@@ -87,6 +88,7 @@ export function Footer() {
               {categories.slice(5).map((cat) => (
                 <li key={cat.slug}>
                   <Link
+                    prefetch={false}
                     href={`/${cat.slug}/`}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
@@ -96,6 +98,7 @@ export function Footer() {
               ))}
               <li>
                 <Link
+                  prefetch={false}
                   href="/tools/"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
@@ -112,6 +115,7 @@ export function Footer() {
               {popularTools.slice(0, 6).map((tool) => (
                 <li key={tool.slug}>
                   <Link
+                    prefetch={false}
                     href={`/tools/${tool.slug}/`}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
@@ -129,6 +133,7 @@ export function Footer() {
               {companyLinks.map((link) => (
                 <li key={link.href}>
                   <Link
+                    prefetch={false}
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
@@ -150,6 +155,7 @@ export function Footer() {
           <div className="flex items-center gap-4">
             {legalLinks.map((link) => (
               <Link
+                prefetch={false}
                 key={link.href}
                 href={link.href}
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors"

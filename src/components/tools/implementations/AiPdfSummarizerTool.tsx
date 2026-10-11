@@ -1,5 +1,9 @@
 "use client";
 
+
+
+import { localPdfWorkerUrl } from "@/lib/pdf-worker";
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { Upload, FileText, Sparkles, Copy, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -82,7 +86,7 @@ function buildConclusions(text: string): string {
 
 async function extractTextFromPdf(file: File): Promise<{ text: string; pageCount: number }> {
   const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
 
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
@@ -172,7 +176,7 @@ export function AiPdfSummarizerTool() {
 
       <div className="p-5 space-y-4">
         {/* Drop zone */}
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           onClick={() => inputRef.current?.click()}
           onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
           onDragOver={e => { e.preventDefault(); setDragOver(true); }}
@@ -182,7 +186,7 @@ export function AiPdfSummarizerTool() {
             dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/20"
           )}
         >
-          <input ref={inputRef} type="file" accept="application/pdf" className="hidden"
+          <input aria-label="Choose file" ref={inputRef} type="file" accept="application/pdf" className="hidden"
             onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
           <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
           <div className="text-sm font-medium">Drop PDF here or click to upload</div>
@@ -196,7 +200,7 @@ export function AiPdfSummarizerTool() {
               <div className="text-sm font-medium truncate">{file.name}</div>
               <div className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</div>
             </div>
-            <button onClick={() => { setFile(null); setSummary(null); }} className="text-muted-foreground hover:text-foreground">
+            <button aria-label="Remove" onClick={() => { setFile(null); setSummary(null); }} className="text-muted-foreground hover:text-foreground">
               <X className="w-4 h-4" />
             </button>
           </div>

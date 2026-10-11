@@ -1,5 +1,11 @@
 "use client";
 
+
+
+
+import { escapeHtml, sanitizeHtml } from "@/lib/html";
+import { localPdfWorkerUrl } from "@/lib/pdf-worker";
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { Upload, Download, FileText, Lock, Unlock, Stamp, ScanText, X } from "lucide-react";
@@ -12,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 async function getPdfText(file: File): Promise<{ text: string; pageCount: number; pages: string[] }> {
   const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
   const ab  = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
   const pages: string[] = [];
@@ -34,13 +40,13 @@ function DropZone({ onFile, accept, label }: { onFile: (f: File) => void; accept
   const [drag, setDrag] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
   return (
-    <div onClick={() => ref.current?.click()}
+    <div role="button" tabIndex={0} onKeyDown={activateOnKey} onClick={() => ref.current?.click()}
       onDrop={e => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files[0]; if (f) onFile(f); }}
       onDragOver={e => { e.preventDefault(); setDrag(true); }}
       onDragLeave={() => setDrag(false)}
       className={cn("border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all",
         drag ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/20")}>
-      <input ref={ref} type="file" accept={accept} className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) onFile(f); }} />
+      <input aria-label="Choose file" ref={ref} type="file" accept={accept} className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) onFile(f); }} />
       <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
       <div className="text-sm font-medium">{label ?? "Drop file here or click to upload"}</div>
     </div>
@@ -77,7 +83,7 @@ function PdfToWord() {
         <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-muted/10 border border-border text-sm">
           <FileText className="w-4 h-4 text-primary shrink-0" />
           <span className="flex-1 truncate text-xs">{file.name}</span>
-          <button onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
       {error && <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-400">{error}</div>}
@@ -105,14 +111,14 @@ function WordToPdf() {
       const mammoth = (await import("mammoth")).default;
       const ab = await f.arrayBuffer();
       const result = await mammoth.convertToHtml({ arrayBuffer: ab });
-      setHtml(result.value);
-    } catch { setHtml(`<p style="font-family:sans-serif">${f.name}</p><p>Preview unavailable — click Print to PDF to save anyway.</p>`); }
+      setHtml(sanitizeHtml(result.value));
+    } catch { setHtml(`<p style="font-family:sans-serif">${escapeHtml(f.name)}</p><p>Preview unavailable — click Print to PDF to save anyway.</p>`); }
     setLoading(false);
   };
 
   const printPdf = () => {
     const w = window.open("", "_blank")!;
-    w.document.write(`<!DOCTYPE html><html><head><title>${file?.name}</title><style>body{font-family:Georgia,serif;line-height:1.6;max-width:800px;margin:40px auto;padding:0 20px}h1,h2,h3{color:#111}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px}</style></head><body>${html}</body></html>`);
+    w.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(file?.name)}</title><style>body{font-family:Georgia,serif;line-height:1.6;max-width:800px;margin:40px auto;padding:0 20px}h1,h2,h3{color:#111}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px}</style></head><body>${html}</body></html>`);
     w.document.close(); w.focus(); w.print();
   };
 
@@ -165,7 +171,7 @@ function PdfToExcel() {
         <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-muted/10 border border-border text-sm">
           <FileText className="w-4 h-4 text-primary shrink-0" />
           <span className="flex-1 truncate text-xs">{file.name}</span>
-          <button onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
       {error && <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-400">{error}</div>}
@@ -190,14 +196,14 @@ function ExcelToPdf() {
     setFile(f);
     const text = await f.text();
     const rows = text.split(/\r?\n/).filter(Boolean).map(row =>
-      `<tr>${row.split(",").map(cell => `<td>${cell.replace(/^"|"$/g, "")}</td>`).join("")}</tr>`
+      `<tr>${row.split(",").map(cell => `<td>${escapeHtml(cell.replace(/^"|"$/g, ""))}</td>`).join("")}</tr>`
     );
     setTable(`<table><thead>${rows[0]?.replace(/<td>/g, "<th>").replace(/<\/td>/g, "</th>")}</thead><tbody>${rows.slice(1).join("")}</tbody></table>`);
   };
 
   const printPdf = () => {
     const w = window.open("", "_blank")!;
-    w.document.write(`<!DOCTYPE html><html><head><title>${file?.name}</title><style>body{font-family:Arial,sans-serif;font-size:12px;margin:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:5px 8px;text-align:left}th{background:#f5f5f5;font-weight:600}tr:nth-child(even){background:#fafafa}@media print{@page{margin:15mm}}</style></head><body>${table}</body></html>`);
+    w.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(file?.name)}</title><style>body{font-family:Arial,sans-serif;font-size:12px;margin:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:5px 8px;text-align:left}th{background:#f5f5f5;font-weight:600}tr:nth-child(even){background:#fafafa}@media print{@page{margin:15mm}}</style></head><body>${table}</body></html>`);
     w.document.close(); w.focus(); w.print();
   };
 
@@ -251,7 +257,7 @@ function PdfToPowerpoint() {
         <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-muted/10 border border-border">
           <FileText className="w-4 h-4 text-primary shrink-0" />
           <span className="flex-1 truncate text-xs">{file.name}</span>
-          <button onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
       {error && <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-400">{error}</div>}
@@ -279,7 +285,7 @@ function PowerpointToPdf() {
 
   const printPdf = () => {
     const w = window.open("", "_blank")!;
-    w.document.write(`<!DOCTYPE html><html><head><title>${file?.name}</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f5f5f5}.card{background:#fff;border-radius:12px;padding:48px;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.1);max-width:480px}</style></head><body><div class="card"><h2>⚠️ PPTX to PDF</h2><p>For best results, open <strong>${file?.name}</strong> in Microsoft PowerPoint or Google Slides and use <strong>File → Export → PDF</strong>.</p><p>Browser-based PPTX rendering requires the full application. This tool opens the print dialog as a fallback.</p></div></body></html>`);
+    w.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(file?.name)}</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f5f5f5}.card{background:#fff;border-radius:12px;padding:48px;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.1);max-width:480px}</style></head><body><div class="card"><h2>⚠️ PPTX to PDF</h2><p>For best results, open <strong>${escapeHtml(file?.name)}</strong> in Microsoft PowerPoint or Google Slides and use <strong>File → Export → PDF</strong>.</p><p>Browser-based PPTX rendering requires the full application. This tool opens the print dialog as a fallback.</p></div></body></html>`);
     w.document.close(); w.focus(); w.print();
   };
 
@@ -328,7 +334,7 @@ function PdfProtector() {
         <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-muted/10 border border-border">
           <Lock className="w-4 h-4 text-primary shrink-0" />
           <span className="flex-1 truncate text-xs">{file.name}</span>
-          <button onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
       <div className="space-y-1.5">
@@ -359,8 +365,7 @@ function OcrPdf() {
     setLoading(true); setError(""); setText(""); setProgress("Loading PDF…");
     try {
       const pdfjsLib = await import("pdfjs-dist");
-      const pdfWorkerUrl = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).toString();
-      pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
       const ab  = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
 
@@ -415,7 +420,7 @@ function OcrPdf() {
         <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-muted/10 border border-border">
           <ScanText className="w-4 h-4 text-primary shrink-0" />
           <span className="flex-1 truncate text-xs">{file.name}</span>
-          <button onClick={() => { setFile(null); setText(""); }} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={() => { setFile(null); setText(""); }} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
       {loading && progress && <div className="text-xs text-muted-foreground text-center py-2">{progress}</div>}
@@ -429,7 +434,7 @@ function OcrPdf() {
             <span className="text-xs text-muted-foreground">{text.split(/\s+/).length.toLocaleString()} words extracted</span>
             <Button size="sm" variant="ghost" onClick={download} className="h-7 text-xs gap-1"><Download className="w-3 h-3" />Download .txt</Button>
           </div>
-          <textarea readOnly value={text} className="w-full min-h-[200px] rounded-xl border border-border bg-muted/5 px-4 py-3 text-xs font-mono resize-y focus:outline-none" />
+          <textarea aria-label="Extracted text" readOnly value={text} className="w-full min-h-[200px] rounded-xl border border-border bg-muted/5 px-4 py-3 text-xs font-mono resize-y focus:outline-none" />
         </div>
       )}
     </div>
@@ -481,7 +486,7 @@ function PdfWatermark() {
         <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-muted/10 border border-border">
           <Stamp className="w-4 h-4 text-primary shrink-0" />
           <span className="flex-1 truncate text-xs">{file.name}</span>
-          <button onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
       <div className="grid sm:grid-cols-2 gap-3">
@@ -492,7 +497,7 @@ function PdfWatermark() {
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Color</label>
           <div className="flex gap-2 items-center">
-            <input type="color" value={color} onChange={e => setColor(e.target.value)} className="h-10 w-16 rounded-xl border border-border bg-background cursor-pointer" />
+            <input aria-label="Color" type="color" value={color} onChange={e => setColor(e.target.value)} className="h-10 w-16 rounded-xl border border-border bg-background cursor-pointer" />
             <span className="text-xs font-mono text-muted-foreground">{color}</span>
           </div>
         </div>
@@ -500,11 +505,11 @@ function PdfWatermark() {
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Font size: {fontSize}pt</label>
-          <input type="range" min={24} max={96} value={fontSize} onChange={e => setFontSize(Number(e.target.value))} className="w-full h-2 accent-primary" />
+          <input aria-label="Font size: pt" type="range" min={24} max={96} value={fontSize} onChange={e => setFontSize(Number(e.target.value))} className="w-full h-2 accent-primary" />
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Opacity: {Math.round(opacity * 100)}%</label>
-          <input type="range" min={0.05} max={0.5} step={0.01} value={opacity} onChange={e => setOpacity(Number(e.target.value))} className="w-full h-2 accent-primary" />
+          <input aria-label="Opacity: %" type="range" min={0.05} max={0.5} step={0.01} value={opacity} onChange={e => setOpacity(Number(e.target.value))} className="w-full h-2 accent-primary" />
         </div>
       </div>
       {error && <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-400">{error}</div>}

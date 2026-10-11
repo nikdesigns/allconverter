@@ -174,7 +174,7 @@ export function QrCodeGeneratorTool() {
             {/* Content input */}
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">Content</label>
-              <textarea
+              <textarea aria-label="Content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={3}
@@ -214,13 +214,13 @@ export function QrCodeGeneratorTool() {
               <div>
                 <label className="text-xs text-muted-foreground mb-1.5 block">Foreground Color</label>
                 <div className="flex items-center gap-2">
-                  <input
+                  <input aria-label="Foreground Color"
                     type="color"
                     value={fgColor}
                     onChange={(e) => { setFgColor(e.target.value); setFgHex(e.target.value); }}
                     className="w-9 h-9 rounded-lg border border-input cursor-pointer p-0.5 bg-transparent"
                   />
-                  <input
+                  <input aria-label="Foreground colour hex"
                     type="text"
                     value={fgHex}
                     onChange={(e) => applyFgHex(e.target.value)}
@@ -233,13 +233,13 @@ export function QrCodeGeneratorTool() {
               <div>
                 <label className="text-xs text-muted-foreground mb-1.5 block">Background Color</label>
                 <div className="flex items-center gap-2">
-                  <input
+                  <input aria-label="Background Color"
                     type="color"
                     value={bgColor}
                     onChange={(e) => { setBgColor(e.target.value); setBgHex(e.target.value); }}
                     className="w-9 h-9 rounded-lg border border-input cursor-pointer p-0.5 bg-transparent"
                   />
-                  <input
+                  <input aria-label="Background colour hex"
                     type="text"
                     value={bgHex}
                     onChange={(e) => applyBgHex(e.target.value)}
@@ -255,7 +255,7 @@ export function QrCodeGeneratorTool() {
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Output Size</label>
-                <select
+                <select aria-label="Output Size"
                   value={size}
                   onChange={(e) => setSize(+e.target.value)}
                   className="w-full h-9 px-3 rounded-xl border border-input bg-background text-sm"
@@ -269,7 +269,7 @@ export function QrCodeGeneratorTool() {
                 <label className="text-xs text-muted-foreground mb-1 block">
                   Quiet Margin: <span className="text-foreground font-medium">{margin}</span>
                 </label>
-                <input
+                <input aria-label="Quiet Margin"
                   type="range"
                   min={0}
                   max={6}
@@ -280,7 +280,7 @@ export function QrCodeGeneratorTool() {
               </div>
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Error Correction</label>
-                <select
+                <select aria-label="Error Correction"
                   value={errorLevel}
                   onChange={(e) => setErrorLevel(e.target.value as "L"|"M"|"Q"|"H")}
                   className="w-full h-9 px-3 rounded-xl border border-input bg-background text-sm"

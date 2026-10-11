@@ -10,24 +10,24 @@ const buttonVariants = cva(
     variants: {
       variant: {
         /* Brand (primary) */
-        default: "bg-[var(--brand)] text-white border-transparent hover:bg-[var(--brand-strong)] focus-visible:ring-4 focus-visible:ring-[var(--brand-medium)]",
+        default: "bg-[var(--brand)] text-white border-transparent hover:bg-[var(--brand-strong)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--brand-medium)]",
         /* Secondary */
-        secondary: "bg-[var(--neutral-secondary-medium)] text-[var(--body)] border-[var(--border-default-medium)] hover:bg-[var(--neutral-tertiary-medium)] hover:text-[var(--heading)] focus-visible:ring-4 focus-visible:ring-[var(--neutral-tertiary)]",
+        secondary: "bg-[var(--neutral-secondary-medium)] text-[var(--body)] border-[var(--border-default-medium)] hover:bg-[var(--neutral-tertiary-medium)] hover:text-[var(--heading)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--body-subtle)]",
         /* Tertiary */
-        tertiary: "bg-[var(--neutral-primary-soft)] text-[var(--body)] border-[var(--border-default)] hover:bg-[var(--neutral-secondary-medium)] hover:text-[var(--heading)] focus-visible:ring-4 focus-visible:ring-[var(--neutral-tertiary-soft)]",
+        tertiary: "bg-[var(--neutral-primary-soft)] text-[var(--body)] border-[var(--border-default)] hover:bg-[var(--neutral-secondary-medium)] hover:text-[var(--heading)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--body-subtle)]",
         /* Success */
-        success: "bg-[var(--success)] text-white border-transparent hover:bg-[var(--success-strong)] focus-visible:ring-4 focus-visible:ring-[var(--success-medium)]",
+        success: "bg-[var(--success)] text-white border-transparent hover:bg-[var(--success-strong)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--success)]",
         /* Danger */
-        destructive: "bg-[var(--danger)] text-white border-transparent hover:bg-[var(--danger-strong)] focus-visible:ring-4 focus-visible:ring-[var(--danger-medium)]",
+        destructive: "bg-[var(--danger)] text-white border-transparent hover:bg-[var(--danger-strong)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--danger)]",
         /* Warning */
-        warning: "bg-[var(--warning)] text-white border-transparent hover:bg-[var(--warning-strong)] focus-visible:ring-4 focus-visible:ring-[var(--warning-medium)]",
+        warning: "bg-[var(--warning)] text-white border-transparent hover:bg-[var(--warning-strong)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--warning)]",
         /* Dark */
-        dark: "bg-[var(--dark)] text-white border-transparent hover:bg-[var(--dark-strong)] focus-visible:ring-4 focus-visible:ring-[var(--neutral-tertiary)]",
+        dark: "bg-[var(--dark)] text-white border-transparent hover:bg-[var(--dark-strong)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--body-subtle)]",
         /* Ghost */
-        ghost: "bg-transparent text-[var(--heading)] border-transparent hover:bg-[var(--neutral-secondary-medium)] focus-visible:ring-4 focus-visible:ring-[var(--neutral-tertiary)] shadow-none",
+        ghost: "bg-transparent text-[var(--heading)] border-transparent hover:bg-[var(--neutral-secondary-medium)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--body-subtle)] shadow-none",
         /* Link style (CTA) */
         link: "bg-transparent text-[var(--fg-brand)] border-transparent underline hover:no-underline px-0 h-auto py-0 focus-visible:ring-0",
-        outline: "border-[var(--border-default)] bg-transparent text-[var(--body)] hover:bg-[var(--neutral-secondary-medium)] hover:text-[var(--heading)] focus-visible:ring-4 focus-visible:ring-[var(--neutral-tertiary-soft)]",
+        outline: "border-[var(--border-default)] bg-transparent text-[var(--body)] hover:bg-[var(--neutral-secondary-medium)] hover:text-[var(--heading)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:ring-[var(--body-subtle)]",
       },
       size: {
         /* xs: 12px / 16px h / 6px v */

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
@@ -43,7 +45,7 @@ function DropZone({
   const [drag, setDrag] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
   return (
-    <div
+    <div role="button" tabIndex={0} onKeyDown={activateOnKey}
       onDragOver={e => { e.preventDefault(); setDrag(true); }}
       onDragLeave={() => setDrag(false)}
       onDrop={e => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files[0]; if (f) onFile(f); }}
@@ -58,7 +60,7 @@ function DropZone({
         <p className="text-sm font-medium text-foreground">{label}</p>
         <p className="text-xs text-muted-foreground mt-1">or click to browse</p>
       </div>
-      <input ref={ref} type="file" accept={accept} className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) onFile(f); }} />
+      <input aria-label="Choose file" ref={ref} type="file" accept={accept} className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) onFile(f); }} />
     </div>
   );
 }
@@ -71,7 +73,7 @@ function FileChip({ file, onRemove }: { file: File; onRemove: () => void }) {
         <p className="text-sm font-medium truncate">{file.name}</p>
         <p className="text-xs text-muted-foreground">{fmtBytes(file.size)}</p>
       </div>
-      <button onClick={onRemove} className="text-muted-foreground hover:text-rose-400 transition-colors"><X className="w-4 h-4" /></button>
+      <button aria-label="Remove" onClick={onRemove} className="text-muted-foreground hover:text-rose-400 transition-colors"><X className="w-4 h-4" /></button>
     </div>
   );
 }
@@ -548,11 +550,11 @@ function MpFourToGif() {
               <label className="text-xs text-muted-foreground mb-1.5 block">
                 FPS: <span className="text-foreground font-medium">{fps}</span>
               </label>
-              <input type="range" min={5} max={24} value={fps} onChange={e => setFps(+e.target.value)} className="w-full mt-2.5 accent-primary" disabled={state === "processing"} />
+              <input aria-label="FPS" type="range" min={5} max={24} value={fps} onChange={e => setFps(+e.target.value)} className="w-full mt-2.5 accent-primary" disabled={state === "processing"} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Output width (px)</label>
-              <select value={width} onChange={e => setWidth(+e.target.value)} disabled={state === "processing"}
+              <select aria-label="Output width (px)" value={width} onChange={e => setWidth(+e.target.value)} disabled={state === "processing"}
                 className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
                 {[240, 320, 480, 640].map(w => <option key={w} value={w}>{w}px</option>)}
               </select>

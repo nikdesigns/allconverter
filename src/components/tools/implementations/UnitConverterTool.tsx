@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useMemo, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -30,10 +32,10 @@ const converterData: Record<string, { title: string; units: UnitDef[] }> = {
       { label: "Gram (g)", factor: 0.001 },
       { label: "Kilogram (kg)", factor: 1 },
       { label: "Metric Ton (t)", factor: 1000 },
-      { label: "Pound (lb)", factor: 0.453592 },
-      { label: "Ounce (oz)", factor: 0.0283495 },
-      { label: "Stone (st)", factor: 6.35029 },
-      { label: "US Ton", factor: 907.185 },
+      { label: "Pound (lb)", factor: 0.45359237 },
+      { label: "Ounce (oz)", factor: 0.028349523125 },
+      { label: "Stone (st)", factor: 6.35029318 },
+      { label: "US Ton", factor: 907.18474 },
     ],
   },
   "temperature-converter": {
@@ -64,12 +66,41 @@ const converterData: Record<string, { title: string; units: UnitDef[] }> = {
       { label: "Square meter (m²)", factor: 1 },
       { label: "Square kilometer (km²)", factor: 1_000_000 },
       { label: "Square inch (in²)", factor: 0.00064516 },
-      { label: "Square foot (ft²)", factor: 0.0929 },
-      { label: "Square yard (yd²)", factor: 0.8361 },
-      { label: "Acre", factor: 4046.86 },
+      { label: "Square foot (ft²)", factor: 0.09290304 },
+      { label: "Square yard (yd²)", factor: 0.83612736 },
+      { label: "Acre", factor: 4046.8564224 },
       { label: "Hectare (ha)", factor: 10_000 },
     ],
   },
+  "data-converter": {
+    title: "Data Storage",
+    units: [
+      { label: "Bit (b)", factor: 0.125 },
+      { label: "Byte (B)", factor: 1 },
+      { label: "Kilobyte (KB)", factor: 1024 },
+      { label: "Megabyte (MB)", factor: 1024 ** 2 },
+      { label: "Gigabyte (GB)", factor: 1024 ** 3 },
+      { label: "Terabyte (TB)", factor: 1024 ** 4 },
+      { label: "Petabyte (PB)", factor: 1024 ** 5 },
+    ],
+  },
+};
+
+// Single-purpose pages: which unit group they use and which pair is preselected.
+const presets: Record<string, { group: string; from: number; to: number }> = {
+  "kb-to-mb": { group: "data-converter", from: 2, to: 3 },
+  "mb-to-gb": { group: "data-converter", from: 3, to: 4 },
+  "gb-to-tb": { group: "data-converter", from: 4, to: 5 },
+  "inches-to-cm": { group: "length-converter", from: 4, to: 1 },
+  "cm-to-inches": { group: "length-converter", from: 1, to: 4 },
+  "feet-to-meter": { group: "length-converter", from: 5, to: 2 },
+  "meter-to-feet": { group: "length-converter", from: 2, to: 5 },
+  "kg-to-pounds": { group: "weight-converter", from: 2, to: 4 },
+  "pounds-to-kg": { group: "weight-converter", from: 4, to: 2 },
+  "celsius-to-fahrenheit": { group: "temperature-converter", from: 0, to: 1 },
+  "fahrenheit-to-celsius": { group: "temperature-converter", from: 1, to: 0 },
+  "sqft-to-sqm": { group: "area-converter", from: 5, to: 2 },
+  "acre-to-hectare": { group: "area-converter", from: 7, to: 8 },
 };
 
 function toBase(value: number, unit: UnitDef, isTempUnit: boolean): number {
@@ -105,19 +136,23 @@ function fmt(n: number): string {
 export function UnitConverterTool() {
   const pathname = usePathname();
   const slug = pathname?.split("/").filter(Boolean).at(-1) || "length-converter";
-  const data = converterData[slug] || converterData["length-converter"];
-  const isTemp = slug === "temperature-converter";
+  const preset = presets[slug];
+  const group = preset?.group ?? (converterData[slug] ? slug : "length-converter");
+  const data = converterData[group];
+  const isTemp = group === "temperature-converter";
+  const startFrom = preset?.from ?? 0;
+  const startTo = preset?.to ?? 1;
 
-  const [fromIndex, setFromIndex] = useState(0);
-  const [toIndex, setToIndex] = useState(1);
+  const [fromIndex, setFromIndex] = useState(startFrom);
+  const [toIndex, setToIndex] = useState(startTo);
   const [inputVal, setInputVal] = useState("1");
 
   // Reset when slug changes
   useEffect(() => {
-    setFromIndex(0);
-    setToIndex(1);
+    setFromIndex(startFrom);
+    setToIndex(startTo);
     setInputVal("1");
-  }, [slug]);
+  }, [slug, startFrom, startTo]);
 
   const allResults = useMemo(() => {
     const num = parseFloat(inputVal);
@@ -152,7 +187,7 @@ export function UnitConverterTool() {
         <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-end">
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">From</label>
-            <select
+            <select aria-label="From"
               value={fromIndex}
               onChange={(e) => setFromIndex(Number(e.target.value))}
               className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring mb-2"
@@ -179,7 +214,7 @@ export function UnitConverterTool() {
 
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">To</label>
-            <select
+            <select aria-label="To"
               value={toIndex}
               onChange={(e) => setToIndex(Number(e.target.value))}
               className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring mb-2"
@@ -201,7 +236,7 @@ export function UnitConverterTool() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {allResults.map((u, i) => (
-              <div
+              <div role="button" tabIndex={0} onKeyDown={activateOnKey}
                 key={i}
                 className={cn(
                   "flex items-center justify-between px-3 py-2 rounded-xl border transition-all cursor-pointer",

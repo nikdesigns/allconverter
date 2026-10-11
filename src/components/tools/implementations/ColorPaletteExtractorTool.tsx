@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef, useCallback } from "react";
 import { Upload, Copy, Download, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -180,7 +182,7 @@ export function ColorPaletteExtractorTool() {
       <div className="p-5 space-y-4">
 
         {/* Drop zone */}
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           onClick={() => inputRef.current?.click()}
           onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) processImage(f); }}
           onDragOver={e => { e.preventDefault(); setDragOver(true); }}
@@ -190,7 +192,7 @@ export function ColorPaletteExtractorTool() {
             dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
           )}
         >
-          <input ref={inputRef} type="file" accept="image/*" className="hidden"
+          <input aria-label="Choose file" ref={inputRef} type="file" accept="image/*" className="hidden"
             onChange={e => { const f = e.target.files?.[0]; if (f) processImage(f); }} />
           {imgSrc ? (
             <img src={imgSrc} alt="uploaded" className="w-full max-h-48 object-contain bg-checkerboard" />
@@ -205,7 +207,7 @@ export function ColorPaletteExtractorTool() {
 
         <div className="flex items-center gap-3">
           <label className="text-xs text-muted-foreground shrink-0">Colors to extract:</label>
-          <input type="range" min={4} max={12} value={colorCount}
+          <input aria-label="Colors to extract" type="range" min={4} max={12} value={colorCount}
             onChange={e => setCount(+e.target.value)}
             className="flex-1 accent-primary" />
           <span className="text-sm font-medium w-4">{colorCount}</span>

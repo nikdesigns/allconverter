@@ -154,7 +154,7 @@ function HreflangGen() {
         <div key={i} className="flex gap-2 items-end">
           <div className="w-40">
             <label className="text-xs text-muted-foreground mb-1 block">Language</label>
-            <select value={row.lang} onChange={e=>update(i,"lang",e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
+            <select aria-label="Language" value={row.lang} onChange={e=>update(i,"lang",e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
               {HREFLANG_LANGS.map(l=><option key={l.code} value={l.code}>{l.code} – {l.name}</option>)}
               <option value="x-default">x-default</option>
             </select>
@@ -188,23 +188,49 @@ function RobotsTester() {
 
   const test = () => {
     const path = testUrl.startsWith("/") ? testUrl : "/" + testUrl;
-    const blocks = robots.split(/\n\s*\n/);
-    let applicable = false;
+    // Google's rules: the most specific user-agent group applies, the longest
+    // matching path wins, and Allow wins a tie. * and $ are supported.
+    const groups: { agents: string[]; rules: { allow: boolean; pattern: string }[] }[] = [];
+    let current: (typeof groups)[number] | null = null;
+    let lastWasAgent = false;
+    for (const raw of robots.split("\n")) {
+      const line = raw.replace(/#.*$/, "").trim();
+      const idx = line.indexOf(":");
+      if (idx === -1) continue;
+      const key = line.slice(0, idx).trim().toLowerCase();
+      const value = line.slice(idx + 1).trim();
+      if (key === "user-agent") {
+        if (!current || !lastWasAgent) { current = { agents: [], rules: [] }; groups.push(current); }
+        current.agents.push(value.toLowerCase());
+        lastWasAgent = true;
+      } else if ((key === "allow" || key === "disallow") && current) {
+        lastWasAgent = false;
+        if (value) current.rules.push({ allow: key === "allow", pattern: value });
+      } else {
+        lastWasAgent = false;
+      }
+    }
+    const ua = userAgent.trim().toLowerCase();
+    const specific = groups.filter(g => ua !== "*" && g.agents.includes(ua));
+    const chosen = specific.length ? specific : groups.filter(g => g.agents.includes("*"));
+    const applicable = chosen.length > 0;
+    const matches = (pattern: string) => {
+      const anchored = pattern.endsWith("$");
+      const body = (anchored ? pattern.slice(0, -1) : pattern)
+        .split("*").map(part => part.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*");
+      return new RegExp("^" + body + (anchored ? "$" : "")).test(path);
+    };
     let allowed = true;
     let matchedRule = "";
-    for (const block of blocks) {
-      const lines = block.split("\n").map(l => l.trim());
-      const agents = lines.filter(l => l.toLowerCase().startsWith("user-agent:")).map(l => l.split(":")[1]?.trim());
-      if (!agents.some(a => a === "*" || a.toLowerCase() === userAgent.toLowerCase())) continue;
-      applicable = true;
-      for (const line of lines) {
-        if (line.toLowerCase().startsWith("disallow:")) {
-          const rule = line.split(":")[1]?.trim();
-          if (rule && path.startsWith(rule)) { allowed = false; matchedRule = `Disallow: ${rule}`; }
-        }
-        if (line.toLowerCase().startsWith("allow:")) {
-          const rule = line.split(":")[1]?.trim();
-          if (rule && path.startsWith(rule)) { allowed = true; matchedRule = `Allow: ${rule}`; }
+    let bestLen = -1;
+    for (const g of chosen) {
+      for (const rule of g.rules) {
+        if (!matches(rule.pattern)) continue;
+        const len = rule.pattern.length;
+        if (len > bestLen || (len === bestLen && rule.allow)) {
+          bestLen = len;
+          allowed = rule.allow;
+          matchedRule = `${rule.allow ? "Allow" : "Disallow"}: ${rule.pattern}`;
         }
       }
     }

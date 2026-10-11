@@ -147,7 +147,7 @@ export function UtmBuilderTool() {
             <span className="text-xs font-medium text-muted-foreground">Generated URL</span>
             <div className="flex items-center gap-2">
               {utmUrl && (
-                <a href={utmUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href={utmUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the tagged URL in a new tab" className="text-muted-foreground hover:text-primary transition-colors">
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               )}
@@ -203,7 +203,7 @@ export function UtmBuilderTool() {
                       <p className="text-xs font-medium truncate">{h.label || "—"}</p>
                       <p className="text-[10px] text-muted-foreground font-mono truncate">{h.url}</p>
                     </div>
-                    <button onClick={async () => { await navigator.clipboard.writeText(h.url); toast.success("Copied!"); }}
+                    <button aria-label="Copy" onClick={async () => { await navigator.clipboard.writeText(h.url); toast.success("Copied!"); }}
                       className="shrink-0 p-1.5 rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary opacity-0 group-hover:opacity-100 transition-all">
                       <Copy className="w-3.5 h-3.5" />
                     </button>

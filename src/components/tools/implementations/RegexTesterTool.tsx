@@ -74,7 +74,7 @@ export function RegexTesterTool() {
             <label className="text-xs text-muted-foreground mb-1 block">Pattern</label>
             <div className="flex rounded-xl border border-border overflow-hidden focus-within:ring-2 focus-within:ring-primary/30">
               <span className="px-3 py-2 bg-muted/40 text-muted-foreground text-sm font-mono border-r border-border">/</span>
-              <input value={pattern} onChange={e => setPattern(e.target.value)}
+              <input aria-label="Pattern" value={pattern} onChange={e => setPattern(e.target.value)}
                 className="flex-1 px-3 py-2 bg-transparent text-sm font-mono outline-none"
                 placeholder="your regex here" />
               <span className="px-3 py-2 bg-muted/40 text-muted-foreground text-sm font-mono border-l border-border">/</span>

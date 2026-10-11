@@ -15,9 +15,9 @@ import { fileURLToPath } from "url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-// Brand SVG — white Zap on #0099DD rounded square
+// Brand SVG — white Zap on #5546F0 rounded square
 const SVG = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#0099DD"/>
+  <rect width="32" height="32" rx="7" fill="#5546F0"/>
   <polygon points="17,6 7,18 16,18 15,26 25,14 16,14" fill="white"/>
 </svg>`);
 

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { secureRandomInt } from "@/lib/secure-random";
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +10,7 @@ import { toast } from "sonner";
 
 const WORDS = ["apple","bridge","cloud","dream","eagle","flame","ghost","honey","ivory","jewel","karma","lemon","magic","noble","ocean","piano","queen","river","solar","tiger","ultra","vapor","wheel","xenon","yacht","zebra","amber","blade","cedar","delta","ember","frost","globe","haven","index","joker","kneel","lunar","maple","nexus","olive","pearl","quirk","rally","slate","thorn","unite","vibes","world","xenon","yield","azure","blaze","crisp","dance","elite","focus","grace","haste","image","judge","knack","light","merit","nerve","orbit","phase","quest","realm","scope","tower","ultra","vista","winds","xerox","youth","zonal","brave","crisp","dusk","echo","fern","glow","haze","iris","jade","keen","loft","mist","neon","opal","pine","roar","sage","tale","veil","warp"];
 
-function randWord() { return WORDS[Math.floor(Math.random() * WORDS.length)]; }
+function randWord() { return WORDS[secureRandomInt(WORDS.length)]; }
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -26,7 +28,7 @@ export function PassphraseGeneratorTool() {
         const w = randWord();
         return capitalize_ ? capitalize(w) : w;
       });
-      if (addNumber) words.push(String(Math.floor(Math.random() * 9000) + 1000));
+      if (addNumber) words.push(String(secureRandomInt(9000) + 1000));
       list.push(words.join(separator));
     }
     setPassphrases(list);
@@ -67,7 +69,7 @@ export function PassphraseGeneratorTool() {
             {passphrases.map((p, i) => (
               <div key={i} className="flex items-center justify-between gap-2 p-3 rounded-xl border border-border bg-muted/10">
                 <code className="text-sm font-mono flex-1 break-all">{p}</code>
-                <button onClick={() => copy(p)} className="shrink-0 p-1.5 hover:bg-muted rounded-lg transition-colors">
+                <button aria-label="Copy" onClick={() => copy(p)} className="shrink-0 p-1.5 hover:bg-muted rounded-lg transition-colors">
                   <Copy className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
               </div>

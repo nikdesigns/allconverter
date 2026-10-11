@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -89,7 +91,7 @@ export function FaviconGeneratorTool() {
         <span className="text-sm font-medium">Favicon Generator</span>
       </div>
       <div className="p-5 space-y-4">
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
           onClick={() => fileRef.current?.click()}
           onDragOver={e=>e.preventDefault()}
@@ -98,7 +100,7 @@ export function FaviconGeneratorTool() {
           <p className="text-sm font-medium">Upload your logo or icon</p>
           <p className="text-xs text-muted-foreground mt-1">PNG, SVG, JPG — transparent PNG works best</p>
         </div>
-        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
+        <input aria-label="Choose file" ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
 
         {src && (
           <>

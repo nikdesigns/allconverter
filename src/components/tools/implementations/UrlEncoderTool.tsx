@@ -64,7 +64,7 @@ export function UrlEncoderTool() {
           </label>
         )}
         <span className="ml-auto text-[10px] text-emerald-500 font-medium">● Live</span>
-        <button onClick={() => setInput("")} className="p-1.5 rounded hover:bg-muted text-muted-foreground transition-all">
+        <button aria-label="Remove" onClick={() => setInput("")} className="p-1.5 rounded hover:bg-muted text-muted-foreground transition-all">
           <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>

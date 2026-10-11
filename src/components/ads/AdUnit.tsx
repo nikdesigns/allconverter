@@ -65,7 +65,7 @@ export function AdUnit({
   }
 
   return (
-    <div className={cn("w-full overflow-hidden", className)}>
+    <div className={cn("ad-slot w-full overflow-hidden", className)}>
       {label && (
         <p className="text-center text-[10px] text-muted-foreground/50 mb-1 select-none">
           Advertisement

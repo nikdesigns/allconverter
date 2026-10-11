@@ -55,7 +55,7 @@ export function MobileAnchorAd() {
 
   return (
     // Only visible below lg breakpoint — desktop uses sidebar ad instead
-    <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[var(--neutral-primary-soft)] border-t border-[var(--border-default)] shadow-[0_-2px_12px_rgba(0,0,0,0.08)]">
+    <div className="ad-slot lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[var(--neutral-primary-soft)] border-t border-[var(--border-default)] shadow-[0_-2px_12px_rgba(0,0,0,0.08)]">
       <div className="relative w-full flex items-center justify-center py-1 px-8 min-h-[60px]">
         {/* Dismiss button */}
         <button

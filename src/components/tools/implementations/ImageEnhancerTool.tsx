@@ -199,7 +199,7 @@ function Slider({ label, value, min, max, onChange, icon }: SliderProps) {
           className="absolute h-full rounded-full bg-primary/40"
           style={{ width: `${pct}%` }}
         />
-        <input
+        <input aria-label={label}
           type="range"
           min={min} max={max} value={value}
           onChange={(e) => onChange(Number(e.target.value))}
@@ -471,7 +471,7 @@ export function ImageEnhancerTool() {
           {/* Quality slider */}
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted-foreground w-24 shrink-0">Output quality</span>
-            <input
+            <input aria-label="Quality"
               type="range" min={60} max={100} value={quality}
               onChange={e => setQuality(Number(e.target.value))}
               className="flex-1 accent-primary h-1.5"

@@ -494,6 +494,20 @@ export function ToolInterface({ tool }: ToolInterfaceProps) {
     addRecentTool(tool.slug);
   }, [tool.slug]);
 
+  if (tool.unavailable) {
+    return (
+      <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="text-center py-8">
+          <h3 className="font-semibold mb-2">{tool.name} is temporarily unavailable</h3>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            This tool has been switched off because it could not do its job reliably in the browser.
+            The guide below explains a dependable way to get the same result today.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (!Component) {
     return (
       <div className="rounded-2xl border border-border bg-card p-6">

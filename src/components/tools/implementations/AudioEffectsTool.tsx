@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { Volume2, Gauge, AudioLines, Upload, Download, Loader2, CheckCircle2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,7 +19,7 @@ const CONFIG: Record<Mode, { icon: React.ElementType; label: string; description
   "audio-speed-changer": {
     icon: Gauge,
     label: "Speed Changer",
-    description: "Speed up or slow down audio without pitch distortion (0.25× – 4×).",
+    description: "Speed up or slow down audio (0.25× – 4×). Pitch rises and falls with speed.",
   },
   "audio-compressor": {
     icon: AudioLines,
@@ -134,7 +136,7 @@ export function AudioEffectsTool({ slug = "audio-volume-booster" }: Props) {
 
       {/* Drop zone */}
       {!buffer ? (
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors"
           onClick={() => inputRef.current?.click()}
           onDrop={onDrop}
@@ -144,7 +146,7 @@ export function AudioEffectsTool({ slug = "audio-volume-booster" }: Props) {
           <p className="font-medium text-sm mb-1">Drop your audio file here</p>
           <p className="text-xs text-muted-foreground">MP3, WAV, M4A, OGG</p>
           {loading && <p className="text-xs mt-2 text-primary animate-pulse">Decoding…</p>}
-          <input
+          <input aria-label="Choose file"
             ref={inputRef}
             type="file"
             accept="audio/*"
@@ -168,7 +170,7 @@ export function AudioEffectsTool({ slug = "audio-volume-booster" }: Props) {
                 <span>Volume multiplier</span>
                 <span className="font-mono text-primary">{gain.toFixed(1)}×</span>
               </Label>
-              <input
+              <input aria-label="Volume multiplier ×"
                 type="range" min={1} max={5} step={0.1} value={gain}
                 onChange={(e) => setGain(parseFloat(e.target.value))}
                 className="w-full accent-primary"
@@ -185,7 +187,7 @@ export function AudioEffectsTool({ slug = "audio-volume-booster" }: Props) {
                 <span>Playback speed</span>
                 <span className="font-mono text-primary">{speed.toFixed(2)}×</span>
               </Label>
-              <input
+              <input aria-label="Playback speed ×"
                 type="range" min={0.25} max={4} step={0.05} value={speed}
                 onChange={(e) => setSpeed(parseFloat(e.target.value))}
                 className="w-full accent-primary"
@@ -203,7 +205,7 @@ export function AudioEffectsTool({ slug = "audio-volume-booster" }: Props) {
                   <span>Threshold</span>
                   <span className="font-mono text-primary">{threshold} dB</span>
                 </Label>
-                <input
+                <input aria-label="Threshold dB"
                   type="range" min={-60} max={0} step={1} value={threshold}
                   onChange={(e) => setThreshold(parseInt(e.target.value))}
                   className="w-full accent-primary"
@@ -217,7 +219,7 @@ export function AudioEffectsTool({ slug = "audio-volume-booster" }: Props) {
                   <span>Ratio</span>
                   <span className="font-mono text-primary">{ratio}:1</span>
                 </Label>
-                <input
+                <input aria-label="Ratio :1"
                   type="range" min={1} max={20} step={0.5} value={ratio}
                   onChange={(e) => setRatio(parseFloat(e.target.value))}
                   className="w-full accent-primary"

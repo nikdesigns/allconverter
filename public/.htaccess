@@ -1,0 +1,49 @@
+# AllConverter.tools — static host configuration (Apache / LiteSpeed).
+# Copied into the export by Next.js; upload it with the rest of ./out.
+
+# ── Custom 404 page instead of the host default ──────────────────────────
+ErrorDocument 404 /404.html
+
+# ── Content types the host cannot infer ──────────────────────────────────
+# The generated social image has no file extension.
+<Files "opengraph-image">
+  ForceType image/png
+</Files>
+<IfModule mod_mime.c>
+  AddType text/plain .txt
+  AddType application/manifest+json .webmanifest
+  AddType text/javascript .mjs
+  AddType application/wasm .wasm
+</IfModule>
+
+<IfModule mod_headers.c>
+  # ── Security headers ───────────────────────────────────────────────────
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # ── Caching ────────────────────────────────────────────────────────────
+  # HTML and route data: always revalidate in the browser, let the CDN hold
+  # a copy for five minutes so requests do not all travel to the origin.
+  <FilesMatch "\.(html|txt|xml|json)$">
+    Header set Cache-Control "public, max-age=0, s-maxage=300, must-revalidate"
+  </FilesMatch>
+  # Unhashed public assets (icons, manifest, social image): one day.
+  <FilesMatch "\.(png|ico|svg|webmanifest)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+  <Files "opengraph-image">
+    Header set Cache-Control "public, max-age=86400"
+  </Files>
+  # The service worker must never be served stale.
+  <Files "sw.js">
+    Header set Cache-Control "no-cache"
+  </Files>
+  # Build output under /_next/static/ is content-hashed, so it can be cached
+  # for a year. Set last so it overrides the extension rules above.
+  <IfModule mod_setenvif.c>
+    SetEnvIf Request_URI "^/_next/static/" HASHED_ASSET=1
+    Header set Cache-Control "public, max-age=31536000, immutable" env=HASHED_ASSET
+  </IfModule>
+</IfModule>

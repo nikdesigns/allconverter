@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useRef, useState } from "react";
 import { Upload, X, FileIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -49,7 +51,7 @@ export function FileUploadZone({
 
   return (
     <div className={cn("space-y-2", className)}>
-      <div
+      <div role="button" tabIndex={0} onKeyDown={activateOnKey}
         className={cn(
           "relative border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-200",
           dragging
@@ -65,7 +67,7 @@ export function FileUploadZone({
           processFiles(e.dataTransfer.files);
         }}
       >
-        <input
+        <input aria-label="Choose file"
           ref={inputRef}
           type="file"
           accept={accept}
@@ -128,7 +130,7 @@ export function UploadedFileCard({ file, onRemove, status = "ready", statusText 
         <div className="w-4 h-4 rounded-full border-2 border-primary border-t-transparent animate-spin shrink-0" />
       )}
       {onRemove && status !== "processing" && (
-        <button onClick={onRemove} className="shrink-0 p-1 rounded hover:bg-muted transition-all">
+        <button aria-label="Remove" onClick={onRemove} className="shrink-0 p-1 rounded hover:bg-muted transition-all">
           <X className="w-3.5 h-3.5 text-muted-foreground" />
         </button>
       )}

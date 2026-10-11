@@ -152,7 +152,7 @@ export function AiResumeBuilderTool() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-muted-foreground">Experience #{i + 1}</span>
                   {experiences.length > 1 && (
-                    <button onClick={() => setExp(ex => ex.filter((_, j) => j !== i))}
+                    <button aria-label="Remove" onClick={() => setExp(ex => ex.filter((_, j) => j !== i))}
                       className="text-rose-400 hover:text-rose-300">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -195,7 +195,7 @@ export function AiResumeBuilderTool() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-muted-foreground">Education #{i + 1}</span>
                   {educations.length > 1 && (
-                    <button onClick={() => setEd(e => e.filter((_, j) => j !== i))} className="text-rose-400 hover:text-rose-300">
+                    <button aria-label="Remove" onClick={() => setEd(e => e.filter((_, j) => j !== i))} className="text-rose-400 hover:text-rose-300">
                       <Trash2 className="w-3.5 h-3.5" /></button>
                   )}
                 </div>

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -132,7 +134,7 @@ export function SocialImageResizerTool() {
         <span className="text-sm font-medium">{title}</span>
       </div>
       <div className="p-5 space-y-4">
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
           onClick={() => fileRef.current?.click()}
           onDragOver={e=>e.preventDefault()}
@@ -141,7 +143,7 @@ export function SocialImageResizerTool() {
             ? <img src={imgSrc} alt="preview" className="max-h-32 mx-auto rounded-lg object-contain" />
             : <><Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" /><p className="text-sm font-medium">Upload image</p></>}
         </div>
-        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
+        <input aria-label="Choose file" ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
 
         <div>
           <label className="text-xs text-muted-foreground mb-2 block">Select size preset</label>
@@ -171,7 +173,7 @@ export function SocialImageResizerTool() {
           {fit === "contain" && (
             <div className="w-28">
               <label className="text-xs text-muted-foreground mb-1 block">BG color</label>
-              <input type="color" value={bgColor} onChange={e=>setBgColor(e.target.value)} className="w-full h-10 rounded-xl border border-input cursor-pointer p-1" />
+              <input aria-label="BG color" type="color" value={bgColor} onChange={e=>setBgColor(e.target.value)} className="w-full h-10 rounded-xl border border-input cursor-pointer p-1" />
             </div>
           )}
         </div>

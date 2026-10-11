@@ -126,7 +126,7 @@ export function HashGeneratorTool() {
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-2 block">Cost factor (rounds): {rounds}</label>
-            <input type="range" min={6} max={14} value={rounds} onChange={e => setRounds(+e.target.value)} className="w-full accent-primary h-1.5" />
+            <input aria-label="Cost factor (rounds)" type="range" min={6} max={14} value={rounds} onChange={e => setRounds(+e.target.value)} className="w-full accent-primary h-1.5" />
             <div className="flex justify-between text-[11px] text-muted-foreground mt-1"><span>Fast (6)</span><span>Secure (14)</span></div>
           </div>
           <Button onClick={generateBcrypt} disabled={loading || !input} className="w-full gap-2">

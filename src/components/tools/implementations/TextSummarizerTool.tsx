@@ -112,7 +112,7 @@ export function TextSummarizerTool() {
             <label className="text-xs text-muted-foreground">Summary length</label>
             <span className="text-xs font-medium">{Math.round(ratio * 100)}% of original</span>
           </div>
-          <input type="range" min={0.1} max={0.6} step={0.05} value={ratio}
+          <input aria-label="Summary length" type="range" min={0.1} max={0.6} step={0.05} value={ratio}
             onChange={e => setRatio(parseFloat(e.target.value))}
             className="w-full accent-primary h-1.5" />
           <div className="flex justify-between text-[11px] text-muted-foreground mt-1">

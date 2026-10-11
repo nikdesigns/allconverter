@@ -417,7 +417,7 @@ export function UpiQrGeneratorTool() {
                 <div>
                   <label className="text-xs text-muted-foreground mb-1.5 block">QR Color</label>
                   <div className="flex gap-2">
-                    <input
+                    <input aria-label="QR Color"
                       type="color"
                       value={fgColor}
                       onChange={e => setFgColor(e.target.value)}
@@ -434,7 +434,7 @@ export function UpiQrGeneratorTool() {
                 <div>
                   <label className="text-xs text-muted-foreground mb-1.5 block">Background</label>
                   <div className="flex gap-2">
-                    <input
+                    <input aria-label="Background"
                       type="color"
                       value={bgColor}
                       onChange={e => setBgColor(e.target.value)}
@@ -454,7 +454,7 @@ export function UpiQrGeneratorTool() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-muted-foreground mb-1 block">Output size</label>
-                  <select
+                  <select aria-label="Output size"
                     value={size}
                     onChange={e => setSize(+e.target.value)}
                     className="w-full h-9 px-3 rounded-xl border border-input bg-background text-sm"
@@ -468,7 +468,7 @@ export function UpiQrGeneratorTool() {
                   <label className="text-xs text-muted-foreground mb-1 block">
                     Quiet margin: <span className="text-foreground font-medium">{margin}</span>
                   </label>
-                  <input
+                  <input aria-label="Quiet margin"
                     type="range"
                     min={0} max={6} value={margin}
                     onChange={e => setMargin(+e.target.value)}
@@ -489,7 +489,7 @@ export function UpiQrGeneratorTool() {
                       <p className="text-xs font-medium text-foreground">Logo uploaded</p>
                       <p className="text-[10px] text-muted-foreground">Error correction set to High (H) automatically</p>
                     </div>
-                    <button onClick={removeLogo} className="text-muted-foreground hover:text-rose-400 transition-colors">
+                    <button aria-label="Remove" onClick={removeLogo} className="text-muted-foreground hover:text-rose-400 transition-colors">
                       <X className="w-4 h-4" />
                     </button>
                   </div>
@@ -502,7 +502,7 @@ export function UpiQrGeneratorTool() {
                     Upload logo / icon
                   </button>
                 )}
-                <input
+                <input aria-label="Choose file"
                   ref={logoInputRef}
                   type="file"
                   accept="image/*"

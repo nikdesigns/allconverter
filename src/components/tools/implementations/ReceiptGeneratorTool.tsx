@@ -159,7 +159,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div className="flex items-center gap-3">
           <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Color</label>
           {["#059669","#3b82f6","#6366f1","#0d9488","#f97316","#e11d48"].map(c => (
-            <button key={c} onClick={() => setThemeAccent(c)} className={cn("w-6 h-6 rounded-full border-2 transition-all hover:scale-110", themeAccent===c?"border-foreground scale-110":"border-transparent")} style={{ backgroundColor: c }} />
+            <button key={c} aria-label={`Use accent colour ${c}`} aria-pressed={themeAccent===c} onClick={() => setThemeAccent(c)} className={cn("w-6 h-6 rounded-full border-2 transition-all hover:scale-110", themeAccent===c?"border-foreground scale-110":"border-transparent")} style={{ backgroundColor: c }} />
           ))}
         </div>
 
@@ -179,12 +179,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div><label className="text-xs text-muted-foreground mb-1 block">Receipt #</label><Input value={meta.number} onChange={e => setMeta_("number",e.target.value)} className="text-sm font-mono" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Date</label><Input type="date" value={meta.date} onChange={e => setMeta_("date",e.target.value)} className="text-sm" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Currency</label>
-            <select value={meta.currency} onChange={e => setMeta_("currency",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
+            <select aria-label="Currency" value={meta.currency} onChange={e => setMeta_("currency",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
             </select>
           </div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Payment Method</label>
-            <select value={meta.paymentMethod} onChange={e => setMeta_("paymentMethod",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
+            <select aria-label="Payment Method" value={meta.paymentMethod} onChange={e => setMeta_("paymentMethod",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               {PAYMENT_METHODS.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>

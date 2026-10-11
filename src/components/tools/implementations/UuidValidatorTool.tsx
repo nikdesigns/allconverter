@@ -102,7 +102,7 @@ export function UuidValidatorTool() {
                   <div key={label} className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border bg-muted/10">
                     <span className="text-xs text-muted-foreground w-24 shrink-0">{label}</span>
                     <code className="text-xs font-mono break-all flex-1 text-right">{val}</code>
-                    <button onClick={() => copy(val)} className="p-1 rounded hover:bg-muted shrink-0">
+                    <button aria-label="Copy" onClick={() => copy(val)} className="p-1 rounded hover:bg-muted shrink-0">
                       <Copy className="w-3 h-3 text-muted-foreground" />
                     </button>
                   </div>

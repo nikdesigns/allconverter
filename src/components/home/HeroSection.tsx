@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Search, ArrowRight, Zap, FileText, Image, Code2, Music, BrainCircuit, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { tools, searchTools } from "@/lib/tools-data";
+import type { Tool } from "@/types";
 import { cn } from "@/lib/utils";
 
 const stats = [
@@ -28,17 +28,25 @@ const quickLinks = [
 
 export function HeroSection() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<typeof tools>([]);
+  const [results, setResults] = useState<Tool[]>([]);
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
+  // The tool catalogue is loaded on demand when the visitor starts typing,
+  // so it is not part of the homepage's initial JavaScript.
   useEffect(() => {
-    if (query.trim()) {
-      setResults(searchTools(query).slice(0, 6));
-    } else {
+    if (!query.trim()) {
       setResults([]);
+      return;
     }
+    let cancelled = false;
+    import("@/lib/tools-data").then(({ searchTools }) => {
+      if (!cancelled) setResults(searchTools(query).slice(0, 6));
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [query]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -55,10 +63,6 @@ export function HeroSection() {
       {/* Subtle grid */}
       <div className="absolute inset-0 grid-pattern opacity-40 pointer-events-none" />
 
-      {/* Glow orbs */}
-      <div className="absolute top-16 left-1/2 -translate-x-1/2 w-175 h-105 bg-[#00BFFF]/8 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-32 right-1/4 w-65 h-65 bg-[#4B0082]/15 rounded-full blur-2xl pointer-events-none" />
-      <div className="absolute bottom-10 left-1/4 w-50 h-50 bg-[#00897B]/10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="container-xl relative z-10">
 
@@ -101,7 +105,7 @@ export function HeroSection() {
               )}
             >
               <Search className="absolute left-4 w-4 h-4 text-(--body-subtle) pointer-events-none" />
-              <input
+              <input aria-label="Search tools"
                 ref={inputRef}
                 type="text"
                 value={query}

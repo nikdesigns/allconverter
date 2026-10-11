@@ -193,7 +193,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div><label className="text-xs text-muted-foreground mb-1 block">Effective Date</label><Input type="date" value={effective} onChange={e => setEffective(e.target.value)} className="text-sm" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Duration (years)</label>
-            <select value={duration} onChange={e => setDuration(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
+            <select aria-label="Duration (years)" value={duration} onChange={e => setDuration(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               {["1","2","3","5","10"].map(y => <option key={y} value={y}>{y} year{y!=="1"?"s":""}</option>)}
             </select>
           </div>

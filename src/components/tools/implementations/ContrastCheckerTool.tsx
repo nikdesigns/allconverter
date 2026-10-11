@@ -103,10 +103,10 @@ export function ContrastCheckerTool() {
           <div>
             <label className="text-xs text-muted-foreground mb-2 block">Text (Foreground)</label>
             <div className="flex items-center gap-2">
-              <input type="color" value={fg}
+              <input aria-label="Text (Foreground)" type="color" value={fg}
                 onChange={e => { setFg(e.target.value); setFgHex(e.target.value); }}
                 className="w-10 h-10 rounded-xl border border-input cursor-pointer p-0.5 bg-transparent" />
-              <input type="text" value={fgHex} onChange={e => applyFgHex(e.target.value)} maxLength={7}
+              <input aria-label="Text (Foreground)" type="text" value={fgHex} onChange={e => applyFgHex(e.target.value)} maxLength={7}
                 className="flex-1 h-10 px-3 rounded-xl border border-input bg-background text-sm font-mono uppercase"
                 placeholder="#000000" />
             </div>
@@ -114,10 +114,10 @@ export function ContrastCheckerTool() {
           <div>
             <label className="text-xs text-muted-foreground mb-2 block">Background</label>
             <div className="flex items-center gap-2">
-              <input type="color" value={bg}
+              <input aria-label="Background" type="color" value={bg}
                 onChange={e => { setBg(e.target.value); setBgHex(e.target.value); }}
                 className="w-10 h-10 rounded-xl border border-input cursor-pointer p-0.5 bg-transparent" />
-              <input type="text" value={bgHex} onChange={e => applyBgHex(e.target.value)} maxLength={7}
+              <input aria-label="Background" type="text" value={bgHex} onChange={e => applyBgHex(e.target.value)} maxLength={7}
                 className="flex-1 h-10 px-3 rounded-xl border border-input bg-background text-sm font-mono uppercase"
                 placeholder="#ffffff" />
             </div>

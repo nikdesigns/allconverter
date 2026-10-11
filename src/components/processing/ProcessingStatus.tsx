@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionGlobalConfig } from "framer-motion";
+
+// Follow the OS "reduce motion" setting: every animated tool imports this
+// module, so setting it here switches framer-motion animations off for them.
+if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+  MotionGlobalConfig.skipAnimations = true;
+}
 import {
   CheckCircle2, XCircle, Shield, Zap, Lock, FolderX,
   FileText, Image, Music, Code, Briefcase, Video, Cpu,

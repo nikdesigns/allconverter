@@ -132,7 +132,7 @@ export function ColorConverterTool() {
         {/* Color picker + input */}
         <div className="flex items-center gap-4">
           <div className="relative shrink-0">
-            <input
+            <input aria-label="Colour picker"
               type="color"
               value={pickerVal}
               onChange={(e) => syncFromPicker(e.target.value)}

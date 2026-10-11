@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,7 +63,7 @@ export function ImageDpiConverterTool() {
         <div className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/20 text-xs text-blue-400">
           DPI conversion rescales the image pixel dimensions. Higher DPI at the same physical size = more pixels.
         </div>
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-6 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
           onClick={() => fileRef.current?.click()}
           onDragOver={e=>e.preventDefault()}
@@ -70,7 +72,7 @@ export function ImageDpiConverterTool() {
             ? <img src={preview} alt="preview" className="max-h-32 mx-auto rounded-lg object-contain" />
             : <><Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" /><p className="text-sm font-medium">Upload image</p></>}
         </div>
-        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
+        <input aria-label="Choose file" ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
         <div className="grid grid-cols-2 gap-3">
           <div><label className="text-xs text-muted-foreground mb-1 block">Current DPI (source)</label>
             <Input type="number" value={sourceDpi} onChange={e=>setSourceDpi(+e.target.value)} className="font-mono text-sm" /></div>

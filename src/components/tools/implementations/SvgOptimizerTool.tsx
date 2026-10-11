@@ -116,7 +116,14 @@ export function SvgOptimizerTool() {
           <div>
             <p className="text-xs text-muted-foreground mb-2">Preview</p>
             <div className="flex items-center justify-center p-8 border border-border rounded-xl bg-muted/10 min-h-[100px]">
-              <div dangerouslySetInnerHTML={{ __html: output }} className="max-w-full max-h-32" />
+              {/* Rendered through <img>, not injected as markup: scripts and event
+                  handlers inside an SVG do not run in an image context. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                alt="Preview of the optimised SVG"
+                src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(/\bxmlns=/.test(output) ? output : output.replace(/<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"'))}`}
+                className="max-w-full max-h-32"
+              />
             </div>
           </div>
         )}

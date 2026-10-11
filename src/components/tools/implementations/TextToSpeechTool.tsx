@@ -82,7 +82,7 @@ export function TextToSpeechTool() {
         {/* Voice */}
         <div className="space-y-2">
           <Label className="text-xs">Voice</Label>
-          <select
+          <select aria-label="Voice"
             value={selectedVoice}
             onChange={(e) => setSelectedVoice(e.target.value)}
             className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs"
@@ -110,7 +110,7 @@ export function TextToSpeechTool() {
             <span>Speed</span>
             <span className="font-mono text-primary">{rate.toFixed(1)}×</span>
           </Label>
-          <input
+          <input aria-label="Speed ×"
             type="range" min={0.5} max={2} step={0.1} value={rate}
             onChange={(e) => setRate(parseFloat(e.target.value))}
             className="w-full accent-primary mt-2"
@@ -126,7 +126,7 @@ export function TextToSpeechTool() {
             <span>Pitch</span>
             <span className="font-mono text-primary">{pitch.toFixed(1)}</span>
           </Label>
-          <input
+          <input aria-label="Pitch"
             type="range" min={0} max={2} step={0.1} value={pitch}
             onChange={(e) => setPitch(parseFloat(e.target.value))}
             className="w-full accent-primary mt-2"

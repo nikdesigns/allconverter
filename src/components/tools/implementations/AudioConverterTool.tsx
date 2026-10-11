@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { FileAudio, Upload, Download, Loader2, CheckCircle2, X } from "lucide-react";
@@ -84,7 +86,7 @@ export function AudioConverterTool({ slug = "mp3-to-wav" }: Props) {
       </div>
 
       {/* Drop zone */}
-      <div
+      <div role="button" tabIndex={0} onKeyDown={activateOnKey}
         className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors"
         onClick={() => inputRef.current?.click()}
         onDrop={onDrop}
@@ -102,7 +104,7 @@ export function AudioConverterTool({ slug = "mp3-to-wav" }: Props) {
             <p className="text-xs text-muted-foreground">or click to browse</p>
           </>
         )}
-        <input
+        <input aria-label="Choose file"
           ref={inputRef}
           type="file"
           className="hidden"

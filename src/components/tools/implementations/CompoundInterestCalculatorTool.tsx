@@ -65,7 +65,7 @@ export function CompoundInterestCalculatorTool() {
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Compound Frequency</label>
-            <select value={compound} onChange={e => setCompound(e.target.value)}
+            <select aria-label="Compound Frequency" value={compound} onChange={e => setCompound(e.target.value)}
               className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               <option value="365">Daily</option>
               <option value="52">Weekly</option>

@@ -166,7 +166,7 @@ export function AdBlockNotice() {
           position: "absolute", top: 0, left: 0, right: 0, height: 3,
           background: failed
             ? "linear-gradient(90deg,#ef4444,#f97316)"
-            : "linear-gradient(90deg,#6366f1,#0099DD)",
+            : "linear-gradient(90deg,#5546F0,#3B7BF6)",
         }} />
 
         {/* Dismiss × */}

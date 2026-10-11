@@ -112,7 +112,7 @@ ${form.image ? `<meta property="twitter:image" content="${form.image}">` : ""}
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Robots</label>
-            <select value={form.robots} onChange={e => set("robots", e.target.value)}
+            <select aria-label="Robots" value={form.robots} onChange={e => set("robots", e.target.value)}
               className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               <option>index, follow</option>
               <option>noindex, follow</option>
@@ -122,7 +122,7 @@ ${form.image ? `<meta property="twitter:image" content="${form.image}">` : ""}
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">OG Type</label>
-            <select value={form.type} onChange={e => set("type", e.target.value)}
+            <select aria-label="OG Type" value={form.type} onChange={e => set("type", e.target.value)}
               className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               <option>website</option>
               <option>article</option>

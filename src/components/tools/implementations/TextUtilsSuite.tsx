@@ -251,7 +251,7 @@ function SlugGenerator() {
     <div className="space-y-4">
       <div className="space-y-2">
         <label className="text-xs font-medium text-muted-foreground">Title or text</label>
-        <input value={input} onChange={e => setInput(e.target.value)}
+        <input aria-label="Title or text" value={input} onChange={e => setInput(e.target.value)}
           placeholder="Enter title or text…"
           className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
       </div>

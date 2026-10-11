@@ -99,15 +99,15 @@ export function PdfMergerTool() {
                     <p className="text-xs text-muted-foreground">{formatBytes2(f.size)}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <button onClick={() => moveUp(i)} disabled={i===0}
+                    <button aria-label="Move up" onClick={() => moveUp(i)} disabled={i===0}
                       className="p-1.5 rounded hover:bg-muted disabled:opacity-30 transition-all">
                       <ArrowUp className="w-3.5 h-3.5" />
                     </button>
-                    <button onClick={() => moveDown(i)} disabled={i===files.length-1}
+                    <button aria-label="Move down" onClick={() => moveDown(i)} disabled={i===files.length-1}
                       className="p-1.5 rounded hover:bg-muted disabled:opacity-30 transition-all">
                       <ArrowDown className="w-3.5 h-3.5" />
                     </button>
-                    <button onClick={() => remove(i)} className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-destructive transition-all">
+                    <button aria-label="Remove" onClick={() => remove(i)} className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-destructive transition-all">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>

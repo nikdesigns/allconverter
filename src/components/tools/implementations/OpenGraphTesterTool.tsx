@@ -66,7 +66,7 @@ export function OpenGraphTesterTool() {
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">OG Type</label>
-            <select value={data.type} onChange={e => set("type", e.target.value)}
+            <select aria-label="OG Type" value={data.type} onChange={e => set("type", e.target.value)}
               className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               <option>website</option><option>article</option><option>product</option>
             </select>

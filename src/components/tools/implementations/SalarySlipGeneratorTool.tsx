@@ -173,7 +173,7 @@ td:last-child{text-align:right;font-family:monospace;font-weight:600}
         {/* Color */}
         <div className="flex items-center gap-3">
           <label className="text-xs font-medium text-muted-foreground">Color</label>
-          {COLORS.map(c => <button key={c} onClick={() => setThemeAccent(c)} className={cn("w-6 h-6 rounded-full border-2 transition-all", themeAccent===c?"border-foreground scale-110":"border-transparent")} style={{ backgroundColor: c }} />)}
+          {COLORS.map(c => <button key={c} aria-label={`Use accent colour ${c}`} aria-pressed={themeAccent===c} onClick={() => setThemeAccent(c)} className={cn("w-6 h-6 rounded-full border-2 transition-all", themeAccent===c?"border-foreground scale-110":"border-transparent")} style={{ backgroundColor: c }} />)}
         </div>
 
         {/* Company */}
@@ -226,7 +226,7 @@ td:last-child{text-align:right;font-family:monospace;font-weight:600}
                 <div key={e.id} className="grid grid-cols-[1fr_88px_24px] gap-1.5 items-center">
                   <Input value={e.label} onChange={ev => updEarning(e.id,"label",ev.target.value)} placeholder="Component" className="text-xs" />
                   <Input type="number" value={e.amount} onChange={ev => updEarning(e.id,"amount",ev.target.value)} placeholder="0" className="text-xs font-mono" min="0" />
-                  <button onClick={() => removeEarning(e.id)} disabled={earnings.length===1} className="p-0.5 hover:text-destructive text-muted-foreground disabled:opacity-25"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button aria-label="Remove" onClick={() => removeEarning(e.id)} disabled={earnings.length===1} className="p-0.5 hover:text-destructive text-muted-foreground disabled:opacity-25"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               ))}
             </div>
@@ -240,7 +240,7 @@ td:last-child{text-align:right;font-family:monospace;font-weight:600}
                 <div key={d.id} className="grid grid-cols-[1fr_88px_24px] gap-1.5 items-center">
                   <Input value={d.label} onChange={ev => updDed(d.id,"label",ev.target.value)} placeholder="Component" className="text-xs" />
                   <Input type="number" value={d.amount} onChange={ev => updDed(d.id,"amount",ev.target.value)} placeholder="0" className="text-xs font-mono" min="0" />
-                  <button onClick={() => removeDed(d.id)} className="p-0.5 hover:text-destructive text-muted-foreground"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button aria-label="Remove" onClick={() => removeDed(d.id)} className="p-0.5 hover:text-destructive text-muted-foreground"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               ))}
             </div>

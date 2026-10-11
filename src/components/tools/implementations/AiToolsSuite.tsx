@@ -1188,7 +1188,7 @@ export function AiToolsSuite() {
               />
             )}
             {field.type === "select" && (
-              <select
+              <select aria-label={field.label}
                 value={values[field.key] ?? field.options[0]?.value ?? ""}
                 onChange={(e) => set(field.key, e.target.value)}
                 className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm"

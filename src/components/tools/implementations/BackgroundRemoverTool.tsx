@@ -116,7 +116,7 @@ export function BackgroundRemoverTool() {
                   <label className="text-xs text-muted-foreground">Tolerance</label>
                   <span className="text-xs font-medium">{tolerance}</span>
                 </div>
-                <input type="range" min={5} max={120} value={tolerance} onChange={(e) => setTolerance(Number(e.target.value))} className="w-full accent-primary h-1.5" />
+                <input aria-label="Tolerance" type="range" min={5} max={120} value={tolerance} onChange={(e) => setTolerance(Number(e.target.value))} className="w-full accent-primary h-1.5" />
               </div>
             </div>
 

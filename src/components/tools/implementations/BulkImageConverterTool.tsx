@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,7 +84,7 @@ export function BulkImageConverterTool() {
         <span className="text-sm font-medium">Bulk Image Converter</span>
       </div>
       <div className="p-5 space-y-4">
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
           onClick={() => fileRef.current?.click()}
           onDragOver={e=>e.preventDefault()}
@@ -91,7 +93,7 @@ export function BulkImageConverterTool() {
           <p className="text-sm font-medium">Drop multiple images here or click to browse</p>
           <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WebP, AVIF — any format</p>
         </div>
-        <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={e=>{if(e.target.files)addFiles(e.target.files);}} />
+        <input aria-label="Choose file" ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={e=>{if(e.target.files)addFiles(e.target.files);}} />
 
         <div className="flex gap-3">
           <div className="flex-1">
@@ -119,7 +121,7 @@ export function BulkImageConverterTool() {
                   <span className="text-xs flex-1 truncate font-mono">{entry.file.name}</span>
                   <span className="text-xs text-muted-foreground">{(entry.file.size/1024).toFixed(0)} KB</span>
                   {entry.status === "done" && (
-                    <button onClick={()=>downloadOne(entry)} className="text-xs text-primary hover:underline">↓</button>
+                    <button aria-label="Download" onClick={()=>downloadOne(entry)} className="text-xs text-primary hover:underline">↓</button>
                   )}
                 </div>
               ))}

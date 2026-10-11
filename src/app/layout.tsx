@@ -163,8 +163,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F8F8FB' },
-    { media: '(prefers-color-scheme: dark)', color: '#0B0B0F' },
+    { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
+    { media: '(prefers-color-scheme: dark)', color: '#0A0A0A' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -248,8 +248,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <a href="#main-content" className="skip-link">Skip to main content</a>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" tabIndex={-1} className="flex-1 outline-none">{children}</main>
           <Footer />
           <Toaster />
           <AdBlockNotice />

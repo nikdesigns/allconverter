@@ -1,5 +1,9 @@
 "use client";
 
+
+
+import { localPdfWorkerUrl } from "@/lib/pdf-worker";
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -47,10 +51,10 @@ function PdfPageNumberAdder() {
   return (
     <div className="space-y-4">
       <DropZone file={file} setFile={setFile} fileRef={fileRef} />
-      <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)setFile(f);}} />
+      <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)setFile(f);}} />
       <div className="grid grid-cols-2 gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">Position</label>
-          <select value={position} onChange={e=>setPosition(e.target.value as typeof position)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
+          <select aria-label="Position" value={position} onChange={e=>setPosition(e.target.value as typeof position)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm">
             <option value="bottom-center">Bottom Center</option>
             <option value="bottom-right">Bottom Right</option>
             <option value="bottom-left">Bottom Left</option>
@@ -113,7 +117,7 @@ function PdfMetadataEditor() {
   return (
     <div className="space-y-4">
       <DropZone file={file} setFile={loadMeta} fileRef={fileRef} />
-      <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)loadMeta(f);}} />
+      <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)loadMeta(f);}} />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {[["Title",title,setTitle],["Author",author,setAuthor],["Subject",subject,setSubject],["Keywords",keywords,setKeywords],["Creator",creator,setCreator]].map(([label,val,set])=>(
           <div key={label as string}><label className="text-xs text-muted-foreground mb-1 block">{label as string}</label>
@@ -171,7 +175,7 @@ function PdfPageReorder() {
   return (
     <div className="space-y-4">
       <DropZone file={file} setFile={loadPdf} fileRef={fileRef} />
-      <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)loadPdf(f);}} />
+      <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)loadPdf(f);}} />
       {pageCount > 0 && (
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">
@@ -216,7 +220,7 @@ function PdfSizeAnalyzer() {
   return (
     <div className="space-y-4">
       <DropZone file={file} setFile={analyze} fileRef={fileRef} />
-      <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)analyze(f);}} />
+      <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)analyze(f);}} />
       {info && (
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-2">
@@ -254,7 +258,7 @@ function PdfToText() {
     setFile(f); setLoading(true); setText("");
     try {
       const pdfjs = await import("pdfjs-dist");
-      pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+      pdfjs.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
       const buffer = await f.arrayBuffer();
       const loadTask = pdfjs.getDocument({ data: buffer });
       const doc = await loadTask.promise;
@@ -282,7 +286,7 @@ function PdfToText() {
   return (
     <div className="space-y-4">
       <DropZone file={file} setFile={extract} fileRef={fileRef} />
-      <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)extract(f);}} />
+      <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)extract(f);}} />
       {loading && <div className="text-center py-4 text-sm text-muted-foreground animate-pulse">Extracting text…</div>}
       {text && (
         <div className="space-y-2">
@@ -290,7 +294,7 @@ function PdfToText() {
             <Button size="sm" variant="outline" onClick={copy} className="flex-1 gap-1">Copy Text</Button>
             <Button size="sm" onClick={download} className="flex-1 gap-1"><Download className="w-3 h-3" />Download .txt</Button>
           </div>
-          <textarea readOnly value={text} className="w-full min-h-[300px] rounded-xl border border-border bg-muted/10 p-3 text-xs font-mono resize-none" />
+          <textarea aria-label="Extracted text" readOnly value={text} className="w-full min-h-[300px] rounded-xl border border-border bg-muted/10 p-3 text-xs font-mono resize-none" />
         </div>
       )}
     </div>
@@ -300,7 +304,7 @@ function PdfToText() {
 // ── Shared DropZone ───────────────────────────────────────────────────────────
 function DropZone({ file, setFile, fileRef }: { file: File|null; setFile: (f:File)=>void; fileRef: React.RefObject<HTMLInputElement | null> }) {
   return (
-    <div
+    <div role="button" tabIndex={0} onKeyDown={activateOnKey}
       className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
       onClick={() => fileRef.current?.click()}
       onDragOver={e=>e.preventDefault()}

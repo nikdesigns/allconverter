@@ -48,7 +48,7 @@ export function KeywordDensityCheckerTool() {
           <span><span className="text-muted-foreground">Sentences:</span> <strong>{stats.sentences}</strong></span>
           <div className="flex items-center gap-2 ml-auto">
             <label className="text-muted-foreground">Min length:</label>
-            <input type="number" min={2} max={10} value={minLen} onChange={e => setMinLen(+e.target.value)}
+            <input aria-label="Min length" type="number" min={2} max={10} value={minLen} onChange={e => setMinLen(+e.target.value)}
               className="w-12 h-7 px-2 rounded-lg border border-input bg-background text-center text-xs" />
             <label className="flex items-center gap-1.5 cursor-pointer">
               <input type="checkbox" checked={showStopwords} onChange={e => setShowStopwords(e.target.checked)} className="accent-primary" />

@@ -37,7 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Dedupe by slug so a repeated entry in tools-data can't emit a URL twice.
-  const uniqueTools = [...new Map(tools.map((t) => [t.slug, t])).values()];
+  const uniqueTools = [...new Map(tools.map((t) => [t.slug, t])).values()].filter((t) => !t.unavailable);
   const toolPages: MetadataRoute.Sitemap = uniqueTools.map((tool) => ({
     url: `${siteConfig.url}/tools/${tool.slug}/`,
     lastModified: now,

@@ -32,7 +32,7 @@ const JsonView = ({ data, label }: { data: unknown; label: string }) => (
   <div className="w-full max-w-full rounded-xl border border-border overflow-hidden">
     <div className="flex items-center justify-between px-3 py-2 bg-muted/20 border-b border-border">
       <span className="text-xs font-medium">{label}</span>
-      <button onClick={() => copy(data)} className="p-1 rounded hover:bg-muted"><Copy className="w-3 h-3" /></button>
+      <button aria-label="Copy" onClick={() => copy(data)} className="p-1 rounded hover:bg-muted"><Copy className="w-3 h-3" /></button>
     </div>
     <pre className="p-3 text-xs font-mono overflow-x-auto whitespace-pre-wrap break-all">{JSON.stringify(data, null, 2)}</pre>
   </div>

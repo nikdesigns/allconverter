@@ -183,7 +183,7 @@ function TimezoneConverter() {
   const tzSelect = (value: string, onChange: (v: string) => void, label: string) => (
     <div className="space-y-1.5">
       <label className="text-xs font-medium text-muted-foreground">{label}</label>
-      <select value={value} onChange={e => onChange(e.target.value)}
+      <select aria-label={label} value={value} onChange={e => onChange(e.target.value)}
         className="w-full h-10 rounded-xl border border-border bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30">
         {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace(/_/g, " ")}</option>)}
       </select>
@@ -442,7 +442,7 @@ function WorldClock() {
               </div>
             </div>
             {i >= DEFAULT_CITIES.length && (
-              <button
+              <button aria-label="Remove"
                 onClick={() => removeCity(i)}
                 className="text-muted-foreground hover:text-rose-400 ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
               >

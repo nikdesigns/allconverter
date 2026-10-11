@@ -1,5 +1,7 @@
 "use client";
 
+
+import { secureRandomInt } from "@/lib/secure-random";
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +20,7 @@ function uuidv1Like(): string {
   const now = Date.now();
   const time = now.toString(16).padStart(12, "0");
   const rand = Array.from(crypto.getRandomValues(new Uint8Array(10))).map(b => b.toString(16).padStart(2,"0")).join("");
-  return `${time.slice(-8)}-${time.slice(-12,-8)}-1${rand.slice(0,3)}-${(8+Math.floor(Math.random()*4)).toString(16)}${rand.slice(3,6)}-${rand.slice(6,18)}`;
+  return `${time.slice(-8)}-${time.slice(-12,-8)}-1${rand.slice(0,3)}-${(8+secureRandomInt(4)).toString(16)}${rand.slice(3,6)}-${rand.slice(6,18)}`;
 }
 
 function nilUuid(): string { return "00000000-0000-0000-0000-000000000000"; }
@@ -110,7 +112,7 @@ export function UuidGeneratorTool() {
               {uuids.map((u, i) => (
                 <div key={i} className="flex items-center gap-2 p-2.5 rounded-xl border border-border bg-muted/10 group">
                   <code className="flex-1 text-sm font-mono">{format(u)}</code>
-                  <button onClick={() => { navigator.clipboard.writeText(format(u)); toast.success("Copied!"); }}
+                  <button aria-label="Copy" onClick={() => { navigator.clipboard.writeText(format(u)); toast.success("Copied!"); }}
                     className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-muted transition-all">
                     <Copy className="w-3.5 h-3.5 text-muted-foreground" />
                   </button>

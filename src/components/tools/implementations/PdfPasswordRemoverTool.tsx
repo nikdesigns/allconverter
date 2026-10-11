@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -52,7 +54,7 @@ export function PdfPasswordRemoverTool() {
         <div className="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs text-amber-400">
           Only use this tool on PDFs you own or have authorization to modify. Supports standard PDF password encryption (RC4/AES).
         </div>
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
           onClick={() => fileRef.current?.click()}
           onDragOver={e=>e.preventDefault()}
@@ -61,7 +63,7 @@ export function PdfPasswordRemoverTool() {
             ? <><FileText className="w-8 h-8 text-primary mx-auto mb-2" /><p className="text-sm font-medium">{file.name}</p><p className="text-xs text-muted-foreground">{(file.size/1024).toFixed(1)} KB — click to replace</p></>
             : <><Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" /><p className="text-sm font-medium">Drop password-protected PDF here</p></>}
         </div>
-        <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
+        <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">PDF Password (leave empty if no user password)</label>
           <Input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter PDF password if required…" className="text-sm" />

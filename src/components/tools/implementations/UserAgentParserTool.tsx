@@ -101,7 +101,7 @@ export function UserAgentParserTool() {
             <div className="p-3 rounded-xl border border-border bg-muted/10">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-xs text-muted-foreground">Raw UA String</p>
-                <button onClick={() => copy(info.raw)} className="p-1 rounded hover:bg-muted">
+                <button aria-label="Copy" onClick={() => copy(info.raw)} className="p-1 rounded hover:bg-muted">
                   <Copy className="w-3 h-3 text-muted-foreground" />
                 </button>
               </div>

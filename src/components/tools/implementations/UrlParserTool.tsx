@@ -14,7 +14,7 @@ const Row = ({ label, value, mono = true }: { label: string; value: string; mono
   <div className="flex items-start gap-3 py-2 border-b border-border/50 last:border-0">
     <span className="text-xs text-muted-foreground w-24 shrink-0 pt-0.5">{label}</span>
     <code className={`flex-1 text-sm break-all ${mono ? "font-mono" : ""}`}>{value}</code>
-    <button onClick={() => copy(value)} className="p-1 rounded hover:bg-muted shrink-0 mt-0.5"><Copy className="w-3 h-3 text-muted-foreground" /></button>
+    <button aria-label="Copy" onClick={() => copy(value)} className="p-1 rounded hover:bg-muted shrink-0 mt-0.5"><Copy className="w-3 h-3 text-muted-foreground" /></button>
   </div>
 ) : null;
 
@@ -64,7 +64,7 @@ export function UrlParserTool() {
                 <div key={k} className="flex items-center gap-3 px-3 py-2 border-b border-border/50 last:border-0 hover:bg-muted/10">
                   <code className="text-xs font-mono text-primary w-32 truncate shrink-0">{k}</code>
                   <code className="text-xs font-mono flex-1 truncate">{decodeURIComponent(v)}</code>
-                  <button onClick={() => copy(decodeURIComponent(v))} className="p-1 rounded hover:bg-muted shrink-0"><Copy className="w-3 h-3 text-muted-foreground" /></button>
+                  <button aria-label="Copy" onClick={() => copy(decodeURIComponent(v))} className="p-1 rounded hover:bg-muted shrink-0"><Copy className="w-3 h-3 text-muted-foreground" /></button>
                 </div>
               ))}
             </div>

@@ -302,7 +302,7 @@ tbody tr:last-child td{border-bottom:none}
               <div className="flex items-center gap-3 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5">
                 <img src={logoBase64} alt="Logo" className="h-8 max-w-[100px] object-contain shrink-0" />
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 flex-1">Logo uploaded</span>
-                <button
+                <button aria-label="Remove logo"
                   onClick={() => setLogoBase64(null)}
                   className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all"
                 >
@@ -318,7 +318,7 @@ tbody tr:last-child td{border-bottom:none}
                 Upload logo (PNG, JPG, SVG, WebP)
               </button>
             )}
-            <input
+            <input aria-label="Choose file"
               ref={logoRef}
               type="file"
               accept="image/*"
@@ -354,7 +354,7 @@ tbody tr:last-child td{border-bottom:none}
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Currency</label>
-            <select
+            <select aria-label="Currency"
               value={meta.currency}
               onChange={e => setMeta_("currency", e.target.value)}
               className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm"
@@ -410,7 +410,7 @@ tbody tr:last-child td{border-bottom:none}
                   <span className="text-sm font-mono text-right text-muted-foreground pr-1 tabular-nums">
                     {fmt(amt)}
                   </span>
-                  <button
+                  <button aria-label="Remove"
                     onClick={() => removeItem(item.id)}
                     disabled={items.length === 1}
                     className="p-1.5 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive disabled:opacity-25 transition-all"

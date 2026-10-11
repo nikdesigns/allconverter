@@ -1,5 +1,7 @@
 "use client";
 
+
+import { escapeHtml } from "@/lib/html";
 import { useState, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { Plus, Trash2, Printer, Download, TrendingUp, TrendingDown } from "lucide-react";
@@ -10,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 function printPage(html: string, title: string) {
   const w = window.open("", "_blank")!;
-  w.document.write(`<!DOCTYPE html><html><head><title>${title}</title><style>
+  w.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(title)}</title><style>
     *{box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:12px;color:#222;margin:0;padding:20px}
     .doc{max-width:800px;margin:0 auto;padding:32px;border:1px solid #ddd}
     .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #333}
@@ -53,7 +55,7 @@ function LineItems({ items, onChange }: { items: LineItem[]; onChange: (items: L
           <Input type="number" min={1} value={it.qty} onChange={e=>upd(i,"qty",Number(e.target.value))} className="col-span-2 h-8 text-xs text-center" />
           <Input type="number" min={0} value={it.rate} onChange={e=>upd(i,"rate",Number(e.target.value))} className="col-span-2 h-8 text-xs text-right" />
           <span className="col-span-1 text-xs text-right font-medium">{(it.qty*it.rate).toLocaleString()}</span>
-          <button onClick={()=>del(i)} className="col-span-1 flex justify-center text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={()=>del(i)} className="col-span-1 flex justify-center text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>
         </div>
       ))}
       <Button variant="outline" size="sm" onClick={add} className="gap-1 text-xs h-7 mt-1"><Plus className="w-3 h-3" />Add item</Button>
@@ -208,7 +210,7 @@ function DeliveryChallan() {
         <Input value={num} onChange={e=>setNum(e.target.value)} placeholder="Challan number" className="h-9 text-sm" />
         <Input type="date" value={date} onChange={e=>setDate(e.target.value)} className="h-9 text-sm" />
         <Input value={vehicle} onChange={e=>setVehicle(e.target.value)} placeholder="Vehicle number (optional)" className="h-9 text-sm" />
-        <select value={reason} onChange={e=>setReason(e.target.value)} className="h-9 rounded-xl border border-border bg-background px-3 text-sm focus:outline-none">
+        <select aria-label="Reason" value={reason} onChange={e=>setReason(e.target.value)} className="h-9 rounded-xl border border-border bg-background px-3 text-sm focus:outline-none">
           {reasons.map(r=><option key={r} value={r}>{r}</option>)}
         </select>
       </div>
@@ -268,7 +270,7 @@ function ExpenseTracker() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <Input value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&add()} placeholder="Description" className="col-span-2 sm:col-span-1 h-9 text-xs" />
-        <select value={cat} onChange={e=>setCat(e.target.value)} className="h-9 rounded-xl border border-border bg-background px-2 text-xs focus:outline-none">
+        <select aria-label="Category" value={cat} onChange={e=>setCat(e.target.value)} className="h-9 rounded-xl border border-border bg-background px-2 text-xs focus:outline-none">
           {EXPENSE_CATS.map(c=><option key={c}>{c}</option>)}
         </select>
         <Input type="number" value={amount} onChange={e=>setAmount(e.target.value?Number(e.target.value):"")} placeholder="Amount ₹" className="h-9 text-xs" />
@@ -292,7 +294,7 @@ function ExpenseTracker() {
                     <span className="px-1.5 py-0.5 rounded-full bg-muted/30 text-[10px] shrink-0">{e.category}</span>
                     <span className="flex-1 truncate">{e.description}</span>
                     <span className="font-semibold">{formatCurrency(e.amount)}</span>
-                    <button onClick={()=>del(i)} className="text-muted-foreground hover:text-rose-400 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Remove" onClick={()=>del(i)} className="text-muted-foreground hover:text-rose-400 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
                 );
               })}
@@ -341,7 +343,7 @@ const ItemList = ({ items, set, label }: { items: PLItem[]; set: React.Dispatch<
       <div key={i} className="flex gap-2 items-center">
         <Input value={it.label} onChange={e=>updItem(set,i,"label",e.target.value)} placeholder="Label" className="flex-1 h-8 text-xs" />
         <Input type="number" value={it.amount} onChange={e=>updItem(set,i,"amount",Number(e.target.value))} placeholder="0" className="w-28 h-8 text-xs text-right" />
-        <button onClick={()=>delItem(set,i)} className="text-muted-foreground hover:text-rose-400 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
+        <button aria-label="Remove" onClick={()=>delItem(set,i)} className="text-muted-foreground hover:text-rose-400 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
       </div>
     ))}
   </div>

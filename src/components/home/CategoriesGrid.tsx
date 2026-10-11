@@ -33,6 +33,7 @@ export function CategoriesGrid() {
 
             return (
               <Link
+                prefetch={false}
                 key={cat.slug}
                 href={`/${cat.slug}/`}
                 className="group relative overflow-hidden rounded-[var(--radius-base)] border border-[var(--border-default)] bg-[var(--neutral-primary-soft)] p-5 hover:border-[var(--border-brand)] hover:bg-[var(--neutral-secondary-medium)] hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5 transition-all duration-200"

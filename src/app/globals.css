@@ -118,8 +118,9 @@
 }
 
 /* ============================================
-   DESIGN SYSTEM TOKENS (from SKILL.md)
-   Material Design 3 inspired — refined purple tones
+   DESIGN SYSTEM TOKENS
+   One system, two themes: crisp neutrals + a single indigo accent
+   (Stripe / Vercel direction). Light values in :root, dark in .dark.
    Dark mode via .dark class (next-themes) + automatic via system
    ============================================ */
 
@@ -129,94 +130,97 @@
   --font-sans: "SF Pro", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* ============================================
-     LIGHTER VERSION — clean, soft, modern take on the Shugo palette
+     LIGHT — crisp neutral system (Stripe / Vercel direction)
+     Pure-neutral greys, white surfaces on an off-white page, hairline
+     borders, one indigo accent. Depth comes from borders first, shadows second.
      ============================================ */
-  /* Background Tokens - Light (lighter variant) */
-  --neutral-primary-soft: #F8F8FB;
+  /* Background Tokens - Light */
+  --neutral-primary-soft: #FFFFFF;   /* cards, header, popovers */
   --neutral-primary: #FFFFFF;
-  --neutral-primary-medium: #F4F4F8;
-  --neutral-primary-strong: #F0F0F5;
-  --neutral-secondary-soft: #F4F4F8;
-  --neutral-secondary: #F0F0F5;
-  --neutral-secondary-medium: #EAEAF0;
-  --neutral-secondary-strong: #E4E4EB;
-  --neutral-tertiary-soft: #E4E4EB;
-  --neutral-tertiary: #DEDEE6;
-  --neutral-tertiary-medium: #D8D8E0;
-  --neutral-quaternary: #D0D0D9;
-  --quaternary-medium: #C8C8D2;
-  --gray: #A8A8B3;
+  --neutral-primary-medium: #FAFAFA;
+  --neutral-primary-strong: #F5F5F5;
+  --neutral-secondary-soft: #FAFAFA; /* muted bands, table heads */
+  --neutral-secondary: #F5F5F5;
+  --neutral-secondary-medium: #F2F2F2; /* hover fill, secondary buttons */
+  --neutral-secondary-strong: #EBEBEB;
+  --neutral-tertiary-soft: #EBEBEB;
+  --neutral-tertiary: #E5E5E5;
+  --neutral-tertiary-medium: #DEDEDE;
+  --neutral-quaternary: #D4D4D4;
+  --quaternary-medium: #C9C9C9;
+  --gray: #A3A3A3;
 
-  /* Brand - Light (blue/teal — allconverter.tools palette) */
-  --brand-softer: #DFFBFF;
-  --brand-soft: #B3EEFF;
-  --brand: #0099DD;
-  --brand-medium: #33B8F0;
-  --brand-strong: #0072A8;
+  /* Brand - Light (indigo) */
+  --brand-softer: #F2F1FE;
+  --brand-soft: #DCD9FD;
+  --brand: #5546F0;
+  --brand-medium: #7D72F5;  /* focus rings — 3.8:1 on white */
+  --brand-strong: #4033C4;  /* hover / pressed */
 
-  /* Status - Light (harmonized) */
-  --success-soft: #E6F4EA;
-  --success: #2E7D32;
-  --success-medium: #C6E2C9;
-  --success-strong: #1B5E20;
-  --danger-soft: #FCE8E6;
-  --danger: #C13A32;
-  --danger-medium: #FADBD9;
-  --danger-strong: #8C1D18;
-  --warning-soft: #FFF3E0;
-  --warning: #E65100;
-  --warning-medium: #FFE0B2;
-  --warning-strong: #BF360C;
+  /* Status - Light */
+  --success-soft: #E9F7EE;
+  --success: #1F8A4C;
+  --success-medium: #C3E8D0;
+  --success-strong: #166A39;
+  --danger-soft: #FDECEC;
+  --danger: #D1343A;
+  --danger-medium: #F9D2D3;
+  --danger-strong: #A32328;
+  --warning-soft: #FFF4E5;
+  --warning: #C75A00;
+  --warning-medium: #FFDDB0;
+  --warning-strong: #9A4400;
 
   /* Utility - Light */
-  --dark: #1A1A20;
-  --dark-strong: #121216;
-  --disabled: #EDEDF3;
+  --dark: #171717;
+  --dark-strong: #000000;
+  --disabled: #F2F2F2;
 
   /* Text Colors - Light */
   --white: #FFFFFF;
-  --black: #121216;
-  --heading: #1E1E24;
-  --body: #4F4F58;
-  --body-subtle: #767680;
+  --black: #000000;
+  --heading: #171717;
+  --body: #454545;
+  --body-subtle: #6B6B6B;
 
   /* Brand FG - Light */
-  --fg-brand-subtle: #33B8F0;
-  --fg-brand: #0099DD;
-  --fg-brand-strong: #0072A8;
+  --fg-brand-subtle: #7D72F5;
+  --fg-brand: #5546F0;
+  --fg-brand-strong: #4033C4;
 
   /* Status FG - Light */
-  --fg-success: #2E7D32;
-  --fg-success-strong: #1B5E20;
-  --fg-danger: #C13A32;
-  --fg-danger-strong: #8C1D18;
-  --fg-warning-subtle: #E65100;
-  --fg-warning: #BF360C;
-  --fg-disabled: #A8A8B3;
+  --fg-success: #1F8A4C;
+  --fg-success-strong: #166A39;
+  --fg-danger: #D1343A;
+  --fg-danger-strong: #A32328;
+  --fg-warning-subtle: #C75A00;
+  --fg-warning: #9A4400;
+  --fg-disabled: #A3A3A3;
 
   /* Border Colors - Light */
-  --border-dark: #1A1A20;
+  --border-dark: #171717;
   --border-buffer: #FFFFFF;
-  --border-buffer-medium: #F8F8FB;
-  --border-buffer-strong: #F0F0F5;
-  --border-muted: #F4F4F8;
-  --border-light-subtle: #E4E4EB;
-  --border-light: #DEDEE6;
-  --border-light-medium: #D8D8E0;
-  --border-default-subtle: #E0E0E8;
-  --border-default: #D0D0D9;
-  --border-default-medium: #B8B8C2;
-  --border-default-strong: #9C9CA8;
-  --border-success-subtle: #C6E2C9;
-  --border-success: #2E7D32;
-  --border-danger-subtle: #FADBD9;
-  --border-danger: #C13A32;
-  --border-warning-subtle: #FFE0B2;
-  --border-warning: #E65100;
-  --border-brand-subtle: #B3EEFF;
-  --border-brand-light: #0099DD;
-  --border-brand: #0099DD;
-  --border-dark-subtle: #1A1A20;
+  --border-buffer-medium: #FAFAFA;
+  --border-buffer-strong: #F5F5F5;
+  --border-muted: #F2F2F2;
+  --border-light-subtle: #EFEFEF;
+  --border-light: #EBEBEB;
+  --border-light-medium: #E5E5E5;
+  --border-default-subtle: #EDEDED;
+  --border-default: #E5E5E5;        /* the hairline used almost everywhere */
+  --border-default-medium: #D4D4D4;
+  --border-default-strong: #A3A3A3;
+  --border-control: #8A8A8A;        /* inputs/selects: 3:1 against the page (WCAG 1.4.11) */
+  --border-success-subtle: #C3E8D0;
+  --border-success: #1F8A4C;
+  --border-danger-subtle: #F9D2D3;
+  --border-danger: #D1343A;
+  --border-warning-subtle: #FFDDB0;
+  --border-warning: #C75A00;
+  --border-brand-subtle: #DCD9FD;
+  --border-brand-light: #5546F0;
+  --border-brand: #5546F0;
+  --border-dark-subtle: #171717;
   --border-purple: #9A82DB;
   --border-orange: #FB8C00;
 
@@ -231,7 +235,7 @@
   --accent-orange: #FB8C00;
 
   /* Legacy / Component mappings - Light */
-  --background: var(--neutral-primary-soft);
+  --background: #FAFAFA;             /* page; cards sit on it in white */
   --foreground: var(--heading);
   --card: var(--neutral-primary-soft);
   --card-foreground: var(--heading);
@@ -274,33 +278,46 @@
   --chart-5: #D81B60;
 }
 
+/* Light theme elevation — tight contact shadow + soft ambient one.
+   The dark theme sets its own values in .dark below. */
+html:not(.dark) {
+  --shadow-2xs: 0 1px 1px rgb(0 0 0 / 0.03);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05), 0 0 0 1px rgb(0 0 0 / 0.01);
+  --shadow-md: 0 2px 4px -1px rgb(23 23 42 / 0.05), 0 8px 20px -6px rgb(23 23 42 / 0.10);
+  --shadow-lg: 0 4px 8px -2px rgb(23 23 42 / 0.05), 0 18px 36px -10px rgb(23 23 42 / 0.14);
+  --shadow-xl: 0 8px 16px -4px rgb(23 23 42 / 0.06), 0 28px 56px -14px rgb(23 23 42 / 0.18);
+  --shadow-2xl: 0 36px 72px -18px rgb(23 23 42 / 0.24);
+}
+
 /* ============================================
-   DARK — Shugo.gg inspired (premium dark gaming armory aesthetic)
-   Deep cool darks, elegant violet-purple accents, high contrast clean UI
+   DARK — same system as light, inverted (Vercel-style)
+   Pure-neutral near-black page, slightly raised card surfaces, hairline
+   borders, and a lifted indigo so the accent keeps its contrast on dark.
    ============================================ */
 .dark {
-  /* Background Tokens - Dark (Shugo.gg style) */
-  --neutral-primary-soft: #0B0B0F;
-  --neutral-primary: #121216;
-  --neutral-primary-medium: #18181D;
-  --neutral-primary-strong: #1F1F25;
-  --neutral-secondary-soft: #0B0B0F;
-  --neutral-secondary: #121216;
-  --neutral-secondary-medium: #1F1F25;
-  --neutral-secondary-strong: #25252C;
-  --neutral-tertiary-soft: #1A1A20;
-  --neutral-tertiary: #222229;
-  --neutral-tertiary-medium: #282830;
-  --neutral-quaternary: #32323A;
-  --quaternary-medium: #3C3C46;
-  --gray: #5C5C68;
+  /* Background Tokens - Dark */
+  --neutral-primary-soft: #111111;   /* cards, header, popovers */
+  --neutral-primary: #161616;
+  --neutral-primary-medium: #1A1A1A;
+  --neutral-primary-strong: #1F1F1F;
+  --neutral-secondary-soft: #0F0F0F; /* muted bands, table heads */
+  --neutral-secondary: #141414;
+  --neutral-secondary-medium: #1C1C1C; /* hover fill, secondary buttons */
+  --neutral-secondary-strong: #222222;
+  --neutral-tertiary-soft: #1F1F1F;
+  --neutral-tertiary: #262626;
+  --neutral-tertiary-medium: #2B2B2B;
+  --neutral-quaternary: #333333;
+  --quaternary-medium: #3D3D3D;
+  --gray: #5E5E5E;
 
-  /* Brand - Dark (blue/teal — allconverter.tools palette) */
-  --brand-softer: #021824;
-  --brand-soft: #053652;
-  --brand: #00BFFF;
-  --brand-medium: #40D0FF;
-  --brand-strong: #0099DD;
+  /* Brand - Dark (indigo, lifted for dark surfaces) */
+  --brand-softer: #15132B;
+  --brand-soft: #262155;
+  --brand: #6658F5;
+  --brand-medium: #8279F7;  /* focus rings — 5.6:1 on cards */
+  --brand-strong: #574AE0;  /* hover / pressed */
 
   /* Status - Dark */
   --success-soft: #0A2A15;
@@ -317,21 +334,21 @@
   --warning-strong: #F59E0B;
 
   /* Utility - Dark */
-  --dark: #0B0B0F;
-  --dark-strong: #18181D;
-  --disabled: #1F1F25;
+  --dark: #0A0A0A;
+  --dark-strong: #1A1A1A;
+  --disabled: #1C1C1C;
 
   /* Text Colors - Dark */
   --white: #FFFFFF;
-  --black: #0B0B0F;
-  --heading: #F1F1F5;
-  --body: #C3C3CB;
-  --body-subtle: #8A8A96;
+  --black: #0A0A0A;
+  --heading: #EDEDED;
+  --body: #B4B4B4;
+  --body-subtle: #8F8F8F;
 
   /* Brand FG - Dark */
-  --fg-brand-subtle: #40D0FF;
-  --fg-brand: #00BFFF;
-  --fg-brand-strong: #80E8FF;
+  --fg-brand-subtle: #8279F7;
+  --fg-brand: #9B92FA;
+  --fg-brand-strong: #BBB5FC;
 
   /* Status FG - Dark */
   --fg-success: #4ADE80;
@@ -340,36 +357,37 @@
   --fg-danger-strong: #FECACA;
   --fg-warning-subtle: #FCD34D;
   --fg-warning: #FDE047;
-  --fg-disabled: #6B6B78;
+  --fg-disabled: #6B6B6B;
 
   /* Border Colors - Dark */
-  --border-dark: #3C3C46;
-  --border-buffer: #0B0B0F;
-  --border-buffer-medium: #121216;
-  --border-buffer-strong: #18181D;
-  --border-muted: #1A1A20;
-  --border-light-subtle: #222229;
-  --border-light: #282830;
-  --border-light-medium: #32323A;
-  --border-default-subtle: #25252C;
-  --border-default: #2F2F38;
-  --border-default-medium: #3C3C46;
-  --border-default-strong: #52525C;
+  --border-dark: #3D3D3D;
+  --border-buffer: #0A0A0A;
+  --border-buffer-medium: #111111;
+  --border-buffer-strong: #1A1A1A;
+  --border-muted: #1A1A1A;
+  --border-light-subtle: #1F1F1F;
+  --border-light: #242424;
+  --border-light-medium: #2B2B2B;
+  --border-default-subtle: #1F1F1F;
+  --border-default: #262626;        /* the hairline used almost everywhere */
+  --border-default-medium: #363636;
+  --border-default-strong: #525252;
+  --border-control: #707070;        /* inputs/selects: 3:1 against cards */
   --border-success-subtle: #14532D;
   --border-success: #4ADE80;
   --border-danger-subtle: #7F1D1D;
   --border-danger: #F87171;
   --border-warning-subtle: #78350F;
   --border-warning: #FBBF24;
-  --border-brand-subtle: #053652;
-  --border-brand-light: #00BFFF;
-  --border-brand: #00BFFF;
-  --border-dark-subtle: #25252C;
+  --border-brand-subtle: #2C2766;
+  --border-brand-light: #8279F7;
+  --border-brand: #6658F5;
+  --border-dark-subtle: #242424;
   --border-purple: #A78BFA;
   --border-orange: #FBBF24;
 
   /* Legacy / Component mappings - Dark */
-  --background: var(--neutral-primary-soft);
+  --background: #0A0A0A;             /* page; cards sit on it one step lighter */
   --foreground: var(--heading);
   --card: var(--neutral-primary-soft);
   --card-foreground: var(--heading);
@@ -387,6 +405,16 @@
   --border: var(--border-default);
   --input: var(--neutral-secondary-medium);
   --ring: var(--brand);
+
+  /* Elevation on dark: shadows barely read, so keep them deep and let the
+     hairline border carry the edge. */
+  --shadow-2xs: 0 1px 1px rgb(0 0 0 / 0.4);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 12px 28px -8px rgb(0 0 0 / 0.7);
+  --shadow-xl: 0 24px 48px -12px rgb(0 0 0 / 0.75);
+  --shadow-2xl: 0 36px 72px -18px rgb(0 0 0 / 0.8);
 }
 
 @layer base {
@@ -476,6 +504,66 @@
     letter-spacing: 0.5px;
   }
 
+  /* ── Typography refinements (both themes): tighter, heavier headings; calmer body ── */
+  html h1,
+  html h2 {
+    font-weight: 600;
+    letter-spacing: -0.035em;
+  }
+  html h3,
+  html h4 {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  html h5,
+  html h6 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  html p {
+    letter-spacing: 0;
+    line-height: 1.6;
+  }
+  html ::selection {
+    background: var(--brand-soft);
+    color: var(--heading);
+  }
+
+  /* Skip link: hidden until focused with the keyboard */
+  .skip-link {
+    position: absolute;
+    left: 16px;
+    top: -100px;
+    z-index: 1000;
+    padding: 10px 16px;
+    border-radius: var(--radius-default);
+    background: var(--brand);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 16px;
+    outline: 2px solid var(--heading);
+    outline-offset: 2px;
+  }
+
+  /* Any focusable element without its own ring still gets a visible one */
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+
+  /* Respect the OS "reduce motion" setting */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   /* Small supporting copy */
   .text-caption,
   .text-meta,
@@ -497,11 +585,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-  }
-  .dark .gradient-text {
-    background: linear-gradient(90deg, #00BFFF 0%, #40D0FF 40%, #8B5CF6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 
   /* Cards — match cards.md exactly */
@@ -588,6 +671,65 @@
   .hero-gradient {
     background: radial-gradient(ellipse 80% 50% at 50% -20%, var(--brand-softer), transparent),
       radial-gradient(ellipse 60% 40% at 80% 50%, var(--brand-soft), transparent);
+  }
+
+  /* ── Surfaces (both themes) ───────────────────────────────────────────
+     Cards sit one step off the page. A hairline border does the work;
+     hover strengthens the border and lifts slightly instead of filling. */
+  html:not(.dark) .gradient-text {
+    background: linear-gradient(90deg, #5546F0 0%, #3B7BF6 55%, #00A6D6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  html .card-interactive:hover,
+  html .tool-card:hover {
+    background: var(--neutral-primary-soft);
+    border-color: var(--border-default-medium);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  html .focus-ring:focus-visible {
+    box-shadow: 0 0 0 3px var(--brand-medium);
+  }
+  html:not(.dark) .hero-gradient {
+    background:
+      radial-gradient(ellipse 70% 55% at 50% -15%, color-mix(in srgb, var(--brand) 11%, transparent), transparent 70%),
+      var(--neutral-primary);
+    border-bottom: 1px solid var(--border-default);
+  }
+  html:not(.dark) .grid-pattern {
+    background-image: linear-gradient(#DDDDDD 1px, transparent 1px),
+      linear-gradient(to right, #DDDDDD 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 65% 70% at 50% 20%, #000 20%, transparent 75%);
+    mask-image: radial-gradient(ellipse 65% 70% at 50% 20%, #000 20%, transparent 75%);
+  }
+  .dark .gradient-text {
+    background: linear-gradient(90deg, #9B92FA 0%, #6FA3FA 55%, #4CCBEE 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .dark .hero-gradient {
+    background:
+      radial-gradient(ellipse 70% 55% at 50% -15%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 70%),
+      var(--background);
+    border-bottom: 1px solid var(--border-default);
+  }
+  .dark .grid-pattern {
+    background-image: linear-gradient(#242424 1px, transparent 1px),
+      linear-gradient(to right, #242424 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 65% 70% at 50% 20%, #000 20%, transparent 75%);
+    mask-image: radial-gradient(ellipse 65% 70% at 50% 20%, #000 20%, transparent 75%);
+  }
+  html .upload-area {
+    background: var(--neutral-secondary-soft);
+    border-color: var(--border-default-medium);
+  }
+  html .upload-area:hover,
+  html .upload-area.dragover {
+    border-color: var(--border-brand);
+    background: var(--brand-softer);
   }
 }
 
@@ -692,4 +834,17 @@
 }
 pre.code-block {
   white-space: pre;
+}
+
+/* ============================================
+   ADS — collapse slots AdSense did not fill
+   AdSense marks an empty slot with data-ad-status="unfilled". Without this,
+   the reserved box and its "Advertisement" label stay on the page as a blank
+   gap (and the mobile anchor bar stays up with nothing in it).
+   ============================================ */
+ins.adsbygoogle[data-ad-status="unfilled"] {
+  display: none !important;
+}
+.ad-slot:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+  display: none !important;
 }

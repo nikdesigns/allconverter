@@ -38,6 +38,8 @@ export interface Tool {
   howTo?: HowToStep[];
   useCases?: string[];
   benefits?: string[];
+  /** Tool is switched off: the page shows a notice instead of the interface, is noindexed and left out of the sitemap. */
+  unavailable?: boolean;
 }
 
 export interface ToolCategory_Data {

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Search, Copy, RefreshCw, ExternalLink, Monitor, Smartphone, Maximize2, Globe, Shield, Server, Zap, FileSearch } from "lucide-react";
@@ -267,7 +269,7 @@ function DnsLookup() {
                     <td className="px-3 py-2 font-mono truncate max-w-[120px]">{r.name}</td>
                     <td className="px-3 py-2"><span className="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-mono text-[10px]">{TYPE_LABELS[r.type] || r.type}</span></td>
                     <td className="px-3 py-2 text-muted-foreground">{r.TTL}s</td>
-                    <td className="px-3 py-2 font-mono break-all cursor-pointer hover:text-primary" onClick={() => copy(r.data)}>{r.data}</td>
+                    <td role="button" tabIndex={0} onKeyDown={activateOnKey} className="px-3 py-2 font-mono break-all cursor-pointer hover:text-primary" onClick={() => copy(r.data)}>{r.data}</td>
                   </tr>
                 ))}
               </tbody>
@@ -347,7 +349,7 @@ function IpLookup() {
             {Object.entries(result).map(([k, v], i) => (
               <div key={k} className={cn("flex items-center justify-between px-4 py-2.5 text-sm", i % 2 === 0 ? "bg-background" : "bg-muted/10")}>
                 <span className="text-muted-foreground text-xs">{k}</span>
-                <span className="font-medium text-right ml-4 cursor-pointer hover:text-primary" onClick={() => copy(v)}>{v}</span>
+                <span role="button" tabIndex={0} onKeyDown={activateOnKey} className="font-medium text-right ml-4 cursor-pointer hover:text-primary" onClick={() => copy(v)}>{v}</span>
               </div>
             ))}
           </div>
@@ -528,7 +530,7 @@ function WebsiteMetadata() {
               return (
                 <div key={k} className={cn("flex items-start gap-3 px-4 py-3 text-xs", i % 2 === 0 ? "bg-background" : "bg-muted/10")}>
                   <span className="text-muted-foreground shrink-0 w-28">{label[k] || k}</span>
-                  <span className="font-medium break-all cursor-pointer hover:text-primary flex-1" onClick={() => copy(v)}>{v}</span>
+                  <span role="button" tabIndex={0} onKeyDown={activateOnKey} className="font-medium break-all cursor-pointer hover:text-primary flex-1" onClick={() => copy(v)}>{v}</span>
                 </div>
               );
             })}

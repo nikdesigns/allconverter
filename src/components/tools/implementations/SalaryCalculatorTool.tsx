@@ -19,7 +19,7 @@ function inp(label: string, value: string, onChange: (v: string) => void, prefix
       <label className="text-xs text-muted-foreground mb-1 block">{label}{sub && <span className="ml-1 opacity-60">{sub}</span>}</label>
       <div className="relative">
         {prefix && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-mono">{prefix}</span>}
-        <input type="number" value={value} onChange={e => onChange(e.target.value)} min="0"
+        <input aria-label={label} type="number" value={value} onChange={e => onChange(e.target.value)} min="0"
           className={cn("w-full h-10 rounded-xl border border-input bg-background text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/30", prefix ? "pl-7 pr-3" : "px-3")} />
       </div>
     </div>
@@ -176,7 +176,7 @@ function CtcToInhand() {
         {inp("Annual CTC (Package)", ctc, setCtc)}
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Basic % of CTC: <span className="font-mono">{basicPct}%</span></label>
-          <input type="range" min="30" max="60" value={basicPct} onChange={e => setBasicPct(e.target.value)} className="w-full accent-primary h-1.5" />
+          <input aria-label="Basic % of CTC: %" type="range" min="30" max="60" value={basicPct} onChange={e => setBasicPct(e.target.value)} className="w-full accent-primary h-1.5" />
           <p className="text-xs text-muted-foreground mt-1">Basic = {fmt(r.annualBasic / 12)}/mo</p>
         </div>
         <div>

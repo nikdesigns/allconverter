@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Copy, Plus, Trash2, Search, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
@@ -54,7 +56,7 @@ function FaqSchemaGenerator() {
         <div key={i} className="rounded-xl border border-border p-3 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground">Q&A #{i + 1}</span>
-            {items.length > 1 && <button onClick={() => del(i)} className="text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>}
+            {items.length > 1 && <button aria-label="Remove" onClick={() => del(i)} className="text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>}
           </div>
           <Input value={it.q} onChange={e => upd(i, "q", e.target.value)} placeholder="Question" className="h-9 text-sm" />
           <Textarea value={it.a} onChange={e => upd(i, "a", e.target.value)} placeholder="Answer" className="text-sm min-h-[70px]" />
@@ -176,7 +178,7 @@ function OrganizationSchemaGenerator() {
         {socials.map((s,i) => (
           <div key={i} className="flex gap-2">
             <Input value={s} onChange={e => setSocials(p => p.map((x,j)=>j===i?e.target.value:x))} placeholder="https://twitter.com/yourbrand" className="flex-1 h-8 text-xs" />
-            {socials.length > 1 && <button onClick={() => setSocials(p=>p.filter((_,j)=>j!==i))} className="text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>}
+            {socials.length > 1 && <button aria-label="Remove" onClick={() => setSocials(p=>p.filter((_,j)=>j!==i))} className="text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>}
           </div>
         ))}
       </div>
@@ -240,7 +242,7 @@ function RedirectChecker() {
               <div className={cn("text-sm font-bold shrink-0 w-8", statusColor(h.status))}>{h.status}</div>
               <div className="flex-1 min-w-0">
                 <div className="text-xs text-muted-foreground">{h.type}</div>
-                <div className="text-sm font-mono truncate cursor-pointer hover:text-primary" onClick={() => copy(h.url)}>{h.url}</div>
+                <div role="button" tabIndex={0} onKeyDown={activateOnKey} className="text-sm font-mono truncate cursor-pointer hover:text-primary" onClick={() => copy(h.url)}>{h.url}</div>
               </div>
               {i < hops.length - 1 && <div className="text-muted-foreground text-xs mt-1">↓</div>}
             </div>
@@ -354,7 +356,7 @@ function CanonicalTagChecker() {
             ].map((row, i) => (
               <div key={row.label} className={cn("flex flex-col sm:flex-row sm:items-center gap-1 px-4 py-2.5 text-xs", i%2===0?"bg-background":"bg-muted/10")}>
                 <span className="text-muted-foreground w-40 shrink-0">{row.label}</span>
-                <span className="font-mono break-all cursor-pointer hover:text-primary" onClick={()=>copy(row.value)}>{row.value}</span>
+                <span role="button" tabIndex={0} onKeyDown={activateOnKey} className="font-mono break-all cursor-pointer hover:text-primary" onClick={()=>copy(row.value)}>{row.value}</span>
               </div>
             ))}
           </div>

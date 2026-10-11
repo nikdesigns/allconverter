@@ -59,7 +59,7 @@ export const pdfToolsPosts: BlogPost[] = [
         "Flatten form fields and merge layers to reduce object count",
         "Use our free PDF Compressor for instant browser-based compression",
       ]},
-      { type: "cta", heading: "Compress your PDF now", text: "Reduce PDF file size by up to 90% — free, instant, no upload required.", href: "/tools/pdf-compressor/", label: "Open PDF Compressor →" },
+      { type: "cta", heading: "Compress your PDF now", text: "Strip metadata and repack your PDF to make it smaller — free, instant, no upload required.", href: "/tools/pdf-compressor/", label: "Open PDF Compressor →" },
       { type: "h2", text: "PDF Security and Permissions" },
       { type: "paragraph", text: "PDFs support two types of password protection: a user password (prevents opening the file) and an owner password (restricts specific actions like printing, copying, or editing while allowing viewing). Encryption is applied using AES-128 or AES-256, both considered secure for most business uses. Note that a 'read-only' PDF is only as secure as the reader software — many tools can remove owner restrictions." },
       { type: "h2", text: "PDF Conversion: Common Use Cases" },

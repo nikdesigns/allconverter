@@ -58,14 +58,14 @@ export function RobotsTxtGeneratorTool() {
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-muted-foreground">Rule #{idx+1}</span>
               {rules.length > 1 && (
-                <button onClick={() => removeRule(rule.id)} className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-destructive">
+                <button aria-label="Remove" onClick={() => removeRule(rule.id)} className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-destructive">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">User-agent</label>
-              <select value={rule.userAgent} onChange={e => updateRule(rule.id, "userAgent", e.target.value)}
+              <select aria-label="User-agent" value={rule.userAgent} onChange={e => updateRule(rule.id, "userAgent", e.target.value)}
                 className="w-full h-9 px-3 rounded-lg border border-input bg-background text-sm">
                 {COMMON_BOTS.map(b => <option key={b}>{b}</option>)}
               </select>
@@ -73,13 +73,13 @@ export function RobotsTxtGeneratorTool() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Allow (one per line)</label>
-                <textarea value={rule.allow.join("\n")} onChange={e => updateLines(rule.id, "allow", e.target.value)}
+                <textarea aria-label="Allow (one per line)" value={rule.allow.join("\n")} onChange={e => updateLines(rule.id, "allow", e.target.value)}
                   className="w-full h-24 px-3 py-2 rounded-xl border border-input bg-background text-sm font-mono resize-none outline-none focus:ring-2 focus:ring-primary/30"
                   placeholder="/&#10;/blog/" />
               </div>
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Disallow (one per line)</label>
-                <textarea value={rule.disallow.join("\n")} onChange={e => updateLines(rule.id, "disallow", e.target.value)}
+                <textarea aria-label="Disallow (one per line)" value={rule.disallow.join("\n")} onChange={e => updateLines(rule.id, "disallow", e.target.value)}
                   className="w-full h-24 px-3 py-2 rounded-xl border border-input bg-background text-sm font-mono resize-none outline-none focus:ring-2 focus:ring-primary/30"
                   placeholder="/admin/&#10;/private/" />
               </div>

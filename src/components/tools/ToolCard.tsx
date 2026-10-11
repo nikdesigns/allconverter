@@ -36,7 +36,7 @@ export function ToolCard({ tool, compact = false, className }: ToolCardProps) {
   const category = getCategoryBySlug(tool.category);
 
   return (
-    <Link href={`/tools/${tool.slug}/`} className={cn("group block", className)}>
+    <Link href={`/tools/${tool.slug}/`} prefetch={false} className={cn("group block", className)}>
       <div className="tool-card h-full flex flex-col">
         <div className="flex items-start gap-3 mb-3">
           <div

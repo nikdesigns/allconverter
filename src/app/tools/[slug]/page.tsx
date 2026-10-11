@@ -12,6 +12,7 @@ import {
   siteConfig,
 } from "@/lib/seo-utils";
 import { getEnrichedTool } from "@/lib/tool-content-gen";
+import { toolCopy } from "@/data/tool-content";
 import { ToolPageClient } from "@/components/tools/ToolPageClient";
 import { allBlogPosts } from "@/data/blog-posts";
 import type { BlogPost } from "@/types/blog";
@@ -37,6 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: { canonical: `${siteConfig.url}/tools/${tool.slug}/` },
     openGraph: meta.openGraph,
     twitter: meta.twitter,
+    ...(tool.unavailable ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -46,7 +48,7 @@ export default async function ToolPage({ params }: Props) {
   if (!rawTool) notFound();
 
   // Enrich with generated FAQs, howTo, benefits, useCases, introduction
-  const tool = getEnrichedTool(rawTool, tools);
+  const tool = getEnrichedTool(rawTool, tools, toolCopy[rawTool.slug]);
 
   const category    = getCategoryBySlug(tool.category);
   const relatedTools = getRelatedTools(tool, 4);

@@ -175,9 +175,9 @@ tbody td{padding:11px 12px;border-bottom:1px solid #f4f4f5;font-size:13px;color:
         <div className="flex items-center gap-3">
           <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Color</label>
           {["#3b82f6","#6366f1","#0d9488","#059669","#f97316","#e11d48"].map(c => (
-            <button key={c} onClick={() => setThemeAccent(c)} className={cn("w-6 h-6 rounded-full border-2 transition-all hover:scale-110", themeAccent===c?"border-foreground scale-110":"border-transparent")} style={{ backgroundColor: c }} />
+            <button key={c} aria-label={`Use accent colour ${c}`} aria-pressed={themeAccent===c} onClick={() => setThemeAccent(c)} className={cn("w-6 h-6 rounded-full border-2 transition-all hover:scale-110", themeAccent===c?"border-foreground scale-110":"border-transparent")} style={{ backgroundColor: c }} />
           ))}
-          <input type="color" value={themeAccent} onChange={e => setThemeAccent(e.target.value)} className="w-6 h-6 rounded-full border border-border cursor-pointer p-0 bg-transparent" />
+          <input aria-label="Color" type="color" value={themeAccent} onChange={e => setThemeAccent(e.target.value)} className="w-6 h-6 rounded-full border border-border cursor-pointer p-0 bg-transparent" />
         </div>
 
         {/* From / To */}
@@ -204,7 +204,7 @@ tbody td{padding:11px 12px;border-bottom:1px solid #f4f4f5;font-size:13px;color:
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div><label className="text-xs text-muted-foreground mb-1 block">{isProposal?"Proposal #":"Quote #"}</label><Input value={meta.number} onChange={e => setMeta_("number",e.target.value)} className="text-sm font-mono" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Currency</label>
-            <select value={meta.currency} onChange={e => setMeta_("currency",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
+            <select aria-label="Currency" value={meta.currency} onChange={e => setMeta_("currency",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
             </select>
           </div>
@@ -228,7 +228,7 @@ tbody td{padding:11px 12px;border-bottom:1px solid #f4f4f5;font-size:13px;color:
                   <Input type="number" value={item.qty} onChange={e => updateItem(item.id,"qty",e.target.value)} className="text-sm text-center font-mono" min="0" />
                   <Input type="number" value={item.rate} onChange={e => updateItem(item.id,"rate",e.target.value)} className="text-sm font-mono" min="0" />
                   <span className="text-sm font-mono text-right text-muted-foreground tabular-nums">{fmt(amt)}</span>
-                  <button onClick={() => removeItem(item.id)} disabled={items.length===1} className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive disabled:opacity-25"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button aria-label="Remove" onClick={() => removeItem(item.id)} disabled={items.length===1} className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive disabled:opacity-25"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               );
             })}

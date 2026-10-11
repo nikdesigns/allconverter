@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -77,7 +79,7 @@ export function AvifImageTool() {
             AVIF export requires Chrome 93+, Firefox 113+, or Safari 16.4+. Older browsers will fall back to PNG.
           </div>
         )}
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
           onClick={() => fileRef.current?.click()}
           onDragOver={e=>e.preventDefault()}
@@ -86,12 +88,12 @@ export function AvifImageTool() {
             ? <img src={preview} alt="preview" className="max-h-40 mx-auto rounded-lg object-contain" onError={()=>setPreview(null)} />
             : <><Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" /><p className="text-sm font-medium">Upload {isAvifInput?"AVIF":slug.includes("jpg")?"JPG":"PNG"} image</p></>}
         </div>
-        <input ref={fileRef} type="file" accept={accept[slug]} className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
+        <input aria-label="Choose file" ref={fileRef} type="file" accept={accept[slug]} className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
 
         {outputFormat !== "png" && (
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Quality: {quality}%</label>
-            <input type="range" min={10} max={100} step={5} value={quality} onChange={e=>setQuality(+e.target.value)} className="w-full" />
+            <input aria-label="Quality: %" type="range" min={10} max={100} step={5} value={quality} onChange={e=>setQuality(+e.target.value)} className="w-full" />
           </div>
         )}
         <Button onClick={convert} disabled={!file || loading} className="w-full gap-2">

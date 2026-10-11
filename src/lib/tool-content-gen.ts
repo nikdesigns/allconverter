@@ -12,6 +12,7 @@
  */
 
 import type { Tool, FAQ, HowToStep, ToolCategory } from "@/types";
+import type { ToolCopy } from "@/data/tool-content/types";
 
 // ─── Trait Detection ──────────────────────────────────────────────────────────
 
@@ -45,8 +46,10 @@ const FILE_FORMATS = new Set([
 ]);
 
 const EXTERNAL_API_TOOLS = new Set([
-  "background-remover", "website-speed-checker", "whois-lookup",
-  "dns-lookup", "ip-lookup", "ssl-checker", "page-speed-checker",
+  "website-speed-checker", "whois-lookup", "dns-lookup", "ip-lookup",
+  "ssl-checker", "page-speed-checker", "website-screenshot",
+  "website-metadata-extractor", "redirect-checker", "canonical-tag-checker",
+  "audio-to-text",
 ]);
 
 function detectTraits(tool: Tool): ToolTraits {
@@ -988,8 +991,30 @@ function relatedToolsFallback(tool: Tool, allTools: Tool[]): string[] {
  * content generator. Existing values in tools-data.ts are always preserved —
  * generated content only fills gaps (faqs < 8, missing howTo, benefits, etc.).
  */
-export function getEnrichedTool(tool: Tool, allTools?: Tool[]): Tool {
+export function getEnrichedTool(tool: Tool, allTools?: Tool[], copy?: ToolCopy): Tool {
   const traits = detectTraits(tool);
+
+  // ── Hand-written copy ─────────────────────────────────────────────────────
+  // When a tool has its own copy (src/data/tool-content), the page is built
+  // from that. The generated, category-level text is only a fallback for
+  // tools without copy — it is largely the same from page to page, which is
+  // what search engines and AdSense treat as thin content.
+  if (copy) {
+    const authored: FAQ[] = copy.faqs.map(([question, answer]) => ({ question, answer }));
+    // Two short site-wide answers (cost, privacy) are still worth having on every page.
+    const common = universalFAQs(tool, traits).filter((_, i) => i === 0 || i === 2);
+    return {
+      ...tool,
+      introduction: copy.intro,
+      howTo: copy.steps.map(([title, description]) => ({ title, description })),
+      // Authored copy replaces the older per-tool FAQs and benefit lists, which
+      // were written before the tools and no longer match what they do.
+      faqs: [...authored, ...common],
+      useCases: copy.uses,
+      benefits: [],
+      relatedTools: allTools ? relatedToolsFallback(tool, allTools) : (tool.relatedTools ?? []),
+    };
+  }
 
   // ── FAQs ──────────────────────────────────────────────────────────────────
   const existingFAQs      = tool.faqs ?? [];

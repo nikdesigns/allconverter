@@ -34,7 +34,7 @@ function Field({ label, value, onChange, prefix, suffix, step }: { label: string
       <label className="text-xs text-muted-foreground mb-1 block">{label}</label>
       <div className="relative flex items-center">
         {prefix && <span className="absolute left-3 text-xs text-muted-foreground font-mono pointer-events-none">{prefix}</span>}
-        <input type="number" value={value} onChange={e => onChange(e.target.value)} step={step||"any"} min="0"
+        <input aria-label={label} type="number" value={value} onChange={e => onChange(e.target.value)} step={step||"any"} min="0"
           className={cn("w-full h-10 rounded-xl border border-input bg-background text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/30", prefix?"pl-7":"pl-3", suffix?"pr-8":"pr-3")} />
         {suffix && <span className="absolute right-3 text-xs text-muted-foreground pointer-events-none">{suffix}</span>}
       </div>

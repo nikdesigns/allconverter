@@ -201,7 +201,7 @@ export function ImageResizerTool() {
               {mode === "percent" && (
                 <div>
                   <label className="text-xs text-muted-foreground mb-1 block">Scale: {percent}%</label>
-                  <input type="range" min={5} max={200} value={percent} onChange={(e) => setPercent(e.target.value)} className="w-full accent-primary h-1.5" />
+                  <input aria-label="Scale: %" type="range" min={5} max={200} value={percent} onChange={(e) => setPercent(e.target.value)} className="w-full accent-primary h-1.5" />
                   <p className="text-xs text-muted-foreground mt-1">
                     Output: {Math.round(origW * parseFloat(percent) / 100)} × {Math.round(origH * parseFloat(percent) / 100)} px
                   </p>

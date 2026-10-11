@@ -1,9 +1,10 @@
 "use client";
 
+
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, ArrowRight, CornerDownLeft } from "lucide-react";
-import { searchTools, getPopularTools } from "@/lib/tools-data";
+import type { Tool } from "@/types";
 import { cn } from "@/lib/utils";
 
 export function CommandPalette() {
@@ -13,7 +14,26 @@ export function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const results = query.trim() ? searchTools(query).slice(0, 8) : getPopularTools(8);
+  // The tool catalogue is large, and this component sits in the root layout,
+  // so it is loaded on demand the first time the palette opens rather than
+  // shipped with every page.
+  const [catalogue, setCatalogue] = useState<typeof import("@/lib/tools-data") | null>(null);
+  useEffect(() => {
+    if (!open || catalogue) return;
+    let cancelled = false;
+    import("@/lib/tools-data").then((mod) => {
+      if (!cancelled) setCatalogue(mod);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, catalogue]);
+
+  const results: Tool[] = !catalogue
+    ? []
+    : query.trim()
+      ? catalogue.searchTools(query).slice(0, 8)
+      : catalogue.getPopularTools(8);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -70,14 +90,17 @@ export function CommandPalette() {
 
   return (
     <div className="fixed inset-0 z-100 flex items-start justify-center pt-[12vh] px-4">
-      <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+      <button
+        type="button"
+        aria-label="Close search"
+        tabIndex={-1}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm cursor-default"
         onClick={() => setOpen(false)}
       />
       <div className="relative w-full max-w-lg rounded-2xl bg-(--neutral-primary) border border-(--border-default) shadow-(--shadow-xl) overflow-hidden">
         <div className="flex items-center gap-3 px-4 border-b border-(--border-default)">
           <Search className="w-4 h-4 text-(--body-subtle) shrink-0" />
-          <input
+          <input aria-label="Search 250+ tools"
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}

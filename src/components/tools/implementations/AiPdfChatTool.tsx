@@ -1,5 +1,9 @@
 "use client";
 
+
+
+import { localPdfWorkerUrl } from "@/lib/pdf-worker";
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { FileText, Send, Trash2, Loader2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +16,7 @@ interface Message {
 
 async function extractPdfText(file: File): Promise<string> {
   const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
   const bytes = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
   const pages: string[] = [];
@@ -82,7 +86,7 @@ export function AiPdfChatTool() {
     setPdfText(null);
     try {
       const pdfjsLib = await import("pdfjs-dist");
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
       const bytes = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
       const pages: string[] = [];
@@ -154,7 +158,7 @@ export function AiPdfChatTool() {
 
       {/* Upload area */}
       {!pdfText && !loading && (
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="flex-1 flex flex-col items-center justify-center gap-4 p-8 cursor-pointer border-2 border-dashed border-border m-4 rounded-xl hover:border-primary/50 hover:bg-muted/20 transition-colors"
           onClick={() => fileRef.current?.click()}
           onDrop={onDrop}
@@ -168,7 +172,7 @@ export function AiPdfChatTool() {
           <Button variant="outline" size="sm" className="gap-2">
             <FileText className="w-4 h-4" />Browse PDF
           </Button>
-          <input ref={fileRef} type="file" accept="application/pdf" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) loadPdf(f); }} />
+          <input aria-label="Choose file" ref={fileRef} type="file" accept="application/pdf" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) loadPdf(f); }} />
         </div>
       )}
 

@@ -4,18 +4,31 @@ import { useEffect, useState } from "react";
 import { History } from "lucide-react";
 import { ToolGrid } from "@/components/tools/ToolGrid";
 import { getRecentSlugs } from "@/lib/recently-used";
-import { getToolBySlug } from "@/lib/tools-data";
 import type { Tool } from "@/types";
 
 export function RecentlyUsedTools() {
   const [tools, setTools] = useState<Tool[] | null>(null);
 
   useEffect(() => {
-    const recent = getRecentSlugs()
-      .map((slug) => getToolBySlug(slug))
-      .filter((t): t is Tool => !!t)
-      .slice(0, 4);
-    setTools(recent);
+    const slugs = getRecentSlugs();
+    if (slugs.length === 0) {
+      setTools([]);
+      return;
+    }
+    // Only visitors with history pay for the tool catalogue download.
+    let cancelled = false;
+    import("@/lib/tools-data").then(({ getToolBySlug }) => {
+      if (cancelled) return;
+      setTools(
+        slugs
+          .map((slug) => getToolBySlug(slug))
+          .filter((t): t is Tool => !!t)
+          .slice(0, 4)
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (!tools || tools.length === 0) return null;

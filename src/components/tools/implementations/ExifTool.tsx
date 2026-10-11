@@ -1,5 +1,7 @@
 "use client";
 
+
+import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -147,7 +149,7 @@ export function ExifTool() {
         <span className="text-sm font-medium">{isRemover ? "EXIF Remover" : "EXIF Viewer"}</span>
       </div>
       <div className="p-5 space-y-4">
-        <div
+        <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
           onClick={() => fileRef.current?.click()}
           onDragOver={e=>e.preventDefault()}
@@ -156,7 +158,7 @@ export function ExifTool() {
           <p className="text-sm font-medium">Drop JPEG image here or click to browse</p>
           <p className="text-xs text-muted-foreground mt-1">JPEG only — EXIF data is stored in JPEG files</p>
         </div>
-        <input ref={fileRef} type="file" accept="image/jpeg" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
+        <input aria-label="Choose file" ref={fileRef} type="file" accept="image/jpeg" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
 
         {isRemover && processedBlob && (
           <Button onClick={download} className="w-full gap-2">

@@ -137,7 +137,7 @@ export function AudioToTextTool() {
       <div className="flex items-center gap-4 flex-wrap">
         <div className="space-y-1 flex-1 min-w-40">
           <Label className="text-xs">Language</Label>
-          <select
+          <select aria-label="Language"
             value={lang}
             onChange={(e) => setLang(e.target.value)}
             disabled={listening}

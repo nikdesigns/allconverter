@@ -77,16 +77,16 @@ ${entries.filter(e => e.url).map(e => `  <url>
                 </>
               )}
               <Input value={e.url} onChange={ev => update(e.id, "url", ev.target.value)} placeholder="https://example.com/page" className="text-xs font-mono h-9" />
-              <select value={e.priority} onChange={ev => update(e.id, "priority", ev.target.value)}
+              <select aria-label="Priority" value={e.priority} onChange={ev => update(e.id, "priority", ev.target.value)}
                 className="h-9 px-2 rounded-xl border border-input bg-background text-xs">
                 {["1.0","0.9","0.8","0.7","0.6","0.5","0.4","0.3","0.2","0.1"].map(v => <option key={v}>{v}</option>)}
               </select>
-              <select value={e.changefreq} onChange={ev => update(e.id, "changefreq", ev.target.value)}
+              <select aria-label="Changefreq" value={e.changefreq} onChange={ev => update(e.id, "changefreq", ev.target.value)}
                 className="h-9 px-2 rounded-xl border border-input bg-background text-xs">
                 {["always","hourly","daily","weekly","monthly","yearly","never"].map(v => <option key={v}>{v}</option>)}
               </select>
               <Input type="date" value={e.lastmod} onChange={ev => update(e.id, "lastmod", ev.target.value)} className="text-xs h-9" />
-              <button onClick={() => removeEntry(e.id)} className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-destructive">
+              <button aria-label="Remove" onClick={() => removeEntry(e.id)} className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-destructive">
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -104,7 +104,7 @@ ${entries.filter(e => e.url).map(e => `  <url>
 
         {showBulk && (
           <div className="space-y-2">
-            <textarea value={bulkInput} onChange={e => setBulkInput(e.target.value)}
+            <textarea aria-label="Bulk input" value={bulkInput} onChange={e => setBulkInput(e.target.value)}
               className="w-full h-28 px-3 py-2 rounded-xl border border-input bg-background text-sm font-mono resize-none outline-none focus:ring-2 focus:ring-primary/30"
               placeholder={"https://example.com/page1\nhttps://example.com/page2"} />
             <Button size="sm" onClick={addBulk} className="h-8 text-xs">Add URLs</Button>

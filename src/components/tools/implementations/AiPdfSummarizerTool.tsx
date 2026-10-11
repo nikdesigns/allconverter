@@ -170,7 +170,7 @@ export function AiPdfSummarizerTool() {
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
         <Sparkles className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">AI PDF Summarizer</span>
+        <span className="text-sm font-medium">PDF Summarizer</span>
         <span className="ml-auto text-[10px] text-muted-foreground">Upload → Instant Summary</span>
       </div>
 

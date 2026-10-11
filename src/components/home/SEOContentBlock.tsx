@@ -63,7 +63,7 @@ export function SEOContentBlock() {
             <Link href="/ai-tools/" className="text-[var(--fg-brand)] hover:underline">
               AI tools
             </Link>{" "}
-            help you produce professional written content in seconds. Generate{" "}
+            give you structured first drafts in seconds, built from templates in your browser. Generate{" "}
             <Link href="/tools/ai-cover-letter/" className="text-[var(--fg-brand)] hover:underline">
               cover letters
             </Link>
@@ -72,9 +72,9 @@ export function SEOContentBlock() {
               LinkedIn profile
             </Link>
             , write cold emails, blog outlines, product descriptions, social posts, and YouTube titles.
-            Developer-focused tools include an{" "}
+            Developer-focused tools include a{" "}
             <Link href="/tools/ai-sql-generator/" className="text-[var(--fg-brand)] hover:underline">
-              AI SQL generator
+              SQL query generator
             </Link>
             , code explainer, and regex generator. No API key required — all tools run in your browser.
           </p>

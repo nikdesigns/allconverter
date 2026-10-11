@@ -3,22 +3,22 @@ import type { ToolCopyMap } from "./types";
 export const pdfToolsCopy: ToolCopyMap = {
   "pdf-compressor": {
     intro:
-      "PDF Compressor rewrites the internal structure of a PDF so the same pages take fewer bytes. It packs the file's objects into compressed streams and, on the Medium and High settings, clears document properties such as title, author and producer.\n\nIt does not re-encode or downscale the images inside the file. A PDF that is mostly scanned pages or photos will shrink only a little, while one exported from an office app or assembled from many merged files usually shrinks more. The result screen shows the original size, the new size and the space saved, so you can judge the outcome before downloading.",
+      "PDF Compressor makes a PDF smaller by re-encoding the photos and scans inside it, which is where almost all of a large PDF's size comes from. Text, fonts and vector drawings are never touched, so the document stays sharp, searchable and selectable.\n\nThree levels are offered. Lossless only repacks the file's internal structure and changes nothing visible. Balanced re-encodes JPEG images at good quality and limits them to 2,000 pixels on the longest side. Smallest uses stronger compression and a 1,400 pixel limit. Everything runs in your browser, and if the result would not be smaller you get the original back.",
     steps: [
       ["Add your PDF", "Drop one PDF onto the upload area or click it to choose a file."],
-      ["Pick a compression level", "Low only repacks the file. Medium also removes document properties. High additionally writes the file without object streams for older readers."],
-      ["Compare and download", "Check the before and after sizes, then download the copy named with _compressed."],
+      ["Pick a level", "Lossless for contracts and archives, Balanced for everyday sharing, Smallest for email limits and web uploads."],
+      ["Compare and download", "Check the before and after sizes and how many images were re-encoded, then download the copy named with _compressed."],
     ],
     faqs: [
-      ["Why did my PDF barely get smaller?", "Most of a scanned or photo-heavy PDF is image data, and this tool does not recompress images. Its savings come from repacking the file's structure, which matters most for text-based documents."],
-      ["Does compression change how the pages look?", "No. Text, fonts, images and layout are copied as they are. Only the container around them and, on Medium and High, the document properties change."],
-      ["Can I compress several PDFs at once?", "Not at the moment. The tool works on one file at a time: compress, download, then add the next."],
-      ["What is removed on Medium and High?", "The title, author, subject, keywords, producer and creator fields are cleared. Page content is untouched."],
+      ["How much smaller will my PDF get?", "It depends on what is inside. Scans and photo-heavy PDFs often shrink by half or more on Balanced. A text-only PDF has no images to compress, so it changes by a few percent at most."],
+      ["Will text become blurry?", "No. Only embedded photos are re-encoded. Text and vector graphics are stored separately and are copied unchanged."],
+      ["Why were some images not re-encoded?", "Only standard RGB and greyscale JPEG images are processed. CMYK print images, PNG-style images and any image that would not end up at least 10 percent smaller are left exactly as they were."],
+      ["Can it compress a password-protected PDF?", "No. Remove the password in your PDF reader first, then compress the unlocked copy."],
     ],
     uses: [
-      "Trimming an exported report so it fits under an email attachment limit",
-      "Stripping author and software details before sharing a document publicly",
-      "Tidying a PDF that grew after several rounds of merging and editing",
+      "Getting a scanned document under an email attachment limit",
+      "Shrinking a photo-heavy brochure or portfolio before uploading",
+      "Reducing a phone-scanned form to fit a government or job portal's size cap",
     ],
   },
   "pdf-merger": {
@@ -321,20 +321,22 @@ export const pdfToolsCopy: ToolCopyMap = {
   },
   "powerpoint-to-pdf": {
     intro:
-      "PowerPoint to PDF in this version is a fallback helper, not a slide renderer. Drawing PowerPoint slides accurately needs the presentation software itself, which a browser page does not have. The tool accepts a .pptx file, confirms its name and size, and opens your browser's print dialog.\n\nFor a faithful PDF, open the presentation in PowerPoint, Keynote or Google Slides and use File, then Export or Download as PDF. That route keeps fonts, images, animations' final states and slide layout exactly as designed.",
+      "PowerPoint to PDF converts a .pptx presentation into a PDF with one page per slide, at the slide's own size. The file is opened in your browser, each slide is drawn using the positions stored in the presentation, and the pages are assembled into a PDF; nothing is uploaded.\n\nIt is a basic converter. Slide backgrounds, text boxes, pictures, simple shapes and tables are reproduced, and text in any language your device has fonts for is supported. Charts, SmartArt, gradients, shadows, theme fonts and animations are not, and slides are stored as images, so text in the PDF cannot be selected. For a pixel-perfect result, export from PowerPoint or Google Slides.",
     steps: [
-      ["Open the deck in PowerPoint or Google Slides", "Google Slides is free and imports .pptx files."],
-      ["Choose Export or Download as PDF", "In PowerPoint it is under File, Export. In Google Slides it is File, Download."],
-      ["Check the PDF", "Confirm fonts and images look right before sharing."],
+      ["Drop a .pptx file", "Older .ppt files must be saved as .pptx first."],
+      ["Wait for the slides to render", "Progress is shown slide by slide, with a preview of the first one."],
+      ["Download the PDF", "Check it before sharing, especially slides with charts."],
     ],
     faqs: [
-      ["Why can't the browser convert my slides?", "A .pptx file describes slides in PowerPoint's own layout model. Rendering it correctly requires an engine that implements that model, which browsers do not include."],
-      ["Is there a free way to convert?", "Yes. Upload the file to Google Slides and download it as a PDF."],
-      ["Will speaker notes be included?", "Only if you choose a notes layout in the application's export or print settings."],
+      ["Why does my slide look different from PowerPoint?", "The converter draws text, pictures, shapes and tables but does not implement PowerPoint's full layout engine. Theme fonts are replaced with a standard sans-serif, and charts and SmartArt are left out."],
+      ["Can I select or search the text in the PDF?", "No. Each slide is placed in the PDF as an image."],
+      ["Does it support .ppt, Keynote or Google Slides files?", "Only .pptx. Export other formats to .pptx first, or export a PDF directly from that application."],
+      ["Are speaker notes included?", "No. Only the slides themselves are converted."],
     ],
     uses: [
-      "Sharing a presentation with people who do not have PowerPoint",
-      "Submitting slides where only PDF uploads are accepted",
+      "Sending a simple deck to someone who does not have PowerPoint",
+      "Making a quick handout from text-and-picture slides",
+      "Uploading slides to a portal that accepts only PDF",
     ],
   },
   "pdf-protector": {

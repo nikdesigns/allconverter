@@ -657,8 +657,8 @@ const TOOLS: Record<string,{ title: string; hasTopicInput: boolean; generate: (v
   "linkedin-post-generator":        { title:"LinkedIn Post Generator",         hasTopicInput:true,  generate: linkedinPost },
   "hook-generator":                 { title:"Hook Generator",                  hasTopicInput:true,  generate: hookContent },
   "cold-email-generator":           { title:"Cold Email Generator",            hasTopicInput:true,  generate: coldEmail },
-  "ai-cover-letter":                { title:"AI Cover Letter Generator",       hasTopicInput:true,  generate: coverLetter },
-  "ai-linkedin-optimizer":          { title:"AI LinkedIn Profile Optimizer",   hasTopicInput:true,  generate: linkedinOptimizer },
+  "ai-cover-letter":                { title:"Cover Letter Generator",       hasTopicInput:true,  generate: coverLetter },
+  "ai-linkedin-optimizer":          { title:"LinkedIn Profile Optimizer",   hasTopicInput:true,  generate: linkedinOptimizer },
 };
 
 export function ContentGeneratorTool() {

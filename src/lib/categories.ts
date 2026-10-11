@@ -60,7 +60,7 @@ export const categories: ToolCategory_Data[] = [
   {
     slug: "ai-tools",
     name: "AI Tools",
-    description: "AI-powered tools for writing, summarizing, and content generation.",
+    description: "Template-based writing, summarizing and content tools, plus on-device background removal.",
     icon: "Sparkles",
     color: "text-pink-500",
     gradient: "from-pink-500/10 to-rose-500/10",

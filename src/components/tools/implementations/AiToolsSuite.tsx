@@ -995,28 +995,28 @@ interface ToolDef {
 
 const TOOLS: Record<string, ToolDef> = {
   "ai-resume-analyzer": {
-    title: "AI Resume Analyzer",
+    title: "Resume Analyzer",
     description: "Paste your resume text to get an ATS score, section analysis, and actionable improvement tips.",
     fields: [{ type: "textarea", key: "text", label: "Resume Text", placeholder: "Paste your resume text here…", rows: 12 }],
     generate: (v) => resumeAnalyzer(v.text ?? ""),
     buttonLabel: "Analyze Resume",
   },
   "ai-seo-audit": {
-    title: "AI SEO Audit",
+    title: "On-Page SEO Audit",
     description: "Paste your page HTML or content to get a detailed on-page SEO audit with scores and recommendations.",
     fields: [{ type: "textarea", key: "content", label: "Page HTML or Content", placeholder: "Paste your page HTML or raw content here…", rows: 10 }],
     generate: (v) => seoAudit(v.content ?? ""),
     buttonLabel: "Run SEO Audit",
   },
   "ai-keyword-cluster": {
-    title: "AI Keyword Cluster Generator",
+    title: "Keyword Cluster Generator",
     description: "Enter your keywords (one per line or comma-separated) and get them clustered by search intent.",
     fields: [{ type: "textarea", key: "input", label: "Keywords", placeholder: "best project management tool\nhow to use Notion\nbuy project management software\nNotion vs Asana\n…", rows: 8 }],
     generate: (v) => keywordCluster(v.input ?? ""),
     buttonLabel: "Cluster Keywords",
   },
   "ai-proposal-generator": {
-    title: "AI Proposal Generator",
+    title: "Project Proposal Writer",
     description: "Fill in the details and get a full professional project proposal you can customize and send.",
     fields: [
       { type: "text", key: "client", label: "Client Name", placeholder: "Acme Corp" },
@@ -1031,14 +1031,14 @@ const TOOLS: Record<string, ToolDef> = {
     outputRows: 60,
   },
   "ai-sql-generator": {
-    title: "AI SQL Generator",
+    title: "SQL Query Generator",
     description: "Describe your query in plain English and get SQL you can run immediately.",
     fields: [{ type: "textarea", key: "description", label: "Describe your query", placeholder: "Show me the top 10 customers by total orders in the last 30 days\nGet all users where email is not verified\nCount orders grouped by product category…", rows: 4 }],
     generate: (v) => sqlGenerator(v.description ?? ""),
     buttonLabel: "Generate SQL",
   },
   "ai-code-explainer": {
-    title: "AI Code Explainer",
+    title: "Code Explainer",
     description: "Paste any code snippet and get a plain-English explanation with concept breakdown and issue detection.",
     fields: [
       {
@@ -1061,7 +1061,7 @@ const TOOLS: Record<string, ToolDef> = {
     buttonLabel: "Explain Code",
   },
   "ai-business-plan": {
-    title: "AI Business Plan Generator",
+    title: "Business Plan Generator",
     description: "Enter your business details and get a complete, investor-ready business plan structure.",
     fields: [
       { type: "text", key: "business", label: "Business Name", placeholder: "e.g. Acme SaaS" },
@@ -1075,7 +1075,7 @@ const TOOLS: Record<string, ToolDef> = {
     outputRows: 70,
   },
   "ai-product-description": {
-    title: "AI Product Description Generator",
+    title: "Product Copy Generator",
     description: "Generate multiple product descriptions optimized for different channels and tones.",
     fields: [
       { type: "text", key: "product", label: "Product Name", placeholder: "e.g. ProDesk Standing Desk" },
@@ -1095,7 +1095,7 @@ const TOOLS: Record<string, ToolDef> = {
     outputRows: 60,
   },
   "ai-meeting-notes": {
-    title: "AI Meeting Notes Generator",
+    title: "Meeting Notes Formatter",
     description: "Paste your raw meeting notes or bullets and get structured, shareable meeting minutes.",
     fields: [{ type: "textarea", key: "input", label: "Raw Meeting Notes", placeholder: "Attendees: John, Sarah, Mike\nDiscussed Q3 roadmap\nJohn will create the design mockups by Friday\nDecided to use React for the frontend\nAction: Sarah to send updated budget to team by EOD\n…", rows: 10 }],
     generate: (v) => meetingNotes(v.input ?? ""),

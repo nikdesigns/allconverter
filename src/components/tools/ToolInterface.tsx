@@ -114,6 +114,10 @@ const AudioMp3ToWav      = lazy(() => import("./implementations/AudioConverterTo
 const AudioWavToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="wav-to-mp3" /> })));
 const AudioM4aToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="m4a-to-mp3" /> })));
 const AudioMp4ToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="mp4-to-mp3" /> })));
+const AudioAacToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="aac-to-mp3" /> })));
+const AudioFlacToMp3      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="flac-to-mp3" /> })));
+const AudioMp3ToFlac      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="mp3-to-flac" /> })));
+const AudioMp3ToAac      = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="mp3-to-aac" /> })));
 const AudioVideoToAudio  = lazy(() => import("./implementations/AudioConverterTool").then(m => ({ default: () => <m.AudioConverterTool slug="video-to-audio" /> })));
 
 // ── AI suite tools ─────────────────────────────────────────────────────────────
@@ -455,10 +459,10 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "ai-linkedin-optimizer": ContentGeneratorTool,
 
   // ── New audio conversion tools ────────────────────────────────────────────
-  "mp3-to-aac":          AudioConversionSuite,
-  "aac-to-mp3":          AudioConversionSuite,
-  "flac-to-mp3":         AudioConversionSuite,
-  "mp3-to-flac":         AudioConversionSuite,
+  "mp3-to-aac": AudioMp3ToAac,
+  "aac-to-mp3": AudioAacToMp3,
+  "flac-to-mp3": AudioFlacToMp3,
+  "mp3-to-flac": AudioMp3ToFlac,
   "audio-noise-reducer": AudioConversionSuite,
   "audio-normalizer":    AudioConversionSuite,
 

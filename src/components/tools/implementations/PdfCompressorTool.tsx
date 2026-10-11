@@ -8,16 +8,25 @@ import { Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { ProcessingStatus, useProcessing } from "@/components/processing";
 
+type Level = "low" | "medium" | "high";
+
+const LEVELS: Record<Level, { label: string; hint: string; image?: { quality: number; maxDimension: number } }> = {
+  low:    { label: "Lossless", hint: "No quality change" },
+  medium: { label: "Balanced", hint: "Images at good quality", image: { quality: 0.72, maxDimension: 2000 } },
+  high:   { label: "Smallest", hint: "Images reduced further", image: { quality: 0.5, maxDimension: 1400 } },
+};
+
 export function PdfCompressorTool() {
   const [file, setFile] = useState<File | null>(null);
   const [outputUrl, setOutputUrl] = useState("");
   const [outputSize, setOutputSize] = useState(0);
-  const [level, setLevel] = useState<"low" | "medium" | "high">("medium");
+  const [level, setLevel] = useState<Level>("medium");
   const [processing, setProcessing] = useState(false);
+  const [note, setNote] = useState("");
 
   const proc = useProcessing({ category: "pdf" });
 
-  const handleFile = (files: File[]) => { setFile(files[0]); setOutputUrl(""); proc.reset(); };
+  const handleFile = (files: File[]) => { setFile(files[0]); setOutputUrl(""); setNote(""); proc.reset(); };
 
   const compress = async () => {
     if (!file) return;
@@ -28,15 +37,19 @@ export function PdfCompressorTool() {
       const { PDFDocument } = await import("pdf-lib");
       const bytes = await file.arrayBuffer();
       const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+      if (doc.isEncrypted) {
+        throw new Error("This PDF is password-protected. Remove the password first, then compress it.");
+      }
       proc.advance("processing");
 
-      const saveOptions = level === "high"
-        ? { useObjectStreams: false, addDefaultPage: false, objectsPerTick: 50 }
-        : level === "medium"
-        ? { useObjectStreams: true, addDefaultPage: false }
-        : { useObjectStreams: true };
+      const saveOptions = { useObjectStreams: true, addDefaultPage: false };
+      let images = { found: 0, recompressed: 0, savedBytes: 0 };
 
       if (level !== "low") {
+        // Balanced and Smallest re-encode embedded photos; text and vectors are untouched.
+        const { recompressPdfImages } = await import("@/lib/pdf-image-compress");
+        images = await recompressPdfImages(doc, LEVELS[level].image!);
+
         doc.setTitle("");
         doc.setAuthor("");
         doc.setSubject("");
@@ -46,7 +59,18 @@ export function PdfCompressorTool() {
       }
 
       const compressed = await doc.save(saveOptions);
-      const blob = new Blob([compressed as unknown as BlobPart], { type: "application/pdf" });
+      // Never hand back a file that is larger than the one that came in.
+      const smaller = compressed.length < file.size;
+      const blob = smaller ? new Blob([compressed as unknown as BlobPart], { type: "application/pdf" }) : file;
+      setNote(
+        !smaller
+          ? "This PDF is already well optimised, so the original is returned unchanged."
+          : level === "low"
+          ? "Lossless: the file structure was repacked. Choose Balanced or Smallest to also compress images."
+          : images.found === 0
+          ? "No JPEG photos were found in this PDF, so only lossless repacking was applied. Text-only PDFs have little left to remove."
+          : `${images.recompressed} of ${images.found} image${images.found === 1 ? "" : "s"} re-encoded. Text and vector graphics were left untouched.`,
+      );
       setOutputUrl(URL.createObjectURL(blob));
       setOutputSize(blob.size);
       const saved = Math.round((1 - blob.size / file.size) * 100);
@@ -54,11 +78,13 @@ export function PdfCompressorTool() {
         { label: "Original Size", after: formatBytes2(file.size) },
         { label: "Compressed Size", after: formatBytes2(blob.size), warn: blob.size >= file.size },
         { label: "Space Saved", after: saved > 0 ? `${saved}%` : "~0%", highlight: saved > 0 },
+        ...(level !== "low" ? [{ label: "Images Re-encoded", after: `${images.recompressed} of ${images.found}` }] : []),
       ]);
       toast.success(`Compressed! ${saved > 0 ? `Saved ${saved}%` : "File optimized"}`);
-    } catch {
-      proc.error("Failed to compress PDF.");
-      toast.error("Failed to compress PDF.");
+    } catch (e) {
+      const msg = e instanceof Error && e.message.includes("password") ? e.message : "Failed to compress PDF.";
+      proc.error(msg);
+      toast.error(msg);
     } finally {
       setProcessing(false);
     }
@@ -74,7 +100,7 @@ export function PdfCompressorTool() {
       </div>
       <div className="p-5 space-y-4">
         <FileUploadZone accept=".pdf,application/pdf" onFiles={handleFile}
-          label="Drop a PDF file here" sublabel="Reduces file size while preserving quality" />
+          label="Drop a PDF file here" sublabel="Compresses the photos inside your PDF; text stays sharp and selectable" />
 
         {file && (
           <>
@@ -93,9 +119,10 @@ export function PdfCompressorTool() {
               <div className="grid grid-cols-3 gap-2">
                 {(["low", "medium", "high"] as const).map((l) => (
                   <button key={l} onClick={() => setLevel(l)}
-                    className={`py-2.5 rounded-xl border text-xs font-medium capitalize transition-all ${level===l?"border-primary/40 bg-primary/10 text-primary":"border-border text-muted-foreground hover:text-foreground"}`}>
-                    {l}
-                    <span className="block text-[10px] opacity-60 mt-0.5">{l==="low"?"Faster":l==="medium"?"Balanced":"Smaller"}</span>
+                    aria-pressed={level === l}
+                    className={`py-2.5 rounded-xl border text-xs font-medium transition-all ${level===l?"border-primary/40 bg-primary/10 text-primary":"border-border text-muted-foreground hover:text-foreground"}`}>
+                    {LEVELS[l].label}
+                    <span className="block text-[10px] opacity-60 mt-0.5">{LEVELS[l].hint}</span>
                   </button>
                 ))}
               </div>
@@ -121,6 +148,7 @@ export function PdfCompressorTool() {
                     {saved > 0 ? `Saved ${saved}% · ` : ""}{formatBytes2(outputSize)}
                   </p>
                   <p className="text-xs text-muted-foreground">Original: {formatBytes2(file.size)}</p>
+                  {note && <p className="text-xs text-muted-foreground mt-1">{note}</p>}
                 </div>
                 <a href={outputUrl} download={file.name.replace(".pdf", "_compressed.pdf")}>
                   <Button size="sm" className="gap-1.5"><Download className="w-3.5 h-3.5" />Download</Button>

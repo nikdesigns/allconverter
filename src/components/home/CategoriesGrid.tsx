@@ -21,7 +21,7 @@ export function CategoriesGrid() {
             Browse by category
           </h2>
           <p className="text-muted-foreground text-base max-w-xl mx-auto">
-            From PDF tools to AI-powered utilities — find the right tool for any task.
+            From PDF tools to writing and business utilities — find the right tool for any task.
           </p>
         </div>
 

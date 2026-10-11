@@ -139,7 +139,7 @@ export default function AboutPage() {
           <p className="text-base text-[var(--body-subtle)] leading-relaxed max-w-2xl">
             AllConverter.tools is a free online platform with 250+ browser-based utilities — from PDF
             conversion and image editing to developer tools, SEO analysis, business documents, and
-            AI-powered content generation. No installation. No account. No file uploads. Just open a
+            template-based content generation. No installation. No account. No file uploads. Just open a
             tool and get things done.
           </p>
         </div>

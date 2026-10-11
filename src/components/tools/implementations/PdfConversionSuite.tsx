@@ -275,32 +275,45 @@ function PdfToPowerpoint() {
 // ─── PowerPoint to PDF ────────────────────────────────────────────────────────
 
 function PowerpointToPdf() {
-  const [file, setFile]   = useState<File | null>(null);
-  const [info, setInfo]   = useState("");
+  const [file, setFile]       = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState("");
+  const [error, setError]     = useState("");
+  const [result, setResult]   = useState<{ blob: Blob; slideCount: number; preview: string; skipped: number } | null>(null);
 
-  const handleFile = (f: File) => {
-    setFile(f);
-    setInfo(`${f.name} (${(f.size/1024/1024).toFixed(2)} MB) — ready to print`);
-  };
-
-  const printPdf = () => {
-    const w = window.open("", "_blank")!;
-    w.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(file?.name)}</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f5f5f5}.card{background:#fff;border-radius:12px;padding:48px;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.1);max-width:480px}</style></head><body><div class="card"><h2>⚠️ PPTX to PDF</h2><p>For best results, open <strong>${escapeHtml(file?.name)}</strong> in Microsoft PowerPoint or Google Slides and use <strong>File → Export → PDF</strong>.</p><p>Browser-based PPTX rendering requires the full application. This tool opens the print dialog as a fallback.</p></div></body></html>`);
-    w.document.close(); w.focus(); w.print();
+  const handleFile = async (f: File) => {
+    setFile(f); setResult(null); setError(""); setLoading(true); setProgress("Reading presentation…");
+    try {
+      const { pptxToPdf } = await import("@/lib/pptx-to-pdf");
+      setResult(await pptxToPdf(f, (done, total) => setProgress(`Rendering slide ${done} of ${total}…`)));
+      toast.success("PDF ready");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not convert this presentation.");
+    }
+    setLoading(false);
   };
 
   return (
     <div className="space-y-4">
-      <DropZone onFile={handleFile} accept=".pptx,.ppt" label="Drop a .pptx PowerPoint file here" />
-      {file && (
+      <DropZone onFile={handleFile} accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation" label="Drop a .pptx PowerPoint file here" />
+      {loading && <div className="text-center py-4 text-muted-foreground text-sm" role="status">{progress}</div>}
+      {error && <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-500" role="alert">{error}</div>}
+      {file && result && (
         <>
-          <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-3 text-xs text-amber-400">
-            For best quality, open the PPTX in PowerPoint or Google Slides → File → Export as PDF. The button below uses browser print as a fallback.
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={result.preview} alt="Preview of the first slide" className="w-full rounded-xl border border-border" />
+          <div className="text-xs text-muted-foreground">
+            {result.slideCount} slide{result.slideCount === 1 ? "" : "s"} · {(result.blob.size / 1024 / 1024).toFixed(2)} MB
+            {result.skipped > 0 && ` · ${result.skipped} chart${result.skipped === 1 ? "" : "s"}, diagram${result.skipped === 1 ? "" : "s"} or unsupported image${result.skipped === 1 ? "" : "s"} left out`}
           </div>
-          <div className="text-xs text-muted-foreground">{info}</div>
-          <Button onClick={printPdf} className="w-full gap-2"><Download className="w-4 h-4" />Open print dialog</Button>
+          <Button onClick={() => downloadBlob(result.blob, file.name.replace(/\.[^.]+$/, "") + ".pdf")} className="w-full gap-2">
+            <Download className="w-4 h-4" />Download PDF
+          </Button>
         </>
       )}
+      <div className="text-xs text-muted-foreground">
+        Converts text, pictures, shapes and tables in your browser. Charts, SmartArt, gradients, theme fonts and animations are not reproduced; for a pixel-perfect PDF, export from PowerPoint or Google Slides.
+      </div>
     </div>
   );
 }

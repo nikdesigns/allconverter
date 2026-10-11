@@ -369,7 +369,7 @@ export default function TermsPage() {
             <p>
               AI tools on AllConverter.tools — including content generators, resume builders, proposal
               generators, email writers, code explainers, grammar checkers, summarisers, and all similar
-              tools — produce outputs based on language model inference. These outputs:
+              tools — produce outputs from templates and pattern rules, not from a language model. These outputs:
             </p>
             <BulletList items={[
               "Do not constitute professional, legal, medical, financial, or expert advice of any kind",

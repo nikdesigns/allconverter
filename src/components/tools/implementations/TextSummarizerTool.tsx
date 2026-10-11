@@ -145,7 +145,7 @@ export function TextSummarizerTool() {
         )}
 
         <p className="text-xs text-muted-foreground text-center">
-          Uses extractive AI summarization — runs entirely in your browser.
+          Extractive summarization: picks the most important sentences. Runs entirely in your browser.
         </p>
       </div>
     </div>

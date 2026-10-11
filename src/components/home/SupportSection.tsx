@@ -29,9 +29,9 @@ const costs = [
     icon: Sparkles,
     color: "text-violet-500",
     bg: "bg-violet-500/10",
-    title: "AI Service Costs",
+    title: "Testing & Maintenance",
     description:
-      "Third-party API usage for AI-powered tools including the cover letter generator, SQL builder, LinkedIn optimiser, and code explainer.",
+      "Keeping 250+ tools working as browsers change: fixing bugs, checking results, and updating the libraries the tools depend on.",
   },
   {
     icon: RefreshCw,

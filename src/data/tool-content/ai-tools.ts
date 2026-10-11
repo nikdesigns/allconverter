@@ -22,7 +22,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-pdf-chat": {
     intro:
-      "AI PDF Chat lets you ask questions about a PDF and returns the passages most relevant to each question. After you upload a file, its text is extracted in your browser and split into chunks; when you ask something, the tool scores the chunks by how well their words match your question and shows the best ones.\n\nThis is keyword retrieval, not a generative language model. It finds and quotes what the document says; it does not write new explanations or reason across sections. It needs a PDF with a real text layer, and nothing is uploaded.",
+      "PDF Q&A lets you ask questions about a PDF and returns the passages most relevant to each question. After you upload a file, its text is extracted in your browser and split into chunks; when you ask something, the tool scores the chunks by how well their words match your question and shows the best ones.\n\nThis is keyword retrieval, not a generative language model. It finds and quotes what the document says; it does not write new explanations or reason across sections. It needs a PDF with a real text layer, and nothing is uploaded.",
     steps: [
       ["Upload a PDF", "A text-based document, not a scan."],
       ["Ask a question", "Use the words the document is likely to use."],
@@ -41,7 +41,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-resume-analyzer": {
     intro:
-      "AI Resume Analyzer reviews the text of a resume against a checklist of things recruiters and applicant tracking systems look for. Paste your resume and it produces a score with notes on sections present or missing, use of action verbs, measurable results, length and contact details.\n\nThe analysis is rule-based and runs in your browser; it is not a language model and it does not compare your resume with a particular job posting. Use it as a quick structural check before tailoring the content yourself.",
+      "Resume Analyzer reviews the text of a resume against a checklist of things recruiters and applicant tracking systems look for. Paste your resume and it produces a score with notes on sections present or missing, use of action verbs, measurable results, length and contact details.\n\nThe analysis is rule-based and runs in your browser; it is not a language model and it does not compare your resume with a particular job posting. Use it as a quick structural check before tailoring the content yourself.",
     steps: [
       ["Paste your resume text", "Copy it from your document."],
       ["Generate the analysis", "A scored report appears."],
@@ -60,7 +60,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-seo-audit": {
     intro:
-      "AI SEO Audit checks the on-page SEO basics of HTML or content that you paste in. It looks at the title tag, meta description, heading structure, content length, links, images and structured data, and returns a report with a score and recommendations.\n\nThe audit is a set of rules applied in your browser. It examines only what you paste, so it cannot measure page speed, backlinks, rankings or anything that needs a crawl of the live site.",
+      "On-Page SEO Audit checks the on-page SEO basics of HTML or content that you paste in. It looks at the title tag, meta description, heading structure, content length, links, images and structured data, and returns a report with a score and recommendations.\n\nThe audit is a set of rules applied in your browser. It examines only what you paste, so it cannot measure page speed, backlinks, rankings or anything that needs a crawl of the live site.",
     steps: [
       ["Paste page HTML or content", "View Source and copy the full page for best results."],
       ["Generate the audit", "Checks run instantly."],
@@ -79,7 +79,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-keyword-cluster": {
     intro:
-      "AI Keyword Cluster Generator sorts a list of keywords into groups by search intent: informational, commercial, transactional and navigational. Paste keywords one per line or separated by commas and it assigns each to a group, with a note on the kind of content that suits it.\n\nClassification is based on signal words. Terms such as how and what indicate informational intent, best and vs indicate commercial research, and buy and price indicate transactional intent. It does not use search volume or live search results.",
+      "Keyword Cluster Generator sorts a list of keywords into groups by search intent: informational, commercial, transactional and navigational. Paste keywords one per line or separated by commas and it assigns each to a group, with a note on the kind of content that suits it.\n\nClassification is based on signal words. Terms such as how and what indicate informational intent, best and vs indicate commercial research, and buy and price indicate transactional intent. It does not use search volume or live search results.",
     steps: [
       ["Paste your keywords", "One per line or comma-separated."],
       ["Generate clusters", "Keywords are grouped by intent."],
@@ -98,7 +98,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-proposal-generator": {
     intro:
-      "AI Proposal Generator assembles a project proposal from the details you enter: client name, your company, project title, scope of work, budget and timeline. It fills a professional template with an executive summary, scope, timeline, pricing and terms sections.\n\nThe output is produced from a fixed template in your browser, not written by a language model, so think of it as a well-structured first draft. Edit the wording, add specifics about the client's problem, and check the terms before sending.",
+      "Project Proposal Writer assembles a project proposal from the details you enter: client name, your company, project title, scope of work, budget and timeline. It fills a professional template with an executive summary, scope, timeline, pricing and terms sections.\n\nThe output is produced from a fixed template in your browser, not written by a language model, so think of it as a well-structured first draft. Edit the wording, add specifics about the client's problem, and check the terms before sending.",
     steps: [
       ["Enter project details", "Client, scope, budget and timeline."],
       ["Generate the proposal", "A full draft is produced."],
@@ -117,7 +117,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-sql-generator": {
     intro:
-      "AI SQL Generator turns a plain-English description into a SQL query by recognising common patterns: selecting and filtering rows, counting and summing, grouping, sorting, limiting, date ranges and simple joins. The result comes with an explanation and suggestions.\n\nIt works by pattern matching in your browser and does not use a language model or know your database schema. Table and column names are inferred from your wording, so expect to adjust them, and always test a generated query on non-production data first.",
+      "SQL Query Generator turns a plain-English description into a SQL query by recognising common patterns: selecting and filtering rows, counting and summing, grouping, sorting, limiting, date ranges and simple joins. The result comes with an explanation and suggestions.\n\nIt works by pattern matching in your browser and does not use a language model or know your database schema. Table and column names are inferred from your wording, so expect to adjust them, and always test a generated query on non-production data first.",
     steps: [
       ["Describe the data you need", "Mention table and column names where you can."],
       ["Generate", "A query and explanation appear."],
@@ -136,7 +136,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-code-explainer": {
     intro:
-      "AI Code Explainer analyses a code snippet and describes what it contains. It identifies programming concepts in use, such as async/await, array methods, classes, error handling, HTTP requests, React hooks and TypeScript types, comments on complexity, and flags some common issues.\n\nDetection is done with pattern rules in your browser for JavaScript, TypeScript, Python, Java, Rust, SQL, CSS and Bash. It recognises structures; it does not execute the code or understand its business logic the way a human reviewer or a language model would.",
+      "Code Explainer analyses a code snippet and describes what it contains. It identifies programming concepts in use, such as async/await, array methods, classes, error handling, HTTP requests, React hooks and TypeScript types, comments on complexity, and flags some common issues.\n\nDetection is done with pattern rules in your browser for JavaScript, TypeScript, Python, Java, Rust, SQL, CSS and Bash. It recognises structures; it does not execute the code or understand its business logic the way a human reviewer or a language model would.",
     steps: [
       ["Paste code", "Optionally choose the language."],
       ["Generate the explanation", "Concepts and notes are listed."],
@@ -155,7 +155,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-business-plan": {
     intro:
-      "AI Business Plan Generator builds the skeleton of a business plan from a few inputs: business name, industry, what the business does, and related details. It lays out the standard sections investors expect, including executive summary, market analysis, go-to-market strategy, financial projections, team and risks.\n\nThe plan is generated from a template, so its value is the structure and prompts, not the numbers. Market sizes and financial figures are placeholders that you must replace with your own research.",
+      "Business Plan Generator builds the skeleton of a business plan from a few inputs: business name, industry, what the business does, and related details. It lays out the standard sections investors expect, including executive summary, market analysis, go-to-market strategy, financial projections, team and risks.\n\nThe plan is generated from a template, so its value is the structure and prompts, not the numbers. Market sizes and financial figures are placeholders that you must replace with your own research.",
     steps: [
       ["Enter your business details", "Name, industry and description."],
       ["Generate the plan", "All sections are drafted."],
@@ -174,7 +174,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-product-description": {
     intro:
-      "AI Product Description Generator produces three versions of a product description from the details you supply: a short one for ads, a medium one for e-commerce listings, and a long one for product pages, written in the tone you select.\n\nThe text is assembled from templates in your browser. It gives you correctly sized drafts for each placement; the persuasive detail, what makes this product different and who it is for, still has to come from you.",
+      "Product Copy Generator produces three versions of a product description from the details you supply: a short one for ads, a medium one for e-commerce listings, and a long one for product pages, written in the tone you select.\n\nThe text is assembled from templates in your browser. It gives you correctly sized drafts for each placement; the persuasive detail, what makes this product different and who it is for, still has to come from you.",
     steps: [
       ["Enter product details", "Name, features, audience and tone."],
       ["Generate", "Three lengths are produced."],
@@ -193,7 +193,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-meeting-notes": {
     intro:
-      "AI Meeting Notes Generator reorganises rough notes into structured minutes. Paste your bullet points or raw notes and it arranges them under headings for discussion summary, decisions, action items and follow-up.\n\nIt sorts lines using keyword rules, for example treating lines with words like will, todo or by Friday as actions. It does not interpret the conversation the way a person would, so read the result and move anything that has landed under the wrong heading.",
+      "Meeting Notes Formatter reorganises rough notes into structured minutes. Paste your bullet points or raw notes and it arranges them under headings for discussion summary, decisions, action items and follow-up.\n\nIt sorts lines using keyword rules, for example treating lines with words like will, todo or by Friday as actions. It does not interpret the conversation the way a person would, so read the result and move anything that has landed under the wrong heading.",
     steps: [
       ["Paste raw notes", "One point per line works best."],
       ["Generate minutes", "Notes are grouped under headings."],
@@ -497,7 +497,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-cover-letter": {
     intro:
-      "AI Cover Letter Generator creates a cover letter draft from the role you are applying for. It follows the standard structure: an opening naming the position, a paragraph on relevant experience, a paragraph on why this company, and a confident close.\n\nThe letter is a template, not a personalised piece of writing. Hiring managers notice generic letters, so use the draft for structure and replace the general statements with two or three concrete achievements that match the job description.",
+      "Cover Letter Generator creates a cover letter draft from the role you are applying for. It follows the standard structure: an opening naming the position, a paragraph on relevant experience, a paragraph on why this company, and a confident close.\n\nThe letter is a template, not a personalised piece of writing. Hiring managers notice generic letters, so use the draft for structure and replace the general statements with two or three concrete achievements that match the job description.",
     steps: [
       ["Enter the role", "Job title and company."],
       ["Generate", "A draft letter appears."],
@@ -516,7 +516,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-linkedin-optimizer": {
     intro:
-      "AI LinkedIn Profile Optimizer generates draft text for the main parts of a LinkedIn profile: a headline, an About section and experience bullet points, based on the role or field you enter.\n\nThe suggestions are template-based. They show the pattern that works, a keyword-rich headline, an About section written in the first person, and bullets that start with action verbs, which you then rewrite with your own results and numbers.",
+      "LinkedIn Profile Optimizer generates draft text for the main parts of a LinkedIn profile: a headline, an About section and experience bullet points, based on the role or field you enter.\n\nThe suggestions are template-based. They show the pattern that works, a keyword-rich headline, an About section written in the first person, and bullets that start with action verbs, which you then rewrite with your own results and numbers.",
     steps: [
       ["Enter your role or field", "For example product designer."],
       ["Generate", "Headline, About and bullet drafts appear."],
@@ -535,7 +535,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-spreadsheet-formula": {
     intro:
-      "AI Spreadsheet Formula Generator finds a formula from a plain-English description. Type what you want to calculate, such as sum a column where another column says Paid, and it returns the Excel formula and the Google Sheets equivalent, with an explanation and a worked example.\n\nIt matches your description against a library of common formulas, including SUMIF, COUNTIF, VLOOKUP, INDEX MATCH, IF, date and text functions. It is not a language model, so unusual requests may return no match; rephrase with the name of the operation.",
+      "Spreadsheet Formula Generator finds a formula from a plain-English description. Type what you want to calculate, such as sum a column where another column says Paid, and it returns the Excel formula and the Google Sheets equivalent, with an explanation and a worked example.\n\nIt matches your description against a library of common formulas, including SUMIF, COUNTIF, VLOOKUP, INDEX MATCH, IF, date and text functions. It is not a language model, so unusual requests may return no match; rephrase with the name of the operation.",
     steps: [
       ["Describe the calculation", "Use plain words such as sum, count, look up."],
       ["Generate", "Excel and Sheets formulas appear."],
@@ -554,7 +554,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-regex-generator": {
     intro:
-      "AI Regex Generator finds a regular expression from a description. Type what you want to match, such as email address, URL, IPv4 address, date, hex colour or UUID, and it returns the pattern with an explanation, an example match, and versions formatted for JavaScript and Python.\n\nPatterns come from a curated library that also includes Indian formats such as mobile numbers, PAN, Aadhaar, PIN code and GSTIN. A built-in tester lets you paste text and see what matches. Descriptions outside the library return no result; browse the pattern list instead.",
+      "Regex Generator finds a regular expression from a description. Type what you want to match, such as email address, URL, IPv4 address, date, hex colour or UUID, and it returns the pattern with an explanation, an example match, and versions formatted for JavaScript and Python.\n\nPatterns come from a curated library that also includes Indian formats such as mobile numbers, PAN, Aadhaar, PIN code and GSTIN. A built-in tester lets you paste text and see what matches. Descriptions outside the library return no result; browse the pattern list instead.",
     steps: [
       ["Describe what to match", "Or pick from the pattern library."],
       ["Review the pattern", "Read the explanation and example."],
@@ -573,7 +573,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-resume-builder": {
     intro:
-      "AI Resume Builder guides you through writing a resume in six steps: personal details, summary, experience, education, skills and preview. Add as many jobs and qualifications as you need, list achievements one per line, and include certifications and projects.\n\nThe result is a clean, plain-text resume in a single-column layout that applicant tracking systems parse reliably. Copy it into Word or Google Docs to apply your own formatting. The tool structures what you write; it does not generate the content for you.",
+      "Resume Builder guides you through writing a resume in six steps: personal details, summary, experience, education, skills and preview. Add as many jobs and qualifications as you need, list achievements one per line, and include certifications and projects.\n\nThe result is a clean, plain-text resume in a single-column layout that applicant tracking systems parse reliably. Copy it into Word or Google Docs to apply your own formatting. The tool structures what you write; it does not generate the content for you.",
     steps: [
       ["Fill in each section", "Move through the tabs in order."],
       ["Write achievement bullets", "Start with an action verb and include a number."],
@@ -592,7 +592,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-contract-summarizer": {
     intro:
-      "AI Contract Summarizer scans contract text and pulls out the essentials: the parties, effective and expiry dates, duration, governing law, payment terms, confidentiality and termination clauses, key obligations, and a list of risk flags such as auto-renewal or unlimited liability wording.\n\nExtraction is done by pattern analysis in your browser, so confidential agreements are not uploaded. It finds text that matches known clause patterns; it does not understand legal meaning and will miss unusually worded terms. It is not legal advice.",
+      "Contract Summarizer scans contract text and pulls out the essentials: the parties, effective and expiry dates, duration, governing law, payment terms, confidentiality and termination clauses, key obligations, and a list of risk flags such as auto-renewal or unlimited liability wording.\n\nExtraction is done by pattern analysis in your browser, so confidential agreements are not uploaded. It finds text that matches known clause patterns; it does not understand legal meaning and will miss unusually worded terms. It is not legal advice.",
     steps: [
       ["Paste the contract text", "At least a few paragraphs."],
       ["Run the summary", "Key fields and risk flags are listed."],
@@ -611,7 +611,7 @@ export const aiToolsCopy: ToolCopyMap = {
   },
   "ai-pdf-summarizer": {
     intro:
-      "AI PDF Summarizer reads a PDF and produces a structured overview: key topics, an executive summary, key points and conclusions, along with the page count, word count and estimated reading time. Files up to 20 MB are accepted.\n\nThe summary is extractive. Text is pulled from the PDF in your browser, the most frequent meaningful terms are identified, and the sentences that best represent them are selected. The sentences are the document's own, not newly written, and scanned PDFs without a text layer cannot be summarised.",
+      "PDF Summarizer reads a PDF and produces a structured overview: key topics, an executive summary, key points and conclusions, along with the page count, word count and estimated reading time. Files up to 20 MB are accepted.\n\nThe summary is extractive. Text is pulled from the PDF in your browser, the most frequent meaningful terms are identified, and the sentences that best represent them are selected. The sentences are the document's own, not newly written, and scanned PDFs without a text layer cannot be summarised.",
     steps: [
       ["Upload a PDF", "Text-based, up to 20 MB."],
       ["Read the summary", "Topics, key points and conclusions."],

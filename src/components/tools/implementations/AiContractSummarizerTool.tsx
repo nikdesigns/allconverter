@@ -217,7 +217,7 @@ export function AiContractSummarizerTool() {
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
         <Sparkles className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">AI Contract Summarizer</span>
+        <span className="text-sm font-medium">Contract Summarizer</span>
         <span className="ml-auto text-[10px] text-muted-foreground">NDA · Agreement · Contract</span>
       </div>
 

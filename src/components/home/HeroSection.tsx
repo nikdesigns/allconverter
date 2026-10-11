@@ -20,7 +20,7 @@ const stats = [
 const quickLinks = [
   { label: "PDF Compressor", href: "/tools/pdf-compressor/", icon: FileText },
   { label: "Image Compressor", href: "/tools/image-compressor/", icon: Image },
-  { label: "AI Cover Letter", href: "/tools/ai-cover-letter/", icon: BrainCircuit },
+  { label: "Cover Letter", href: "/tools/ai-cover-letter/", icon: BrainCircuit },
   { label: "GST Calculator", href: "/tools/gst-calculator/", icon: Calculator },
   { label: "MP3 Cutter", href: "/tools/mp3-cutter/", icon: Music },
   { label: "JSON Formatter", href: "/tools/json-formatter/", icon: Code2 },
@@ -112,7 +112,7 @@ export function HeroSection() {
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 150)}
-                placeholder='Search 250+ tools… try "compress PDF", "AI cover letter" or "GST calculator"'
+                placeholder='Search 250+ tools… try "compress PDF", "cover letter" or "GST calculator"'
                 className="flex-1 pl-11 pr-4 py-4 text-sm bg-transparent outline-none text-(--heading) placeholder:text-(--body-subtle)"
               />
               <div className="pr-2">

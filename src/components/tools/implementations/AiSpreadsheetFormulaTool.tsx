@@ -311,7 +311,7 @@ export function AiSpreadsheetFormulaTool() {
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
         <Sparkles className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">AI Spreadsheet Formula Generator</span>
+        <span className="text-sm font-medium">Spreadsheet Formula Generator</span>
       </div>
 
       <div className="p-5 space-y-4">

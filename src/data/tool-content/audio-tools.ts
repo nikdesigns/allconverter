@@ -98,40 +98,40 @@ export const audioToolsCopy: ToolCopyMap = {
   },
   "m4a-to-mp3": {
     intro:
-      "This tool decodes M4A and AAC audio, the format used by iPhone voice memos and Apple Music downloads, and converts it to an uncompressed WAV file. Despite the name, the output is WAV, not MP3: browsers can decode AAC but do not include an MP3 encoder.\n\nWAV is accepted by every audio editor, transcription service and media player, so it solves the same compatibility problem. The trade-off is size, roughly 10 MB per minute of stereo. Conversion is local and nothing is uploaded.",
+      "M4A to MP3 converts M4A and AAC audio, the format used by iPhone voice memos and Apple Music downloads, into MP3 files that play on practically every device. The file is decoded in your browser and re-encoded with the LAME MP3 encoder; nothing is uploaded.\n\nChoose a bitrate from 128 to 320 kbps. 192 kbps is a good balance for music, and 128 kbps is plenty for speech. Because both formats are lossy, converting between them cannot improve the sound, so keep the original if you may need it again.",
     steps: [
       ["Drop an M4A or AAC file", "Voice memos and music files both work."],
-      ["Convert", "The audio is decoded in your browser."],
-      ["Download the WAV", "16-bit PCM."],
+      ["Choose a bitrate", "192 kbps suits most uses."],
+      ["Convert and download", "A real .mp3 file is saved."],
     ],
     faqs: [
-      ["Do I get an MP3 file?", "No. The download is a WAV file."],
+      ["Will the MP3 sound as good as the M4A?", "Very nearly at 192 kbps or above, but a second lossy encode always loses a little."],
       ["Will it open a protected iTunes purchase?", "No. Older DRM-protected .m4p files cannot be decoded."],
-      ["Is quality lost?", "Nothing further is lost; WAV stores exactly what was decoded."],
+      ["Which bitrate should I pick for voice memos?", "128 kbps keeps speech clear at about 1 MB per minute."],
     ],
     uses: [
-      "Opening an iPhone voice memo in an audio editor",
-      "Preparing a recording for a transcription service",
-      "Playing Apple audio on a device that does not support AAC",
+      "Playing an iPhone voice memo on a car stereo",
+      "Sending a recording to someone whose player rejects M4A",
+      "Uploading audio to a platform that accepts only MP3",
     ],
   },
   "wav-to-mp3": {
     intro:
-      "This tool re-exports a WAV file as a standard 16-bit, 44.1 kHz stereo WAV. It does not create an MP3: browsers have no built-in MP3 encoder, so the output stays in WAV format and will not be smaller.\n\nWhat it does do is normalise unusual WAV files. Recordings at 48 or 96 kHz, 24-bit or 32-bit float files, and mono files are converted to the CD-standard layout that every program can read.",
+      "WAV to MP3 compresses uncompressed WAV audio into MP3. A WAV file takes about 10 MB per minute of stereo sound; the same minute as a 192 kbps MP3 is about 1.4 MB, small enough to email or upload quickly.\n\nEncoding is done on your device with the LAME encoder, at a bitrate you choose between 128 and 320 kbps. WAV files at unusual sample rates, such as 96 kHz studio recordings, are converted to 44.1 kHz first because MP3 does not support higher rates.",
     steps: [
-      ["Drop a WAV file", "Any sample rate or bit depth your browser can decode."],
-      ["Convert", "It is re-rendered at 44.1 kHz stereo."],
-      ["Download", "A standard 16-bit WAV."],
+      ["Drop a WAV file", "Any bit depth your browser can decode."],
+      ["Choose a bitrate", "320 kbps for the best quality, 128 kbps for the smallest file."],
+      ["Convert and download", "The MP3 is saved to your device."],
     ],
     faqs: [
-      ["Does this produce an MP3?", "No. The output is WAV. To make an MP3, use a desktop encoder such as Audacity or ffmpeg."],
-      ["Will the file be smaller?", "Only if the original used a higher sample rate or bit depth."],
-      ["Why standardise to 44.1 kHz?", "It is the CD standard and the most widely supported rate."],
+      ["How much smaller is the MP3?", "At 192 kbps it is roughly one seventh of a CD-quality WAV; at 128 kbps about one eleventh."],
+      ["Can people hear the difference from WAV?", "At 256 to 320 kbps most listeners cannot on normal equipment."],
+      ["Should I keep the WAV?", "Yes. Keep it as your master and make MP3 copies for sharing."],
     ],
     uses: [
-      "Fixing a WAV that a program refuses to open",
-      "Matching sample rates across files in a project",
-      "Converting 24-bit recordings for older software",
+      "Sharing a recording by email or chat",
+      "Uploading a podcast episode",
+      "Putting studio exports on a phone or music player",
     ],
   },
   "mp3-to-wav": {
@@ -155,20 +155,20 @@ export const audioToolsCopy: ToolCopyMap = {
   },
   "mp4-to-mp3": {
     intro:
-      "This tool takes the soundtrack from an MP4 video and saves it as a WAV audio file. The download is WAV, not MP3, because browsers cannot encode MP3; WAV plays everywhere and can be converted later if you need a smaller file.\n\nThe video is read on your device and only its audio track is decoded, which is much quicker than playing the video through. Nothing is uploaded, so it is suitable for private recordings such as meetings.",
+      "MP4 to MP3 takes the soundtrack from an MP4 video and saves it as an MP3 file. The video is read on your device, only its audio track is decoded, and the result is encoded to MP3 with the LAME encoder at the bitrate you select.\n\nBecause nothing is uploaded, it is suitable for private recordings such as meetings and lectures. Decoding the audio track directly is much quicker than playing the video through, though long videos need enough free memory to hold the decoded sound.",
     steps: [
       ["Drop an MP4 file", "The video stays on your device."],
-      ["Convert", "The audio track is decoded."],
-      ["Download the WAV", "Audio only."],
+      ["Choose a bitrate", "128 kbps for speech, 192 kbps or more for music."],
+      ["Convert and download", "An audio-only .mp3 is saved."],
     ],
     faqs: [
-      ["Is the output an MP3?", "No. It is an uncompressed WAV file."],
       ["Why did decoding fail?", "The video may have no audio track or use a codec your browser cannot decode. Very large files can also exceed available memory."],
       ["Can I extract audio from a YouTube link?", "No. The tool works on files you already have."],
+      ["How big will the MP3 be?", "About 1 MB per minute at 128 kbps and 1.4 MB per minute at 192 kbps."],
     ],
     uses: [
       "Saving the audio of a recorded meeting",
-      "Getting a voice track for transcription",
+      "Listening to a lecture video as audio",
       "Pulling music from your own video footage",
     ],
   },
@@ -231,78 +231,78 @@ export const audioToolsCopy: ToolCopyMap = {
   },
   "mp3-to-aac": {
     intro:
-      "This tool decodes an MP3 and re-encodes it with whatever audio encoder your browser provides. Most browsers cannot produce a raw AAC file, and in that case the result is saved as WebM audio using the Opus codec, with a .webm extension so the file is labelled correctly.\n\nOpus is a modern codec that sounds as good as AAC at the same bitrate and plays in every current browser and in VLC. If you specifically need an .aac or .m4a file, for example for an older Apple device, use a desktop encoder instead. Encoding runs in real time.",
+      "MP3 to AAC re-encodes MP3 audio as AAC, saved as a standard .aac file. Encoding uses the AAC encoder built into your browser, which is available in Chrome, Edge and recent versions of Safari; if your browser has no AAC encoder the tool tells you instead of producing a mislabelled file.\n\nAAC is the format Apple devices, YouTube and most streaming services use, and it sounds a little better than MP3 at the same bitrate. Converting an existing MP3 cannot add quality back, so this is for compatibility, not improvement.",
     steps: [
       ["Drop an MP3", "It stays on your device."],
-      ["Convert", "Encoding takes as long as the track plays."],
-      ["Preview and download", "The file extension shows the real format."],
+      ["Choose a bitrate", "Match or slightly exceed the MP3's own bitrate."],
+      ["Convert and download", "Saved as a .aac file."],
     ],
     faqs: [
-      ["Will I get an .aac file?", "Only if your browser can encode AAC. Otherwise you get WebM Opus, and the tool says so."],
-      ["Does converting MP3 to another lossy format improve quality?", "No. Each lossy re-encode loses a little more."],
-      ["Why does it take so long?", "The browser's recorder works in real time."],
+      ["Which browsers can do this?", "Chrome and Edge on desktop, and recent Safari. Firefox currently cannot encode AAC."],
+      ["Does converting MP3 to AAC improve quality?", "No. Each lossy re-encode loses a little."],
+      ["Is .aac the same as .m4a?", "The audio is the same AAC. An .m4a file wraps it in an MP4 container; .aac is the raw stream, which most players also accept."],
     ],
     uses: [
-      "Trying out a smaller, modern audio format",
-      "Preparing audio for web playback",
-      "Checking whether your browser supports AAC encoding",
+      "Preparing audio for a device or app that prefers AAC",
+      "Matching the format of an existing AAC library",
+      "Testing AAC playback in a project",
     ],
   },
   "aac-to-mp3": {
     intro:
-      "This tool decodes AAC and M4A audio and re-encodes it in your browser. Browsers do not include an MP3 encoder, so the output is saved as WebM audio with the Opus codec and a .webm extension; it is not an MP3 file.\n\nWebM Opus plays in all modern browsers, on Android, and in VLC, but not on some car stereos and older players that expect MP3. For a true MP3, convert with a desktop application such as Audacity or ffmpeg. Encoding takes as long as the audio lasts.",
+      "AAC to MP3 converts AAC and M4A audio into MP3, the format that every player, car stereo and editing program understands. The file is decoded in your browser and encoded with the LAME MP3 encoder, so it is never uploaded.\n\nPick a bitrate between 128 and 320 kbps. AAC is the more efficient codec, so to keep the sound close to the original choose an MP3 bitrate somewhat higher than the AAC file's own.",
     steps: [
       ["Drop an AAC or M4A file", "Processed locally."],
-      ["Convert", "Runs in real time."],
-      ["Preview and download", "Saved as .webm."],
+      ["Choose a bitrate", "192 kbps or higher for music."],
+      ["Convert and download", "A real .mp3 file is saved."],
     ],
     faqs: [
-      ["Is the result an MP3?", "No. It is WebM Opus, and the download is named accordingly."],
-      ["Will it play on my device?", "On computers and Android phones, yes. Older hardware players may not support it."],
-      ["How do I get a real MP3?", "Use Audacity, ffmpeg or another desktop encoder."],
+      ["What MP3 bitrate matches a 128 kbps AAC?", "Around 192 kbps is a safe choice."],
+      ["Will tags such as title and artist carry over?", "No. The audio is converted; add tags afterwards in your music app."],
+      ["Why is the MP3 larger than the AAC?", "You chose a higher bitrate than the source used. Size depends only on bitrate and length."],
     ],
     uses: [
-      "Re-encoding an M4A for a web page",
-      "Shrinking a large audio file",
-      "Converting a voice memo for playback in a browser",
+      "Playing downloaded audio on an older MP3 player",
+      "Importing audio into software that rejects AAC",
+      "Standardising a mixed music folder on MP3",
     ],
   },
   "flac-to-mp3": {
     intro:
-      "This tool decodes a lossless FLAC file and re-encodes it to a much smaller lossy file in your browser. Because browsers have no MP3 encoder, the output is WebM audio using the Opus codec, saved with a .webm extension, not an MP3.\n\nOpus at typical browser settings is far smaller than FLAC and sounds transparent to most listeners. It plays in browsers, on Android and in VLC. If your player only reads MP3, use a desktop encoder to make one. Conversion runs in real time.",
+      "FLAC to MP3 turns lossless FLAC audio into MP3. A FLAC album is perfect for archiving but large, and many phones, cars and portable players will not play it; an MP3 copy at 256 or 320 kbps is a fraction of the size and sounds the same to most listeners.\n\nYour browser decodes the FLAC and the LAME encoder writes the MP3, all on your device. High-resolution files above 48 kHz are converted to 44.1 kHz because MP3 does not support higher sample rates.",
     steps: [
       ["Drop a FLAC file", "It is decoded on your device."],
-      ["Convert", "Takes as long as the track."],
-      ["Preview and download", "Saved as .webm."],
+      ["Choose a bitrate", "320 kbps keeps the most detail."],
+      ["Convert and download", "A real .mp3 file is saved."],
     ],
     faqs: [
-      ["Do I get an MP3?", "No. The file is WebM Opus."],
-      ["How much smaller is the result?", "Often a tenth of the FLAC's size or less."],
+      ["How much smaller is the result?", "A 320 kbps MP3 is typically a third of the FLAC's size; 192 kbps about a fifth."],
       ["Should I keep the FLAC?", "Yes. Keep the lossless original as your master and make lossy copies from it."],
+      ["Does it handle 24-bit FLAC?", "Yes. It is decoded and encoded at 16-bit precision, which is all MP3 can use."],
     ],
     uses: [
       "Making a compact copy of a lossless album for a phone",
+      "Playing a FLAC collection in a car that reads only MP3",
       "Sharing a track without sending a huge file",
-      "Creating a web-playable version of a master",
     ],
   },
   "mp3-to-flac": {
     intro:
-      "This tool decodes an MP3 and re-encodes it in the browser. Browsers cannot write FLAC files, so the output is WebM audio with the Opus codec and a .webm extension; it is not a FLAC.\n\nIt is also worth knowing that converting MP3 to a lossless format never restores quality. The detail discarded when the MP3 was made cannot be recovered, so a FLAC made from an MP3 is simply a much larger file with the same sound. If you need lossless audio, go back to the original source.",
+      "MP3 to FLAC decodes an MP3 and stores the result in a genuine FLAC file, written by a FLAC encoder that runs in your browser. The output is 16-bit lossless audio that any FLAC player or editor will open.\n\nBe clear about what this achieves. FLAC preserves exactly what the MP3 decodes to, but the detail discarded when the MP3 was made cannot be recovered, so the file gets several times larger without sounding better. Convert when a program or device requires FLAC input, not to improve quality.",
     steps: [
       ["Drop an MP3", "Processed locally."],
-      ["Convert", "Runs in real time."],
-      ["Preview and download", "Saved as .webm."],
+      ["Convert", "Encoding takes a few seconds."],
+      ["Download the FLAC", "A standard .flac file."],
     ],
     faqs: [
-      ["Will I get a FLAC file?", "No. The browser saves WebM Opus."],
       ["Does MP3 to FLAC improve sound quality?", "No. Lost detail cannot be recreated."],
-      ["When is a real FLAC conversion useful?", "Only when software strictly requires FLAC input. Use a desktop tool for that."],
+      ["Why is the FLAC so much bigger?", "It stores every decoded sample exactly, typically at 50 to 70 percent of WAV size."],
+      ["When is this conversion useful?", "When software or hardware accepts only FLAC, or to stop further quality loss while editing."],
     ],
     uses: [
-      "Understanding what lossy-to-lossless conversion can and cannot do",
-      "Re-encoding an MP3 for web playback",
-      "Testing a browser's audio encoding",
+      "Feeding audio to a tool that only accepts FLAC",
+      "Editing without another round of lossy compression",
+      "Keeping a consistent format in a FLAC library",
     ],
   },
   "audio-noise-reducer": {

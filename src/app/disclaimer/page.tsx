@@ -205,17 +205,18 @@ export default function DisclaimerPage() {
           badge="Important"
         >
           <Callout>
-            AI tools on this platform generate content using language models. All AI-generated output must
+            The writing and analysis tools on this platform generate content from templates and rules in your
+            browser; they are not language models. All generated output must
             be independently reviewed and verified before use. Do not publish, submit, or act on
-            AI-generated content without applying your own judgment and, where appropriate, professional
+            generated content without applying your own judgment and, where appropriate, professional
             review.
           </Callout>
           <p>
-            Our AI tools — including but not limited to the AI Cover Letter Generator, AI LinkedIn Profile
+            Our content tools — including but not limited to the Cover Letter Generator, LinkedIn Profile
             Optimizer, Blog Outline Generator, Grammar Checker, Text Summariser, Email Generator, SQL
             Generator, Code Explainer, Proposal Generator, Business Plan Generator, and all related
-            content-generation tools — produce outputs based on patterns in training data and the context
-            you provide.
+            content-generation tools — produce outputs from fixed templates and pattern rules combined with
+            the details you provide.
           </p>
           <p>
             AI-generated content may:

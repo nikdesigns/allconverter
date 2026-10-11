@@ -206,20 +206,34 @@ function RedirectChecker() {
       const data = await res.json();
       if (data.status !== "success") { setError("Could not check URL. Ensure it is publicly accessible."); return; }
 
+      // Microlink reports every hop it followed, with the real status code.
+      const kinds: Record<number, string> = {
+        301: "Permanent redirect", 302: "Temporary redirect", 303: "See other",
+        307: "Temporary redirect (method kept)", 308: "Permanent redirect (method kept)",
+      };
       const chain: Hop[] = [];
-      const finalUrl = data.data?.url ?? u;
-      if (finalUrl !== u) {
-        chain.push({ url: u,        status: 301, type: "Redirect" });
-        chain.push({ url: finalUrl, status: 200, type: "Final destination" });
-      } else {
-        chain.push({ url: u, status: 200, type: "No redirect — direct hit" });
+      const finalUrl: string = data.data?.url ?? u;
+      const reported: { statusCode?: number; url?: string }[] = Array.isArray(data.redirects) ? data.redirects : [];
+      for (const r of reported) {
+        if (!r.url) continue;
+        const code = r.statusCode ?? 0;
+        chain.push({ url: r.url, status: code, type: kinds[code] ?? "Redirect" });
       }
+      // The service did not list hops but the address changed: show the move without inventing a status code.
+      if (!chain.length && finalUrl.replace(/\/$/, "") !== u.replace(/\/$/, "")) {
+        chain.push({ url: u, status: 0, type: "Redirect (status code not reported)" });
+      }
+      chain.push({
+        url: finalUrl,
+        status: typeof data.statusCode === "number" ? data.statusCode : 200,
+        type: chain.length ? "Final destination" : "No redirect — loads directly",
+      });
       setHops(chain);
     } catch { setError("Failed to check redirects. The URL may be blocking external requests."); }
     finally { setLoading(false); }
   };
 
-  const statusColor = (s: number) => s < 300 ? "text-emerald-400" : s < 400 ? "text-amber-400" : "text-rose-400";
+  const statusColor = (s: number) => s === 0 ? "text-muted-foreground" : s < 300 ? "text-emerald-400" : s < 400 ? "text-amber-400" : "text-rose-400";
 
   return (
     <div className="space-y-4">
@@ -236,10 +250,13 @@ function RedirectChecker() {
 
       {hops && (
         <div className="space-y-2">
-          <div className="text-xs text-muted-foreground">{hops.length - 1} redirect{hops.length !== 2 ? "s" : ""} found</div>
+          <div className="text-xs text-muted-foreground">
+            {hops.length - 1} redirect{hops.length !== 2 ? "s" : ""} found
+            {hops.length > 3 && " — chains this long slow pages down; point the first URL straight at the final one"}
+          </div>
           {hops.map((h, i) => (
             <div key={i} className="flex items-start gap-3 px-4 py-3 rounded-xl border border-border">
-              <div className={cn("text-sm font-bold shrink-0 w-8", statusColor(h.status))}>{h.status}</div>
+              <div className={cn("text-sm font-bold shrink-0 w-8", statusColor(h.status))}>{h.status || "→"}</div>
               <div className="flex-1 min-w-0">
                 <div className="text-xs text-muted-foreground">{h.type}</div>
                 <div role="button" tabIndex={0} onKeyDown={activateOnKey} className="text-sm font-mono truncate cursor-pointer hover:text-primary" onClick={() => copy(h.url)}>{h.url}</div>

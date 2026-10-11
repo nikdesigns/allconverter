@@ -326,21 +326,21 @@ export const seoToolsCopy: ToolCopyMap = {
   },
   "redirect-checker": {
     intro:
-      "Redirect Checker shows where a URL ends up. Enter an address and the tool requests it through an external service, follows any redirects and reports the starting URL and the final destination, or confirms that the URL loads directly.\n\nIt answers the practical question of whether an old link reaches the right page. It reports the start and end points and does not list every intermediate hop or the exact status code of each one. Because the request is made by a third-party service, sites that block automated requests cannot be checked.",
+      "Redirect Checker traces the path a URL takes to its final destination. Enter an address and the tool requests it through an external service, follows every redirect and lists each hop in order with its HTTP status code: 301 and 308 for permanent moves, 302 and 307 for temporary ones. The last row shows the final URL and the status it returned.\n\nUse it to confirm that an old link reaches the right page in a single step, and to find chains where one redirect leads to another. Because the request is made by a third-party service running a real browser, sites that block automated visitors cannot be checked, and an http to https hop on a site that enforces HTTPS in the browser can be reported as 307.",
     steps: [
-      ["Enter a URL", "Include https://."],
+      ["Enter a URL", "Include http:// or https://."],
       ["Run the check", "Wait while redirects are followed."],
-      ["Compare start and finish", "Confirm the destination is the page you expect."],
+      ["Read the chain", "Check each status code and that the final URL is the page you expect."],
     ],
     faqs: [
-      ["Does it show whether a redirect is 301 or 302?", "No. For exact status codes use your browser's network panel or the command curl -I."],
-      ["What is the difference between 301 and 302?", "301 is permanent and passes ranking signals to the new URL. 302 is temporary."],
-      ["Why can't a URL be checked?", "The site is blocking the external service, or it is not publicly reachable."],
+      ["What is the difference between 301 and 302?", "301 is permanent and passes ranking signals to the new URL. 302 is temporary, and search engines may keep the old URL indexed."],
+      ["How many redirects are too many?", "Aim for one. Every extra hop adds a round trip, and Googlebot stops following after about ten."],
+      ["Why can't a URL be checked?", "The site is blocking the external service, timing out, or is not publicly reachable."],
     ],
     uses: [
       "Verifying redirects after a site migration",
       "Finding where a shortened link leads",
-      "Checking that http and non-www versions resolve to one address",
+      "Checking that http and non-www versions reach one address in a single hop",
     ],
   },
   "canonical-tag-checker": {

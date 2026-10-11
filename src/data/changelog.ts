@@ -141,13 +141,13 @@ export const releases: Release[] = [
     summary:
       "AI Tools category expanded with 8 new tools. Audio Tools category launched. All AI tools run entirely in-browser with no API key required.",
     changes: [
-      { type: "tool", text: "AI Cover Letter Generator — structured template-based generation, role, company, and skills input" },
-      { type: "tool", text: "AI LinkedIn Profile Optimizer" },
+      { type: "tool", text: "Cover Letter Generator — structured template-based generation, role, company, and skills input" },
+      { type: "tool", text: "LinkedIn Profile Optimizer" },
       { type: "tool", text: "AI Cold Email Writer" },
       { type: "tool", text: "AI Blog Outline Generator" },
-      { type: "tool", text: "AI SQL Generator" },
-      { type: "tool", text: "AI Code Explainer" },
-      { type: "tool", text: "AI Product Description Generator" },
+      { type: "tool", text: "SQL Query Generator" },
+      { type: "tool", text: "Code Explainer" },
+      { type: "tool", text: "Product Copy Generator" },
       { type: "tool", text: "Audio Converter — MP3, WAV, AAC, FLAC, M4A" },
       { type: "tool", text: "Audio Compressor with quality and bitrate controls" },
       { type: "tool", text: "Audio Trimmer with waveform preview" },
@@ -347,7 +347,7 @@ export const releases: Release[] = [
 export const roadmap = {
   planned: [
     { text: "Batch file processing — convert or compress multiple files in one operation", priority: "high" as const },
-    { text: "AI Resume Analyzer — score and improve resumes against job descriptions", priority: "high" as const },
+    { text: "Resume Analyzer — score and improve resumes against job descriptions", priority: "high" as const },
     { text: "Advanced site search — filters by category, input type, and file format", priority: "high" as const },
     { text: "Progressive Web App (PWA) — install tools for offline access", priority: "medium" as const },
     { text: "More AI writing tools — proposal generator, performance review writer, job description writer", priority: "medium" as const },

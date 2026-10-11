@@ -144,7 +144,7 @@ export function AiPdfChatTool() {
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
         <div className="flex items-center gap-2">
           <FileText className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium">AI PDF Chat</span>
+          <span className="text-sm font-medium">PDF Q&A</span>
         </div>
         {pdfText && (
           <div className="flex items-center gap-3">

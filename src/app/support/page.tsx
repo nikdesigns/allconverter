@@ -50,8 +50,8 @@ const costs = [
     icon: Sparkles,
     color: "text-violet-500",
     bg: "bg-violet-500/10",
-    title: "AI Service Costs",
-    description: "Third-party API usage for AI-powered tools: cover letter generator, SQL builder, LinkedIn optimiser, code explainer, and resume analyser.",
+    title: "Testing & Maintenance",
+    description: "Keeping 250+ tools working as browsers change: fixing bugs, checking results, and updating the libraries the tools depend on.",
   },
   {
     icon: RefreshCw,
@@ -83,7 +83,7 @@ const faqs = [
   },
   {
     q: "What does my contribution actually pay for?",
-    a: "Hosting, CDN bandwidth, AI API costs for the AI-powered tools, domain renewal, and engineering time for new features. No money goes to advertising, investors, or a team — it's a one-person project.",
+    a: "Hosting, CDN bandwidth, domain renewal, and engineering time for maintenance for new features. No money goes to advertising, investors, or a team — it's a one-person project.",
   },
   {
     q: "Is there a minimum contribution amount?",

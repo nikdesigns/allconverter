@@ -39,6 +39,7 @@ const SmartBackgroundRemoverTool = lazy(() => import("./implementations/SmartBac
 const SvgToPngTool = lazy(() => import("./implementations/SvgToPngTool").then(m => ({ default: m.SvgToPngTool })));
 const AvifImageTool = lazy(() => import("./implementations/AvifImageTool").then(m => ({ default: m.AvifImageTool })));
 const ImageDpiConverterTool = lazy(() => import("./implementations/ImageDpiConverterTool").then(m => ({ default: m.ImageDpiConverterTool })));
+const FormPhotoResizerTool = lazy(() => import("./implementations/FormPhotoResizerTool").then(m => ({ default: m.FormPhotoResizerTool })));
 const SvgOptimizerTool = lazy(() => import("./implementations/SvgOptimizerTool").then(m => ({ default: m.SvgOptimizerTool })));
 const ExifTool = lazy(() => import("./implementations/ExifTool").then(m => ({ default: m.ExifTool })));
 const FaviconGeneratorTool = lazy(() => import("./implementations/FaviconGeneratorTool").then(m => ({ default: m.FaviconGeneratorTool })));
@@ -191,6 +192,7 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "jpg-to-avif": AvifImageTool,
   "png-to-avif": AvifImageTool,
   "image-dpi-converter": ImageDpiConverterTool,
+  "photo-signature-resizer": FormPhotoResizerTool,
   "svg-optimizer": SvgOptimizerTool,
   "exif-viewer": ExifTool,
   "exif-remover": ExifTool,

@@ -1,6 +1,27 @@
 import type { ToolCopyMap } from "./types";
 
 export const imageToolsCopy: ToolCopyMap = {
+  "photo-signature-resizer": {
+    intro:
+      "Photo & Signature Resizer prepares an image for an online application form that demands exact dimensions and a file-size range, for example a 3.5 × 4.5 cm photo between 20 and 50 KB, or a signature between 10 and 20 KB. Enter the width and height in centimetres, millimetres, inches or pixels, set the minimum and maximum size in KB, and the tool crops, resizes and compresses the image to fit all of them at once.\n\nZoom and position sliders let you frame the face or signature inside the crop. The tool then finds the highest JPEG quality that stays under your maximum, and if the file would fall below your minimum it raises the quality to use the spare room. A status line tells you plainly whether the result meets the limits. Your image is processed in the browser and is never uploaded.",
+    steps: [
+      ["Upload the photo or signature scan", "A clear, well-lit JPG or PNG works best."],
+      ["Enter the form's requirements", "Pick a starting preset, then set width, height, unit and the KB range exactly as the form states."],
+      ["Frame it and download", "Adjust zoom and position, check the status line says the limits are met, and download the JPG."],
+    ],
+    faqs: [
+      ["How do I convert centimetres to pixels?", "Pixels equal centimetres divided by 2.54, multiplied by the DPI. At 200 DPI, 3.5 × 4.5 cm is 276 × 354 pixels. The tool does this for you and shows the pixel size."],
+      ["Which DPI should I choose?", "Use the DPI the form specifies. If it gives only centimetres and a KB range, 200 DPI is a common choice; if the file ends up under the minimum size, raise the DPI."],
+      ["Why is my file below the minimum size?", "A small image holds little detail, so even at full quality it may be only a few KB. Increase the DPI or pixel dimensions, or use a sharper original."],
+      ["Are the presets official requirements?", "No. They are common starting points. Requirements differ between forms and change from year to year, so always follow the instructions on the form you are filling in."],
+      ["Can it change the background colour?", "No. It crops, resizes and compresses only. Take the photo against the background the form requires."],
+    ],
+    uses: [
+      "Uploading a photo and signature to an exam or job application portal",
+      "Meeting the size rules of a visa or passport application",
+      "Shrinking a scanned signature for a bank or admission form",
+    ],
+  },
   "image-enhancer": {
     intro:
       "Image Enhancer adjusts a photo with six controls: brightness, contrast, saturation, colour temperature, sharpness and vignette. A split view shows the original on one side and the adjusted version on the other, and you drag the divider to compare.\n\nAuto Enhance reads the image's histogram and sets the sliders for you; it is a rule-based correction, not a generative AI model, so it never invents detail. Six presets (Portrait, Vivid, Landscape, Soft, B & W and Night) give a starting point. The result is exported as a JPG at the quality you choose, with _enhanced added to the name.",
@@ -22,13 +43,14 @@ export const imageToolsCopy: ToolCopyMap = {
   },
   "image-compressor": {
     intro:
-      "Image Compressor reduces image file sizes by re-encoding them at a quality level you set with a slider from 5 to 100. Results update live as you move it, with the original and new size shown for each file, so you can stop at the point where the saving is good and the image still looks right.\n\nYou can add several images, optionally cap the width in pixels, and choose the output format. On the Auto setting, JPG and WebP inputs become JPG and PNG inputs become WebP, because PNG itself has no quality setting to trade against size. Animated GIFs are flattened to a single frame.",
+      "Image Compressor reduces image file sizes by re-encoding them at a quality level you set with a slider from 5 to 100. Results update live as you move it, with the original and new size shown for each file, so you can stop at the point where the saving is good and the image still looks right.\n\nIf you have a size limit to meet, switch to target-size mode and enter the limit in KB, such as 50, 100 or 200 KB. Each image is then saved at the highest quality that fits under it, and its dimensions are reduced only when quality alone is not enough.\n\nYou can add several images, optionally cap the width in pixels, and choose the output format. On the Auto setting, JPG and WebP inputs become JPG and PNG inputs become WebP, because PNG itself has no quality setting to trade against size. Animated GIFs are flattened to a single frame.",
     steps: [
       ["Add images", "Drop JPG, PNG, WebP or GIF files. You can add more than one."],
-      ["Tune quality and size", "Move the quality slider, and set a maximum width if the image is larger than it needs to be."],
-      ["Download", "Save files one at a time or use Download All."],
+      ["Tune quality or set a target", "Move the quality slider, or choose target size and enter a limit in KB. Set a maximum width if the image is larger than it needs to be."],
+      ["Download", "Save files one at a time, or download them all in one ZIP."],
     ],
     faqs: [
+      ["How do I compress an image to 100 KB or 50 KB?", "Choose To a target size, enter the limit in KB and add your image. The tool searches for the best quality that fits and tells you if the limit cannot be reached."],
       ["Why did my PNG turn into a WebP?", "On Auto, PNGs are saved as WebP because that is where the size reduction comes from. Choose PNG as the output format to keep the type, though the file may not get smaller."],
       ["What quality should I use?", "Between 70 and 85 is usually indistinguishable from the original for photos. Go lower for thumbnails."],
       ["Does it keep animation in GIFs?", "No. Only the first frame is processed."],

@@ -3,13 +3,14 @@ import type { ToolCopyMap } from "./types";
 export const pdfToolsCopy: ToolCopyMap = {
   "pdf-compressor": {
     intro:
-      "PDF Compressor makes a PDF smaller by re-encoding the photos and scans inside it, which is where almost all of a large PDF's size comes from. Text, fonts and vector drawings are never touched, so the document stays sharp, searchable and selectable.\n\nThree levels are offered. Lossless only repacks the file's internal structure and changes nothing visible. Balanced re-encodes JPEG images at good quality and limits them to 2,000 pixels on the longest side. Smallest uses stronger compression and a 1,400 pixel limit. Everything runs in your browser, and if the result would not be smaller you get the original back.",
+      "PDF Compressor makes a PDF smaller by re-encoding the photos and scans inside it, which is where almost all of a large PDF's size comes from. Text, fonts and vector drawings are never touched, so the document stays sharp, searchable and selectable.\n\nThree levels are offered. Lossless only repacks the file's internal structure and changes nothing visible. Balanced re-encodes JPEG images at good quality and limits them to 2,000 pixels on the longest side. Smallest uses stronger compression and a 1,400 pixel limit. A fourth option, Target size, takes a limit such as 200 KB or 1 MB and compresses the images only as far as needed to get under it. Everything runs in your browser, and if the result would not be smaller you get the original back.",
     steps: [
       ["Add your PDF", "Drop one PDF onto the upload area or click it to choose a file."],
       ["Pick a level", "Lossless for contracts and archives, Balanced for everyday sharing, Smallest for email limits and web uploads."],
       ["Compare and download", "Check the before and after sizes and how many images were re-encoded, then download the copy named with _compressed."],
     ],
     faqs: [
+      ["How do I compress a PDF to 200 KB or 1 MB?", "Choose Target size, enter the limit and compress. The tool steps through stronger image settings and stops at the first one that fits. If the limit cannot be reached, it gives you the smallest version and says so."],
       ["How much smaller will my PDF get?", "It depends on what is inside. Scans and photo-heavy PDFs often shrink by half or more on Balanced. A text-only PDF has no images to compress, so it changes by a few percent at most."],
       ["Will text become blurry?", "No. Only embedded photos are re-encoded. Text and vector graphics are stored separately and are copied unchanged."],
       ["Why were some images not re-encoded?", "Only standard RGB and greyscale JPEG images are processed. CMYK print images, PNG-style images and any image that would not end up at least 10 percent smaller are left exactly as they were."],

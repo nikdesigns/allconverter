@@ -8,6 +8,7 @@ import { Download, Trash2, ImageDown, Layers } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ProcessingStatus, useProcessing } from "@/components/processing";
+import { compressToTarget, loadImage } from "@/lib/target-size";
 
 interface CompressedFile {
   original: File;
@@ -17,6 +18,8 @@ interface CompressedFile {
   savings: number;
   width: number;
   height: number;
+  /** Target-size mode only: false when the limit could not be reached. */
+  met?: boolean;
 }
 
 function compressImage(
@@ -77,6 +80,8 @@ export function ImageCompressorTool() {
   const [maxWidth, setMaxWidth]         = useState("");
   const [outputFormat, setOutputFormat] = useState("auto");
   const [results, setResults]           = useState<CompressedFile[]>([]);
+  const [mode, setMode]                 = useState<"quality" | "target">("quality");
+  const [targetKb, setTargetKb]         = useState("100");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const proc = useProcessing({ category: "image" });
@@ -99,6 +104,28 @@ export function ImageCompressorTool() {
       const file = files[idx]!;
       proc.setProgress(28 + Math.round(((idx + 0.5) / files.length) * 44));
       try {
+        if (mode === "target") {
+          const limit = Math.max(1, parseFloat(targetKb) || 0) * 1024;
+          // Already under the limit: hand the original back untouched.
+          if (file.size <= limit && !mw && !mime) {
+            const bmp = await loadImage(file);
+            out.push({ original: file, blob: file, url: URL.createObjectURL(file), outputName: file.name, savings: 0, width: bmp.width, height: bmp.height, met: true });
+            bmp.close();
+            continue;
+          }
+          const bmp = await loadImage(file);
+          const targetMime = mime === "image/webp" ? "image/webp" : "image/jpeg";
+          const res = await compressToTarget(bmp, { maxBytes: limit, mime: targetMime, maxDimension: mw });
+          bmp.close();
+          out.push({
+            original: file, blob: res.blob,
+            url: URL.createObjectURL(res.blob),
+            outputName: file.name.replace(/\.[^.]+$/, `_${Math.round(limit / 1024)}kb.${extMap[targetMime]}`),
+            savings: Math.round(((file.size - res.blob.size) / file.size) * 100),
+            width: res.width, height: res.height, met: res.met,
+          });
+          continue;
+        }
         const { blob, w, h } = await compressImage(file, quality, mw, mime);
         const savings = Math.round(((file.size - blob.size) / file.size) * 100);
         // Determine actual output mime (auto for PNG → webp)
@@ -139,7 +166,7 @@ export function ImageCompressorTool() {
       },
       { label: "Files Processed", after: `${out.length}` },
     ]);
-  }, [files, quality, maxWidth, outputFormat, proc]);
+  }, [files, quality, maxWidth, outputFormat, mode, targetKb, proc]);
 
   // Auto-recompress whenever settings or files change (debounced 350ms)
   useEffect(() => {
@@ -148,7 +175,7 @@ export function ImageCompressorTool() {
     debounceRef.current = setTimeout(runCompress, 350);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files, quality, maxWidth, outputFormat]);
+  }, [files, quality, maxWidth, outputFormat, mode, targetKb]);
 
   const handleFiles = (newFiles: File[]) => {
     setFiles(p => [...p, ...newFiles]);
@@ -162,11 +189,22 @@ export function ImageCompressorTool() {
     proc.reset();
   };
 
-  const downloadAll = () =>
-    results.forEach(r => {
-      const a = document.createElement("a");
-      a.href = r.url; a.download = r.outputName; a.click();
+  // One ZIP instead of a burst of separate downloads, which browsers often block.
+  const downloadAll = async () => {
+    const { default: JSZip } = await import("jszip");
+    const zip = new JSZip();
+    const used = new Set<string>();
+    results.forEach((r) => {
+      let name = r.outputName;
+      for (let n = 2; used.has(name); n++) name = r.outputName.replace(/(\.[^.]+)$/, `-${n}$1`);
+      used.add(name);
+      zip.file(name, r.blob);
     });
+    const blob = await zip.generateAsync({ type: "blob", compression: "STORE" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "compressed-images.zip"; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  };
 
   const totalOrig  = files.reduce((s, f) => s + f.size, 0);
   const totalComp  = results.reduce((s, r) => s + r.blob.size, 0);
@@ -230,8 +268,43 @@ export function ImageCompressorTool() {
               </div>
             </div>
 
+            {/* Mode: by quality, or to a file-size limit */}
+            <div className="grid grid-cols-2 gap-2" role="group" aria-label="Compression mode">
+              {([["quality", "By quality"], ["target", "To a target size"]] as const).map(([m, label]) => (
+                <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}
+                  className={cn("h-9 rounded-xl border text-xs font-medium transition-all",
+                    mode === m ? "border-primary/40 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground")}>
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {mode === "target" && (
+              <div>
+                <label htmlFor="target-kb" className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Maximum file size</label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex items-center gap-1.5">
+                    <input id="target-kb" type="number" min={1} value={targetKb}
+                      onChange={e => setTargetKb(e.target.value)}
+                      className="w-24 h-9 px-3 rounded-xl border border-input bg-background text-sm" />
+                    <span className="text-sm text-muted-foreground">KB</span>
+                  </div>
+                  {[20, 50, 100, 200, 500, 1024].map(kb => (
+                    <button key={kb} type="button" onClick={() => setTargetKb(String(kb))}
+                      className={cn("h-8 px-2.5 rounded-lg border text-xs transition-all",
+                        targetKb === String(kb) ? "border-primary/40 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground")}>
+                      {kb >= 1024 ? "1 MB" : `${kb} KB`}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-2">
+                  Each image is saved at the highest quality that fits. Dimensions are reduced only if quality alone is not enough. Output is JPEG, or WebP if selected above.
+                </p>
+              </div>
+            )}
+
             {/* Quality slider */}
-            <div>
+            <div className={mode === "target" ? "hidden" : undefined}>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Quality</label>
                 <div className="flex items-center gap-2.5">
@@ -301,6 +374,11 @@ export function ImageCompressorTool() {
                                 </span>
                               )}
                               <span className="text-[10px] text-muted-foreground">{r.width}×{r.height}px</span>
+                              {r.met === false && (
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full text-rose-600 dark:text-rose-400 bg-rose-500/10">
+                                  Could not reach target
+                                </span>
+                              )}
                               <div className="hidden sm:flex flex-1 max-w-25 h-1.5 rounded-full bg-muted overflow-hidden">
                                 <div className={cn(
                                   "h-full rounded-full transition-all duration-500",
@@ -340,7 +418,7 @@ export function ImageCompressorTool() {
                   {totalSaved > 0 && <span className="font-bold text-emerald-500">({totalSaved}% saved)</span>}
                 </div>
                 <Button variant="outline" onClick={downloadAll} className="gap-1.5 h-8 text-xs">
-                  <Download className="w-3.5 h-3.5" /> Download All
+                  <Download className="w-3.5 h-3.5" /> Download all (ZIP)
                 </Button>
               </div>
             )}

@@ -8,13 +8,25 @@ import { Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { ProcessingStatus, useProcessing } from "@/components/processing";
 
-type Level = "low" | "medium" | "high";
+type Level = "low" | "medium" | "high" | "target";
 
 const LEVELS: Record<Level, { label: string; hint: string; image?: { quality: number; maxDimension: number } }> = {
   low:    { label: "Lossless", hint: "No quality change" },
   medium: { label: "Balanced", hint: "Images at good quality", image: { quality: 0.72, maxDimension: 2000 } },
   high:   { label: "Smallest", hint: "Images reduced further", image: { quality: 0.5, maxDimension: 1400 } },
+  target: { label: "Target size", hint: "Fit under a limit" },
 };
+
+/** Settings tried in order, gentlest first, when compressing to a size limit. */
+const TARGET_LADDER = [
+  { quality: 0.8,  maxDimension: 2400 },
+  { quality: 0.7,  maxDimension: 2000 },
+  { quality: 0.6,  maxDimension: 1600 },
+  { quality: 0.5,  maxDimension: 1300 },
+  { quality: 0.4,  maxDimension: 1100 },
+  { quality: 0.32, maxDimension: 900 },
+  { quality: 0.25, maxDimension: 700 },
+];
 
 export function PdfCompressorTool() {
   const [file, setFile] = useState<File | null>(null);
@@ -23,6 +35,7 @@ export function PdfCompressorTool() {
   const [level, setLevel] = useState<Level>("medium");
   const [processing, setProcessing] = useState(false);
   const [note, setNote] = useState("");
+  const [targetKb, setTargetKb] = useState("200");
 
   const proc = useProcessing({ category: "pdf" });
 
@@ -36,34 +49,61 @@ export function PdfCompressorTool() {
     try {
       const { PDFDocument } = await import("pdf-lib");
       const bytes = await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
-      if (doc.isEncrypted) {
+      const probe = await PDFDocument.load(bytes, { ignoreEncryption: true });
+      if (probe.isEncrypted) {
         throw new Error("This PDF is password-protected. Remove the password first, then compress it.");
       }
       proc.advance("processing");
 
       const saveOptions = { useObjectStreams: true, addDefaultPage: false };
-      let images = { found: 0, recompressed: 0, savedBytes: 0 };
+      type ImageSetting = { quality: number; maxDimension: number };
 
-      if (level !== "low") {
-        // Balanced and Smallest re-encode embedded photos; text and vectors are untouched.
-        const { recompressPdfImages } = await import("@/lib/pdf-image-compress");
-        images = await recompressPdfImages(doc, LEVELS[level].image!);
+      // One full pass: load a fresh copy, optionally re-encode its photos, and save.
+      const pass = async (image?: ImageSetting) => {
+        const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+        let images = { found: 0, recompressed: 0, savedBytes: 0 };
+        if (image) {
+          const { recompressPdfImages } = await import("@/lib/pdf-image-compress");
+          images = await recompressPdfImages(doc, image);
+          doc.setTitle(""); doc.setAuthor(""); doc.setSubject("");
+          doc.setKeywords([]); doc.setProducer(""); doc.setCreator("");
+        }
+        return { out: await doc.save(saveOptions), images };
+      };
 
-        doc.setTitle("");
-        doc.setAuthor("");
-        doc.setSubject("");
-        doc.setKeywords([]);
-        doc.setProducer("");
-        doc.setCreator("");
+      const limit = Math.max(1, parseFloat(targetKb) || 0) * 1024;
+      let best: Awaited<ReturnType<typeof pass>>;
+      let reached = true;
+
+      if (level !== "target") {
+        best = await pass(LEVELS[level].image);
+      } else if (file.size <= limit) {
+        best = { out: new Uint8Array(bytes), images: { found: 0, recompressed: 0, savedBytes: 0 } };
+      } else {
+        // Step down through stronger settings and stop at the first one that fits,
+        // so the result keeps as much image quality as the limit allows.
+        best = await pass(TARGET_LADDER[0]);
+        // With no photos to re-encode, stronger settings cannot help: one pass is enough.
+        for (let i = 1; i < TARGET_LADDER.length && best.out.length > limit && best.images.found > 0; i++) {
+          proc.setProgress(30 + Math.round((i / TARGET_LADDER.length) * 55));
+          const next = await pass(TARGET_LADDER[i]);
+          if (next.out.length < best.out.length) best = next;
+        }
+        reached = best.out.length <= limit;
       }
 
-      const compressed = await doc.save(saveOptions);
+      const { out: compressed, images } = best;
       // Never hand back a file that is larger than the one that came in.
       const smaller = compressed.length < file.size;
       const blob = smaller ? new Blob([compressed as unknown as BlobPart], { type: "application/pdf" }) : file;
       setNote(
-        !smaller
+        level === "target" && file.size <= limit
+          ? "This PDF is already under your target size, so it is returned unchanged."
+          : level === "target" && !reached
+          ? images.found === 0
+            ? `Could not reach ${formatBytes2(limit)}: this PDF has no JPEG photos to compress, and text and vector content cannot be made smaller. Splitting it into parts is the way to get under the limit.`
+            : `Could not reach ${formatBytes2(limit)} even at the strongest image setting. This is the smallest version; splitting the PDF into parts will get each part under the limit.`
+          : !smaller
           ? "This PDF is already well optimised, so the original is returned unchanged."
           : level === "low"
           ? "Lossless: the file structure was repacked. Choose Balanced or Smallest to also compress images."
@@ -76,11 +116,12 @@ export function PdfCompressorTool() {
       const saved = Math.round((1 - blob.size / file.size) * 100);
       proc.complete([
         { label: "Original Size", after: formatBytes2(file.size) },
-        { label: "Compressed Size", after: formatBytes2(blob.size), warn: blob.size >= file.size },
+        { label: "Compressed Size", after: formatBytes2(blob.size), warn: blob.size >= file.size || !reached },
         { label: "Space Saved", after: saved > 0 ? `${saved}%` : "~0%", highlight: saved > 0 },
         ...(level !== "low" ? [{ label: "Images Re-encoded", after: `${images.recompressed} of ${images.found}` }] : []),
+        ...(level === "target" ? [{ label: "Target", after: reached ? `Under ${formatBytes2(limit)}` : "Not reached", warn: !reached, highlight: reached }] : []),
       ]);
-      toast.success(`Compressed! ${saved > 0 ? `Saved ${saved}%` : "File optimized"}`);
+      toast.success(saved > 0 ? `Compressed! Saved ${saved}%` : "File checked");
     } catch (e) {
       const msg = e instanceof Error && e.message.includes("password") ? e.message : "Failed to compress PDF.";
       proc.error(msg);
@@ -116,8 +157,8 @@ export function PdfCompressorTool() {
 
             <div>
               <label className="text-xs text-muted-foreground mb-2 block">Compression Level</label>
-              <div className="grid grid-cols-3 gap-2">
-                {(["low", "medium", "high"] as const).map((l) => (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {(["low", "medium", "high", "target"] as const).map((l) => (
                   <button key={l} onClick={() => setLevel(l)}
                     aria-pressed={level === l}
                     className={`py-2.5 rounded-xl border text-xs font-medium transition-all ${level===l?"border-primary/40 bg-primary/10 text-primary":"border-border text-muted-foreground hover:text-foreground"}`}>
@@ -127,6 +168,28 @@ export function PdfCompressorTool() {
                 ))}
               </div>
             </div>
+
+            {level === "target" && (
+              <div>
+                <label htmlFor="pdf-target-kb" className="text-xs text-muted-foreground mb-2 block">Maximum file size</label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex items-center gap-1.5">
+                    <input id="pdf-target-kb" type="number" min={1} value={targetKb} onChange={(e) => setTargetKb(e.target.value)}
+                      className="w-24 h-9 px-3 rounded-xl border border-input bg-background text-sm" />
+                    <span className="text-sm text-muted-foreground">KB</span>
+                  </div>
+                  {[100, 200, 500, 1024, 2048].map((kb) => (
+                    <button key={kb} type="button" onClick={() => setTargetKb(String(kb))}
+                      className={`h-8 px-2.5 rounded-lg border text-xs transition-all ${targetKb === String(kb) ? "border-primary/40 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}>
+                      {kb >= 1024 ? `${kb / 1024} MB` : `${kb} KB`}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-2">
+                  Images are compressed only as far as needed to fit, so quality stays as high as the limit allows.
+                </p>
+              </div>
+            )}
 
             <Button onClick={compress} disabled={processing} className="w-full gap-2">
               {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Compressing…</> : "Compress PDF"}

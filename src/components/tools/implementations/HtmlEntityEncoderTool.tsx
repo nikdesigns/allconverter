@@ -110,7 +110,7 @@ export function HtmlEntityEncoderTool() {
             <code className="block">&amp;amp; → &amp;</code>
             <code className="block">&amp;lt; → &lt;</code>
             <code className="block">&amp;gt; → &gt;</code>
-            <code className="block">&amp;quot; → "</code>
+            <code className="block">&amp;quot; → &quot;</code>
           </div>
           <div className="p-3 rounded-xl border border-border bg-muted/10">
             <p className="font-medium text-foreground mb-1">Special chars</p>

@@ -1,7 +1,7 @@
 {
   "name": "AllConverter.tools — Free Online Tools",
   "short_name": "AllConverter",
-  "description": "100+ free online tools for PDF, images, text, developer utilities, and more",
+  "description": "250+ free online tools for PDF, images, text, developer utilities, and more",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0B0B0F",

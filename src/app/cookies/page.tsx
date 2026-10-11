@@ -10,13 +10,14 @@ import {
   Mail,
   Info,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
   description:
-    "Learn how AllConverter.tools uses cookies — including essential, analytics, and advertising cookies from Google Analytics and Google AdSense — and how to manage your preferences.",
+    "How AllConverter.tools uses essential, analytics and advertising cookies from Google Analytics and Google AdSense, and how to manage your preferences.",
   alternates: { canonical: `${siteConfig.url}/cookies/` },
+  openGraph: baseOpenGraph("/cookies/"),
 };
 
 const EFFECTIVE_DATE = "1 June 2025";

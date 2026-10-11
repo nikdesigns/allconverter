@@ -827,7 +827,7 @@ ${remainingLines.slice(10).map(l => `- ${l.replace(/^[-•*]\s*/,"")}`).join("\n
 function formatSql(raw: string): string {
   if (!raw.trim()) return "Please paste SQL to format.";
   const keywords = ["SELECT","FROM","WHERE","JOIN","LEFT JOIN","RIGHT JOIN","INNER JOIN","OUTER JOIN","ON","GROUP BY","ORDER BY","HAVING","LIMIT","OFFSET","INSERT INTO","VALUES","UPDATE","SET","DELETE FROM","CREATE TABLE","DROP TABLE","ALTER TABLE","WITH","UNION","UNION ALL","EXCEPT","INTERSECT","CASE","WHEN","THEN","ELSE","END","AND","OR","NOT","IN","IS NULL","IS NOT NULL","AS","DISTINCT","COUNT","SUM","AVG","MAX","MIN","COALESCE","NULLIF"];
-  let sql = raw.trim().replace(/\s+/g, " ");
+  const sql = raw.trim().replace(/\s+/g, " ");
   const upper = keywords.reduce((s, kw) => s.replace(new RegExp(`\\b${kw}\\b`,"gi"), kw), sql);
   const formatted = upper
     .replace(/\b(SELECT)\b/g, "\nSELECT")

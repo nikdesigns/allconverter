@@ -250,7 +250,7 @@ export const developerToolsPosts: BlogPost[] = [
     priorityScore: 8,
     publishedAt: "2025-06-15",
     readingTime: 7,
-    seoTitle: "Strong Password Guide: Security Best Practices for 2025 | AllConverter.tools",
+    seoTitle: "Strong Password Guide: Security Best Practices | AllConverter.tools",
     metaDescription: "How to create truly strong passwords in 2025 — length, character sets, passphrases, password managers, and how to check if your passwords have been breached.",
     h1: "Strong Password Guide: How to Create Secure Passwords",
     primaryKeyword: "strong password guide",

@@ -16,13 +16,14 @@ import {
   Mail,
   Info,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
   title: "Terms and Conditions",
   description:
-    "Terms and Conditions for AllConverter.tools — permitted use, intellectual property, limitation of liability, AI content disclaimer, and your rights when using our free online tools.",
+    "Terms and Conditions for AllConverter.tools — permitted use, intellectual property, liability limits, AI content disclaimer and your rights.",
   alternates: { canonical: `${siteConfig.url}/terms/` },
+  openGraph: baseOpenGraph("/terms/"),
 };
 
 const EFFECTIVE_DATE = "1 June 2025";
@@ -171,7 +172,7 @@ export default function TermsPage() {
             </p>
             <p>
               If you are using this platform on behalf of an organisation, you represent and warrant that
-              you have the authority to bind that organisation to these Terms, and the term "you" refers
+              you have the authority to bind that organisation to these Terms, and the term &quot;you&quot; refers
               to both you and that organisation.
             </p>
             <p>
@@ -274,7 +275,7 @@ export default function TermsPage() {
 
           <Section id="warranties" number="05" icon={<AlertTriangle className="w-5 h-5" />} title="Disclaimer of Warranties">
             <Callout variant="warning">
-              AllConverter.tools is provided strictly on an "as is" and "as available" basis. We make no
+              AllConverter.tools is provided strictly on an &quot;as is&quot; and &quot;as available&quot; basis. We make no
               representations or warranties of any kind, express or implied, regarding the platform or
               its outputs.
             </Callout>
@@ -345,9 +346,9 @@ export default function TermsPage() {
             <SubHeading>Google AdSense and Analytics</SubHeading>
             <p>
               This platform uses Google AdSense to display advertisements and Google Analytics 4 to
-              collect anonymised usage statistics. Both services operate under Google's own Terms of
+              collect anonymised usage statistics. Both services operate under Google&apos;s own Terms of
               Service and Privacy Policy. We are not responsible for the content of advertisements served
-              by Google or for Google's data processing practices, which are governed by Google's policies.
+              by Google or for Google&apos;s data processing practices, which are governed by Google&apos;s policies.
             </p>
 
             <SubHeading>External links</SubHeading>

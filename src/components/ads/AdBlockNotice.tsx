@@ -58,14 +58,24 @@ function detectAdBlocker(baitOnly = false): Promise<boolean> {
             bait.offsetWidth  === 0 ||
             bait.clientHeight === 0;
 
-          // adsbygoogle check only valid on initial page load
-          const adsBlocked = baitOnly ? false : (
-            typeof window.adsbygoogle === "undefined" ||
-            !Array.isArray(window.adsbygoogle)
-          );
-
           if (document.body.contains(bait)) document.body.removeChild(bait);
-          resolve(baitBlocked || adsBlocked);
+          if (baitBlocked) return resolve(true);
+          // Script check is only valid on initial page load
+          if (baitOnly) return resolve(false);
+
+          // Once adsbygoogle.js has loaded it replaces the plain queue array
+          // with its own object and sets `loaded: true` — so "not an array"
+          // means the script DID load. Give it a few seconds to arrive on
+          // slow connections before concluding that it was blocked.
+          const scriptLoaded = () =>
+            Boolean((window.adsbygoogle as unknown as { loaded?: boolean } | undefined)?.loaded);
+          const startedAt = Date.now();
+          const poll = () => {
+            if (scriptLoaded()) return resolve(false);
+            if (Date.now() - startedAt > 4000) return resolve(true);
+            setTimeout(poll, 250);
+          };
+          poll();
         }, 250);
       });
     });
@@ -201,7 +211,7 @@ export function AdBlockNotice() {
         {!failed && (
           <p style={{ margin: "0 0 12px", fontSize: 11, color: "var(--muted-foreground, #888)", lineHeight: 1.5, paddingLeft: 48 }}>
             In your ad blocker, click the icon in the address bar and choose&nbsp;
-            <strong style={{ color: "var(--foreground, #fff)" }}>"Always allow on this site"</strong>
+            <strong style={{ color: "var(--foreground, #fff)" }}>&quot;Always allow on this site&quot;</strong>
             &nbsp;or add&nbsp;
             <strong style={{ color: "var(--foreground, #fff)" }}>allconverter.tools</strong>&nbsp;to the whitelist.
           </p>

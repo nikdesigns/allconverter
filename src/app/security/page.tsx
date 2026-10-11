@@ -11,13 +11,14 @@ import {
   AlertTriangle,
   Mail,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
   title: "Security — How We Protect Your Data",
   description:
     "AllConverter.tools processes everything in your browser. No file uploads, no servers, no data retention. Learn how we keep your data private and secure.",
   alternates: { canonical: `${siteConfig.url}/security/` },
+  openGraph: baseOpenGraph("/security/"),
 };
 
 interface SectionProps {
@@ -100,9 +101,9 @@ export default function SecurityPage() {
         <Section icon={<FolderX className="w-5 h-5" />} title="No Storage, No Retention">
           <p>
             We have no infrastructure capable of storing user files because we deliberately built none. Files
-            you open in our tools are read via the browser's File API and held temporarily in browser memory for
+            you open in our tools are read via the browser&apos;s File API and held temporarily in browser memory for
             the duration of the operation. When you close the tab or navigate away, that memory is released by
-            the browser's garbage collector.
+            the browser&apos;s garbage collector.
           </p>
           <p>
             We do not log file names, file sizes, file contents, or any metadata about the documents you process.
@@ -145,7 +146,7 @@ export default function SecurityPage() {
           </p>
           <p>
             Google AdSense is used to display advertising. AdSense may set cookies on your device in accordance
-            with Google's own privacy policy to serve contextually relevant ads. You can opt out of personalised
+            with Google&apos;s own privacy policy to serve contextually relevant ads. You can opt out of personalised
             advertising via{" "}
             <a
               href="https://adssettings.google.com"
@@ -153,7 +154,7 @@ export default function SecurityPage() {
               rel="noopener noreferrer"
               className="text-[var(--fg-brand)] underline underline-offset-2 hover:opacity-80 transition-opacity"
             >
-              Google's Ad Settings
+              Google&apos;s Ad Settings
             </a>
             . We do not sell your data. We do not build individual user profiles. We have no user account system
             and therefore hold no passwords, email addresses, or personal records of any kind.
@@ -168,7 +169,7 @@ export default function SecurityPage() {
             <li>Use a modern, up-to-date browser — Chrome, Firefox, Safari, and Edge all receive regular security patches.</li>
             <li>Bookmark <strong className="text-[var(--heading)] font-medium">allconverter.tools</strong> directly and navigate from your bookmark rather than search results, to avoid landing on lookalike domains.</li>
             <li>For highly sensitive documents, you can disconnect from the internet before using any tool. Since all processing is local, every tool will continue to work offline once the page has loaded.</li>
-            <li>After processing a sensitive file, clear your browser's memory cache if you share your device with others.</li>
+            <li>After processing a sensitive file, clear your browser&apos;s memory cache if you share your device with others.</li>
           </ul>
         </Section>
 

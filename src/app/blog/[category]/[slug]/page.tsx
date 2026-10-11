@@ -12,6 +12,7 @@ import { BlogBreadcrumbs } from "@/components/blog/BlogBreadcrumbs";
 import { AdUnit } from "@/components/ads/AdUnit";
 import type { BlogCategorySlug } from "@/types/blog";
 
+import { defaultOgImages, stripBrand, truncateAtWord } from "@/lib/seo-utils";
 const SITE_URL = "https://allconverter.tools";
 const SITE_NAME = "AllConverter.tools";
 
@@ -29,13 +30,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   return {
-    title: post.seoTitle,
-    description: post.metaDescription,
+    title: stripBrand(post.seoTitle),
+    description: truncateAtWord(post.metaDescription),
     keywords: [post.primaryKeyword, ...post.secondaryKeywords].join(", "),
     alternates: { canonical: `${SITE_URL}/blog/${category}/${slug}/` },
     openGraph: {
+      images: defaultOgImages,
       title: post.seoTitle,
-      description: post.metaDescription,
+      description: truncateAtWord(post.metaDescription),
       url: `${SITE_URL}/blog/${category}/${slug}/`,
       siteName: SITE_NAME,
       type: "article",
@@ -57,15 +59,17 @@ export default async function BlogArticlePage({ params }: Props) {
   // Article Schema
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": post.type === "pillar" || post.type === "educational" ? "Article" : "HowTo",
+    // Always Article: these posts have no HowToStep data, so "HowTo" was invalid.
+    "@type": "Article",
     headline: post.h1,
     description: post.metaDescription,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
+    image: defaultOgImages[0].url,
     author: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      url: SITE_URL,
+      "@type": "Person",
+      name: "Nitin Kaushik",
+      url: `${SITE_URL}/author/nitin/`,
     },
     publisher: {
       "@type": "Organization",

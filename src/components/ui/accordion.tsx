@@ -49,11 +49,15 @@ function AccordionTrigger({
 function AccordionContent({
   className,
   children,
+  keepMounted = true,
   ...props
 }: AccordionPrimitive.Panel.Props) {
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
+      // Closed panels stay in the DOM (hidden) so their text is present in the
+      // static HTML — FAQ answers must be on the page to match the FAQ schema.
+      keepMounted={keepMounted}
       className="overflow-hidden text-sm data-open:animate-accordion-down data-closed:animate-accordion-up"
       {...props}
     >

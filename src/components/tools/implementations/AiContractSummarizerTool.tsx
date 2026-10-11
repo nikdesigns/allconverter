@@ -153,6 +153,15 @@ function summarizeContract(text: string): ContractSummary {
   };
 }
 
+// Defined at module level: a component declared inside another component is
+// re-created on every render, which remounts it (inputs lose focus, state resets).
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div className="rounded-xl border border-border bg-muted/10 p-4 space-y-2">
+    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{title}</div>
+    {children}
+  </div>
+);
+
 export function AiContractSummarizerTool() {
   const [text, setText] = useState("");
   const [result, setResult] = useState<ContractSummary | null>(null);
@@ -203,13 +212,6 @@ export function AiContractSummarizerTool() {
     navigator.clipboard.writeText(lines);
     toast.success("Report copied!");
   };
-
-  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div className="rounded-xl border border-border bg-muted/10 p-4 space-y-2">
-      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{title}</div>
-      {children}
-    </div>
-  );
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">

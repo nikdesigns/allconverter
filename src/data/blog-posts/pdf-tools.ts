@@ -105,7 +105,7 @@ export const pdfToolsPosts: BlogPost[] = [
     publishedAt: "2025-06-05",
     readingTime: 7,
     isFeatured: true,
-    seoTitle: "How to Compress a PDF Without Losing Quality (2025 Guide) | AllConverter.tools",
+    seoTitle: "How to Compress a PDF Without Losing Quality (Guide) | AllConverter.tools",
     metaDescription: "Step-by-step guide to reducing PDF file size without quality loss. Learn the best compression methods, recommended settings, and when to use each approach.",
     h1: "How to Compress a PDF Without Losing Quality",
     primaryKeyword: "how to compress PDF",

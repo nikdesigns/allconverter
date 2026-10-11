@@ -18,13 +18,14 @@ import {
   Megaphone,
   FileText,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Privacy Policy for AllConverter.tools — how we collect, use, and protect your data. Covers Google Analytics, Google AdSense, cookies, your rights under Indian privacy law, and data retention.",
+    "Privacy Policy for AllConverter.tools — how we collect, use and protect your data, including Google Analytics, AdSense, cookies and your rights.",
   alternates: { canonical: `${siteConfig.url}/privacy/` },
+  openGraph: baseOpenGraph("/privacy/"),
 };
 
 const EFFECTIVE_DATE = "1 June 2025";

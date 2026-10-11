@@ -136,7 +136,7 @@ export function SupportSection() {
                   Support ongoing development
                 </h3>
                 <p className="text-sm text-[var(--body-subtle)] mt-3 leading-relaxed">
-                  There's no minimum amount, no recurring charge, and no expectation. If the platform
+                  There&apos;s no minimum amount, no recurring charge, and no expectation. If the platform
                   has been useful to you, a contribution of any size is genuinely appreciated and
                   goes directly toward the costs above.
                 </p>
@@ -162,9 +162,9 @@ export function SupportSection() {
               <div className="mt-auto pt-5 border-t border-[var(--border-default)]">
                 <blockquote>
                   <p className="text-xs text-[var(--body-subtle)] leading-relaxed italic">
-                    "I don't have a premium plan to sell you. This is an independent project I
+                    &quot;I don&apos;t have a premium plan to sell you. This is an independent project I
                     maintain because people find it genuinely useful. Every tool on this site stays
-                    free — that's not going to change."
+                    free — that&apos;s not going to change.&quot;
                   </p>
                   <footer className="mt-2 text-xs font-medium text-[var(--heading)]">
                     — Nitin Kaushik, Founder

@@ -88,13 +88,13 @@ export function FounderSection() {
             {/* Pull quote */}
             <blockquote className="border-l-2 border-[var(--fg-brand)] pl-4">
               <p className="text-sm text-[var(--body-subtle)] leading-relaxed italic">
-                "I built AllConverter.tools because the best tools I found were either paywalled, privacy-invasive, or simply too slow for what people actually needed. I wanted to fix that — and keep it free."
+                &quot;I built AllConverter.tools because the best tools I found were either paywalled, privacy-invasive, or simply too slow for what people actually needed. I wanted to fix that — and keep it free.&quot;
               </p>
             </blockquote>
 
             {/* Story */}
             <p className="text-sm text-[var(--body-subtle)] leading-relaxed">
-              I'm a frontend developer with a focus on web applications and productivity tools. For years I'd reach for an online tool — to compress a PDF, format some JSON, generate an invoice — and hit the same wall: a paywall, a forced account, or a slow server upload. I started building my own versions, sharing them publicly, and the response told me this gap was real. AllConverter.tools is the result: a single platform where useful tools are genuinely accessible.
+              I&apos;m a frontend developer with a focus on web applications and productivity tools. For years I&apos;d reach for an online tool — to compress a PDF, format some JSON, generate an invoice — and hit the same wall: a paywall, a forced account, or a slow server upload. I started building my own versions, sharing them publicly, and the response told me this gap was real. AllConverter.tools is the result: a single platform where useful tools are genuinely accessible.
             </p>
 
             {/* Founder CTA */}
@@ -188,7 +188,7 @@ export function FounderSection() {
           <div className="rounded-(--radius-base) border border-border-brand bg-brand-soft px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <p className="font-semibold text-(--heading) text-sm">
-                Can't find the tool you need?
+                Can&apos;t find the tool you need?
               </p>
               <p className="text-xs text-(--body-subtle) mt-0.5">
                 Suggest it — popular requests ship within days.

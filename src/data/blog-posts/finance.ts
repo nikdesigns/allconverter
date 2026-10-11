@@ -141,7 +141,7 @@ export const financePosts: BlogPost[] = [
     publishedAt: "2025-06-10",
     readingTime: 10,
     isFeatured: true,
-    seoTitle: "GST Guide for Indian Businesses: Rates, Slabs, ITC & Filing (2025) | AllConverter.tools",
+    seoTitle: "GST Guide for Indian Businesses: Rates, Slabs, ITC & Filing | AllConverter.tools",
     metaDescription: "Complete GST guide for Indian businesses — tax slabs, CGST/SGST/IGST, input tax credit, GST registration threshold, invoice requirements, and GST return filing.",
     h1: "GST Guide for Indian Businesses: Rates, ITC & Everything You Need to Know",
     primaryKeyword: "GST guide India",

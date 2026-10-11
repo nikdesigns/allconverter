@@ -6,15 +6,17 @@ import { FeaturedCard } from "@/components/blog/FeaturedCard";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { AdUnit } from "@/components/ads/AdUnit";
 
+import { defaultOgImages } from "@/lib/seo-utils";
 const SITE_URL = "https://allconverter.tools";
 const SITE_NAME = "AllConverter.tools";
 
 export const metadata: Metadata = {
-  title: `Blog — Tools Guides, Tutorials & Tips | ${SITE_NAME}`,
+  title: `Blog — Tools Guides, Tutorials & Tips`,
   description:
     "Expert guides on PDF tools, image formats, developer utilities, SEO, finance, business, AI writing, and audio tools. Free tutorials from the team behind 250+ free tools.",
   alternates: { canonical: `${SITE_URL}/blog/` },
   openGraph: {
+    images: defaultOgImages,
     title: `Blog | ${SITE_NAME}`,
     description: "Expert guides on PDF tools, image formats, developer utilities, SEO, finance, business, AI writing, and audio tools.",
     url: `${SITE_URL}/blog/`,

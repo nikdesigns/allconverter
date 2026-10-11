@@ -9,6 +9,7 @@ import { BlogBreadcrumbs } from "@/components/blog/BlogBreadcrumbs";
 import { AdUnit } from "@/components/ads/AdUnit";
 import type { BlogCategorySlug } from "@/types/blog";
 
+import { defaultOgImages, stripBrand, truncateAtWord } from "@/lib/seo-utils";
 const SITE_URL = "https://allconverter.tools";
 const SITE_NAME = "AllConverter.tools";
 
@@ -26,12 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cat) return {};
 
   return {
-    title: cat.metaTitle,
-    description: cat.metaDescription,
+    title: stripBrand(cat.metaTitle),
+    description: truncateAtWord(cat.metaDescription),
     alternates: { canonical: `${SITE_URL}/blog/${cat.slug}/` },
     openGraph: {
+      images: defaultOgImages,
       title: cat.metaTitle,
-      description: cat.metaDescription,
+      description: truncateAtWord(cat.metaDescription),
       url: `${SITE_URL}/blog/${cat.slug}/`,
       siteName: SITE_NAME,
       type: "website",

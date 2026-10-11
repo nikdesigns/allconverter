@@ -320,6 +320,40 @@ function ExpenseTracker() {
 
 interface PLItem { label: string; amount: number; }
 
+// Defined at module level: a component declared inside another component is
+// re-created on every render, which remounts it (inputs lose focus, state resets).
+const addItem = (set: React.Dispatch<React.SetStateAction<PLItem[]>>) =>
+  set(prev => [...prev, {label:"", amount:0}]);
+
+const updItem = (set: React.Dispatch<React.SetStateAction<PLItem[]>>, i:number, k:keyof PLItem, v:string|number) =>
+  set(prev => prev.map((it,j)=>j===i?{...it,[k]:v}:it));
+
+const delItem = (set: React.Dispatch<React.SetStateAction<PLItem[]>>, i:number) =>
+  set(prev=>prev.filter((_,j)=>j!==i));
+
+const ItemList = ({ items, set, label }: { items: PLItem[]; set: React.Dispatch<React.SetStateAction<PLItem[]>>; label: string }) => (
+  <div className="space-y-1.5">
+    <div className="flex items-center justify-between">
+      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{label}</span>
+      <Button variant="ghost" size="sm" onClick={()=>addItem(set)} className="h-6 text-xs gap-1"><Plus className="w-3 h-3" />Add</Button>
+    </div>
+    {items.map((it,i)=>(
+      <div key={i} className="flex gap-2 items-center">
+        <Input value={it.label} onChange={e=>updItem(set,i,"label",e.target.value)} placeholder="Label" className="flex-1 h-8 text-xs" />
+        <Input type="number" value={it.amount} onChange={e=>updItem(set,i,"amount",Number(e.target.value))} placeholder="0" className="w-28 h-8 text-xs text-right" />
+        <button onClick={()=>delItem(set,i)} className="text-muted-foreground hover:text-rose-400 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
+      </div>
+    ))}
+  </div>
+);
+
+const PLRow = ({ label, value, highlight, indent }: { label:string; value:number; highlight?:boolean; indent?:boolean }) => (
+  <div className={cn("flex justify-between py-2 px-3 text-sm border-b border-border/50 last:border-0", highlight&&"font-bold bg-muted/10", indent&&"pl-6 text-muted-foreground text-xs")}>
+    <span>{label}</span>
+    <span className={cn(value>=0?"text-emerald-500":"text-rose-500")}>{formatCurrency(value)}</span>
+  </div>
+);
+
 function ProfitLossCalculator() {
   const [revItems,  setRevItems]  = useState<PLItem[]>([{ label:"Sales Revenue", amount:0 }]);
   const [cogsItems, setCogsItems] = useState<PLItem[]>([{ label:"Cost of Goods Sold", amount:0 }]);
@@ -336,36 +370,6 @@ function ProfitLossCalculator() {
   const netProfit  = ebit - tax;
   const gpm        = revenue ? (grossProfit/revenue*100) : 0;
   const npm        = revenue ? (netProfit/revenue*100) : 0;
-
-  const addItem = (set: React.Dispatch<React.SetStateAction<PLItem[]>>) =>
-    set(prev => [...prev, {label:"", amount:0}]);
-  const updItem = (set: React.Dispatch<React.SetStateAction<PLItem[]>>, i:number, k:keyof PLItem, v:string|number) =>
-    set(prev => prev.map((it,j)=>j===i?{...it,[k]:v}:it));
-  const delItem = (set: React.Dispatch<React.SetStateAction<PLItem[]>>, i:number) =>
-    set(prev=>prev.filter((_,j)=>j!==i));
-
-  const ItemList = ({ items, set, label }: { items: PLItem[]; set: React.Dispatch<React.SetStateAction<PLItem[]>>; label: string }) => (
-    <div className="space-y-1.5">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{label}</span>
-        <Button variant="ghost" size="sm" onClick={()=>addItem(set)} className="h-6 text-xs gap-1"><Plus className="w-3 h-3" />Add</Button>
-      </div>
-      {items.map((it,i)=>(
-        <div key={i} className="flex gap-2 items-center">
-          <Input value={it.label} onChange={e=>updItem(set,i,"label",e.target.value)} placeholder="Label" className="flex-1 h-8 text-xs" />
-          <Input type="number" value={it.amount} onChange={e=>updItem(set,i,"amount",Number(e.target.value))} placeholder="0" className="w-28 h-8 text-xs text-right" />
-          <button onClick={()=>delItem(set,i)} className="text-muted-foreground hover:text-rose-400 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
-        </div>
-      ))}
-    </div>
-  );
-
-  const PLRow = ({ label, value, highlight, indent }: { label:string; value:number; highlight?:boolean; indent?:boolean }) => (
-    <div className={cn("flex justify-between py-2 px-3 text-sm border-b border-border/50 last:border-0", highlight&&"font-bold bg-muted/10", indent&&"pl-6 text-muted-foreground text-xs")}>
-      <span>{label}</span>
-      <span className={cn(value>=0?"text-emerald-500":"text-rose-500")}>{formatCurrency(value)}</span>
-    </div>
-  );
 
   return (
     <div className="space-y-5">

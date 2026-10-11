@@ -25,6 +25,15 @@ console.log(greeting);
 [Visit Google](https://google.com)
 `;
 
+// Attribute values come from user-supplied markdown and the result is rendered
+// with dangerouslySetInnerHTML, so quotes must be escaped (otherwise a URL like
+// `x" onerror="…` injects an attribute) and script-capable URL schemes blocked.
+const escAttr = (v: string) => v.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+const safeUrl = (url: string) => {
+  const u = url.trim();
+  return /^(https?:|mailto:|tel:|\/|#|\.)/i.test(u) || !/^[a-z][a-z0-9+.-]*:/i.test(u) ? escAttr(u) : "#";
+};
+
 function simpleMarkdown(md: string): string {
   let h = md
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -34,14 +43,14 @@ function simpleMarkdown(md: string): string {
     .replace(/^#{3}\s(.+)$/gm, "<h3>$1</h3>")
     .replace(/^#{2}\s(.+)$/gm, "<h2>$1</h2>")
     .replace(/^#{1}\s(.+)$/gm, "<h1>$1</h1>")
-    .replace(/```(\w*)\n([\s\S]*?)```/gm, (_, lang, code) => `<pre><code class="language-${lang}">${code.trim()}</code></pre>`)
+    .replace(/```(\w*)\n([\s\S]*?)```/gm, (_, lang, code) => `<pre><code class="language-${escAttr(lang)}">${code.trim()}</code></pre>`)
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>")
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")
     .replace(/~~(.+?)~~/g, "<del>$1</del>")
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2">')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, url) => `<img alt="${escAttr(alt)}" src="${safeUrl(url)}">`)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => `<a href="${safeUrl(url)}" rel="noopener noreferrer">${text}</a>`)
     .replace(/^---$/gm, "<hr>")
     .replace(/^&gt;\s(.+)$/gm, "<blockquote>$1</blockquote>")
     .replace(/^[\*\-]\s(.+)$/gm, "<li>$1</li>")

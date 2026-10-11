@@ -299,7 +299,7 @@ function slugSpecificFAQs(tool: Tool): FAQ[] {
       return [
         { question: "How much can I reduce a PDF file size?", answer: "Compression varies by content. PDFs containing high-resolution images typically reduce 50–90%. Text-only or already-optimised PDFs may reduce 10–30%. Choose a higher compression level for maximum savings." },
         { question: "Will PDF compression affect image quality?", answer: "At Low and Medium levels, images remain visually indistinguishable from the original. At High compression, images may show slight softness under close inspection. Text, vectors, and fonts are never degraded regardless of compression level." },
-        { question: "Can I compress multiple PDFs at once?", answer: "Yes. Upload multiple PDFs and compress them in a single batch. Each file is processed independently and you can download outputs individually or as a ZIP archive." },
+        { question: "Can I compress multiple PDFs at once?", answer: "Not at the moment. PDF Compressor works on one file at a time — compress a PDF, download it, then add the next one." },
         { question: "What compression levels are available?", answer: "Three levels: Low (minimal quality impact, modest size reduction), Medium (balanced — the recommended default), and High (maximum compression, minor image quality reduction)." },
       ];
 
@@ -322,7 +322,7 @@ function slugSpecificFAQs(tool: Tool): FAQ[] {
       const fmt = tool.slug === "pdf-to-jpg" ? "JPG" : "PNG";
       return [
         { question: `What resolution are the output ${fmt} images?`, answer: `Default is 150 DPI — sharp for screen use. Select 300 DPI for print-quality output. Higher DPI produces larger, crisper images.` },
-        { question: "Are all pages converted or just the first?", answer: `All pages are converted by default, each becoming one ${fmt} image. Download them individually or as a single ZIP archive.` },
+        { question: "Are all pages converted or just the first?", answer: `All pages are converted by default, each becoming one ${fmt} image. Each page image can be downloaded individually.` },
         { question: "Will text in the PDF remain sharp after conversion?", answer: "Yes, especially at 150 DPI or higher. For PDFs with small print or fine detail, use 300 DPI to preserve legibility." },
       ];
     }
@@ -526,12 +526,15 @@ function traitFAQs(tool: Tool, traits: ToolTraits): FAQ[] {
   const { name } = tool;
   const faqs: FAQ[] = [];
 
-  if (traits.isConverter && traits.inputFormat && traits.outputFormat) {
-    const inf  = traits.inputFormat.toUpperCase();
-    const outf = traits.outputFormat.toUpperCase();
+  // File-conversion FAQs only apply to tools that convert media/document files.
+  // An "x-to-y" slug alone is not enough: unit converters (cm-to-inches),
+  // text/data tools (json-to-xml) and calculators share that pattern.
+  const convertsFiles = ["pdf-tools", "image-tools", "audio-tools", "video-tools"].includes(tool.category);
+  if (convertsFiles && traits.isConverter && traits.inputFormat && traits.outputFormat) {
+    const inf  = traits.inputFormat.toUpperCase().replace(/-/g, " ");
+    const outf = traits.outputFormat.toUpperCase().replace(/-/g, " ");
     faqs.push(
-      { question: `Is ${inf} to ${outf} conversion lossless?`, answer: `Lossless conversion depends on the formats involved. Converting from a lossless format (PNG, WAV, FLAC) to another lossless format produces no quality loss. Converting to a lossy format (JPG, MP3, AAC) involves compression — you control quality via the settings slider.` },
-      { question: `Can I convert multiple ${inf} files to ${outf} at once?`, answer: `Yes. Upload multiple files and they are all converted in a single batch, ready to download individually or as a single ZIP archive.` },
+      { question: `Is ${inf} to ${outf} conversion lossless?`, answer: `Lossless conversion depends on the formats involved. Converting from a lossless format (PNG, WAV, FLAC) to another lossless format produces no quality loss. Converting to a lossy format (JPG, MP3, AAC) involves compression, so some detail is discarded to reduce file size.` },
       { question: `How large can the ${inf} input file be?`, answer: `Processing happens locally in your browser so limits depend on your device's available memory. Files up to 100 MB are handled without issues on most computers.` },
     );
   }
@@ -959,7 +962,7 @@ const USECASE_DEFAULTS: Partial<Record<ToolCategory, string[]>> = {
   ],
 };
 
-function useCasesFallback(tool: Tool): string[] {
+function buildUseCasesFallback(tool: Tool): string[] {
   return USECASE_DEFAULTS[tool.category] ?? [
     "Quick one-off conversions without installing software",
     "Batch processing multiple items to save time",
@@ -1015,7 +1018,7 @@ export function getEnrichedTool(tool: Tool, allTools?: Tool[]): Tool {
   // ── Use Cases ─────────────────────────────────────────────────────────────
   const useCases = (tool.useCases?.length ?? 0) > 0
     ? tool.useCases!
-    : useCasesFallback(tool);
+    : buildUseCasesFallback(tool);
 
   // ── Related Tools ─────────────────────────────────────────────────────────
   const relatedTools = allTools

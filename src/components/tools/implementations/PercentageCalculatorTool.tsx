@@ -49,7 +49,9 @@ export function PercentageCalculatorTool() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const ResultRow = ({ label, value }: { label: string; value: string }) => (
+  // Plain render helper, called as a function rather than used as a JSX
+  // component, so React does not see a new component type on every render.
+  const renderResultRow = ({ label, value }: { label: string; value: string }) => (
     <div className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border bg-muted/30">
       <span className="text-sm font-semibold text-foreground">{value}</span>
       <button
@@ -95,7 +97,7 @@ export function PercentageCalculatorTool() {
           <div className="text-xs text-muted-foreground">
             {pct1}% of {val1} =
           </div>
-          <ResultRow label="mode1" value={res1} />
+          {renderResultRow({ label: "mode1", value: res1 })}
         </div>
 
         {/* Mode 2 */}
@@ -121,7 +123,7 @@ export function PercentageCalculatorTool() {
           <div className="text-xs text-muted-foreground">
             {xOf} is what % of {yOf} =
           </div>
-          <ResultRow label="mode2" value={res2} />
+          {renderResultRow({ label: "mode2", value: res2 })}
         </div>
 
         {/* Mode 3 */}

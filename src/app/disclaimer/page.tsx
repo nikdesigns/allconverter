@@ -11,13 +11,14 @@ import {
   Mail,
   Info,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
   title: "Disclaimer",
   description:
     "Important disclaimers for AllConverter.tools — no financial, legal, or professional advice. AI-generated content, accuracy limitations, and user responsibilities explained.",
   alternates: { canonical: `${siteConfig.url}/disclaimer/` },
+  openGraph: baseOpenGraph("/disclaimer/"),
 };
 
 const EFFECTIVE_DATE = "1 June 2025";
@@ -123,7 +124,7 @@ export default function DisclaimerPage() {
           <p>
             AllConverter.tools is a free online utility platform providing browser-based tools for file
             conversion, text processing, calculations, developer utilities, SEO analysis, business document
-            generation, and AI-assisted content creation. All tools are provided on an <strong className="text-[var(--heading)]">"as is" and "as available" basis</strong>, without warranty of any kind, express or implied.
+            generation, and AI-assisted content creation. All tools are provided on an <strong className="text-[var(--heading)]">&quot;as is&quot; and &quot;as available&quot; basis</strong>, without warranty of any kind, express or implied.
           </p>
           <p>
             We make reasonable efforts to ensure that our tools are functional, accurate, and fit for general

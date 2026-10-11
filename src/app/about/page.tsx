@@ -13,13 +13,14 @@ import {
   Lock,
   ArrowRight,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
   title: "About Us — Who We Are & Our Mission",
   description:
-    "Learn about AllConverter.tools — a free browser-based platform with 250+ online tools for PDF conversion, image editing, developer utilities, SEO, business documents, AI content, and more. No sign-up. No uploads. Just results.",
+    "About AllConverter.tools — a free, browser-based platform with 250+ online tools for PDF, images, developer, SEO and business tasks. No sign-up, no uploads.",
   alternates: { canonical: `${siteConfig.url}/about/` },
+  openGraph: baseOpenGraph("/about/"),
 };
 
 const aboutSchema = {

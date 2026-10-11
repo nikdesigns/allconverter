@@ -20,14 +20,15 @@ import {
 } from "lucide-react";
 import { releases, roadmap } from "@/data/changelog";
 import type { ChangeType } from "@/data/changelog";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: "Changelog — Release History & Updates | AllConverter.tools",
+  title: "Changelog — Release History & Updates",
   description:
     "Full release history for AllConverter.tools — every new tool, feature, performance improvement, bug fix, and SEO enhancement since v1.0. Updated with every release.",
   alternates: { canonical: `${siteConfig.url}/changelog/` },
   openGraph: {
+    images: defaultOgImages,
     title: "Changelog | AllConverter.tools",
     description: "Every update, new tool, and improvement to AllConverter.tools — documented in full since May 2025.",
     url: `${siteConfig.url}/changelog/`,
@@ -320,7 +321,7 @@ export default function ChangelogPage() {
               <h2 className="text-xl font-bold text-(--heading)">Public Roadmap</h2>
             </div>
             <p className="text-sm text-(--body-subtle) mb-8 max-w-2xl leading-relaxed">
-              What's being worked on, what's planned, and what's already shipped. This roadmap is shaped
+              What&apos;s being worked on, what&apos;s planned, and what&apos;s already shipped. This roadmap is shaped
               by user requests — if you want something on it, email{" "}
               <a href="mailto:feedback@allconverter.tools" className="text-fg-brand hover:underline">
                 feedback@allconverter.tools

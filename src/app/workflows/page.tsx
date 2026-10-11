@@ -3,16 +3,17 @@ import Link from "next/link";
 import {
   Briefcase, Rocket, Search as SearchIcon, ImageIcon, ArrowRight, Workflow,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
 import { getToolBySlug } from "@/lib/tools-data";
 import type { Tool } from "@/types";
 
 export const metadata: Metadata = {
-  title: `Workflows — Guided Tool Bundles | ${siteConfig.name}`,
+  title: `Workflows — Guided Tool Bundles`,
   description:
     "Multi-step workflows that bundle the right tools together for common tasks — job applications, launching a business, SEO audits, and prepping photos for the web.",
   alternates: { canonical: `${siteConfig.url}/workflows/` },
   openGraph: {
+    images: defaultOgImages,
     title: "Workflows — Guided Tool Bundles",
     description: "Bundles of tools for common multi-step tasks, in the right order.",
     url: `${siteConfig.url}/workflows/`,

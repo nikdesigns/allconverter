@@ -83,7 +83,7 @@ export const aiToolsPosts: BlogPost[] = [
     publishedAt: "2025-06-05",
     readingTime: 7,
     isFeatured: true,
-    seoTitle: "How to Write a Cover Letter with AI: Tips, Templates & Examples (2025) | AllConverter.tools",
+    seoTitle: "How to Write a Cover Letter with AI: Tips, Templates & Examples | AllConverter.tools",
     metaDescription: "Step-by-step guide to writing a compelling cover letter with AI — what information to provide, how to personalise the output, and common mistakes to avoid.",
     h1: "How to Write a Cover Letter with AI: A Practical Guide",
     primaryKeyword: "how to write cover letter with AI",

@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AllConverter.tools
 
-## Getting Started
+Source for [allconverter.tools](https://allconverter.tools) — 250+ free, browser-based tools for PDF, images, audio, video, developer, SEO, business and unit-conversion tasks.
 
-First, run the development server:
+Built with Next.js (App Router, static export), React, TypeScript and Tailwind CSS. Tools run client-side; there is no backend.
+
+## Commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev       # local dev server at http://localhost:3000
+npm run build     # static export to ./out
+npm run fresh     # clean .next and out, then build
+npm run lint      # ESLint
+npm run indexnow  # submit all URLs to IndexNow (Bing, Yandex)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | What it holds |
+| --- | --- |
+| `src/lib/tools-data.ts` | Every tool's slug, name, category, copy and SEO overrides |
+| `src/lib/tool-content-gen.ts` | Generated intro, FAQ, how-to and benefits for tool pages |
+| `src/lib/seo-utils.ts` | Site config, titles, descriptions, Open Graph and JSON-LD builders |
+| `src/components/tools/implementations/` | The tool UIs |
+| `src/components/tools/ToolInterface.tsx` | Maps a tool slug to its component |
+| `src/data/blog-posts/` | Blog articles |
+| `src/app/sitemap.ts`, `src/app/robots.ts` | Sitemap and robots.txt |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## SEO conventions
 
-## Learn More
+- Page titles must **not** include "| AllConverter.tools" — the root layout's title template adds it.
+- Meta descriptions go through `fitDescription` / `truncateAtWord` so they are never cut mid-word.
+- Social previews use `public/og-default.png` via `defaultOgImages`.
+- Bump `siteConfig.lastUpdated` when tool or category pages change; the sitemap uses it for `lastModified`.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploying
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`npm run build` writes a fully static site to `out/`. Upload that folder to the host.

@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Wrench, MapPin, Globe } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
 import { allBlogPosts } from "@/data/blog-posts";
 
 export const metadata: Metadata = {
-  title: `Nitin Kaushik — Founder & Developer | ${siteConfig.name}`,
+  title: `Nitin Kaushik — Founder & Developer`,
   description:
     "Nitin Kaushik is the founder and developer of AllConverter.tools — a free browser-based platform with 250+ online tools. Based in Mumbai, India.",
   alternates: { canonical: `${siteConfig.url}/author/nitin/` },
   openGraph: {
+    images: defaultOgImages,
     title: "Nitin Kaushik — Founder & Developer at AllConverter.tools",
     description:
       "Frontend developer and founder of AllConverter.tools. Building free, privacy-first tools for everyone.",
@@ -119,13 +120,13 @@ export default function AuthorPage() {
         {/* Bio */}
         <section>
           <p className="text-sm text-(--body-subtle) leading-relaxed mb-4">
-            I'm a frontend developer with a focus on web applications and browser-based productivity
+            I&apos;m a frontend developer with a focus on web applications and browser-based productivity
             tools. I built AllConverter.tools because the tools I needed most were either behind
             paywalls, required unnecessary sign-ups, or were slow due to server-side processing.
           </p>
           <p className="text-sm text-(--body-subtle) leading-relaxed mb-4">
             Every tool on this platform runs in your browser — your files never leave your device.
-            No account system, no premium tier, no limits. That's not a marketing line; it's a
+            No account system, no premium tier, no limits. That&apos;s not a marketing line; it&apos;s a
             technical design choice made from day one.
           </p>
           <p className="text-sm text-(--body-subtle) leading-relaxed">

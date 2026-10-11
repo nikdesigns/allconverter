@@ -8,10 +8,11 @@ import { blogCategories } from "@/data/blog-categories";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-  // Stable dates for pages that don't change often — avoids signalling
-  // "everything changed" on every deploy, which wastes crawl budget.
+  // Stable dates — avoids signalling "everything changed" on every deploy,
+  // which teaches crawlers to ignore lastmod. Bump siteConfig.lastUpdated
+  // when tool/category pages actually change.
   const d = (s: string) => new Date(s);
+  const now = d(siteConfig.lastUpdated);
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${siteConfig.url}/`,           lastModified: now,              changeFrequency: "daily",   priority: 1.0 },
@@ -21,7 +22,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteConfig.url}/changelog/`, lastModified: now,              changeFrequency: "weekly",  priority: 0.6 },
     { url: `${siteConfig.url}/contact/`,   lastModified: d("2025-01-01"),  changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteConfig.url}/sitemap/`,   lastModified: now,              changeFrequency: "weekly",  priority: 0.5 },
-    { url: `${siteConfig.url}/video-tools/`,   lastModified: now,          changeFrequency: "weekly",  priority: 0.85 },
+    { url: `${siteConfig.url}/workflows/`,     lastModified: now,          changeFrequency: "monthly", priority: 0.6 },
+    { url: `${siteConfig.url}/security/`,      lastModified: d("2025-01-01"), changeFrequency: "monthly", priority: 0.4 },
     { url: `${siteConfig.url}/support/`,       lastModified: d("2025-01-01"), changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteConfig.url}/author/nitin/`,  lastModified: d("2025-01-01"), changeFrequency: "monthly", priority: 0.5 },
     // privacy/terms/cookies/disclaimer excluded — boilerplate, consume crawl budget without ranking value
@@ -34,7 +36,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  const toolPages: MetadataRoute.Sitemap = tools.map((tool) => ({
+  // Dedupe by slug so a repeated entry in tools-data can't emit a URL twice.
+  const uniqueTools = [...new Map(tools.map((t) => [t.slug, t])).values()];
+  const toolPages: MetadataRoute.Sitemap = uniqueTools.map((tool) => ({
     url: `${siteConfig.url}/tools/${tool.slug}/`,
     lastModified: now,
     changeFrequency: "monthly",
@@ -50,7 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogPostPages: MetadataRoute.Sitemap = allBlogPosts.map((post) => ({
     url: `${siteConfig.url}/blog/${post.category}/${post.slug}/`,
-    lastModified: now,
+    lastModified: d(post.updatedAt ?? post.publishedAt),
     changeFrequency: "monthly",
     priority: post.isPillar ? 0.8 : post.isFeatured ? 0.75 : 0.65,
   }));

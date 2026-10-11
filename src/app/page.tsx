@@ -10,11 +10,7 @@ import { FounderSection } from "@/components/home/FounderSection";
 import { SupportSection } from "@/components/home/SupportSection";
 import { SEOContentBlock } from "@/components/home/SEOContentBlock";
 import { LatestArticles } from "@/components/home/LatestArticles";
-import {
-  generateOrganizationSchema,
-  generateWebsiteSchema,
-  siteConfig,
-} from "@/lib/seo-utils";
+import { baseOpenGraph, siteConfig } from "@/lib/seo-utils";
 
 const founderSchema = {
   "@context": "https://schema.org",
@@ -38,26 +34,17 @@ const founderSchema = {
 };
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name} — ${siteConfig.tagline}`,
+  // absolute: the brand is already in the title, so skip the layout template
+  title: { absolute: `${siteConfig.name} — ${siteConfig.tagline}` },
   description: siteConfig.description,
   alternates: { canonical: `${siteConfig.url}/` },
+  openGraph: baseOpenGraph("/"),
 };
 
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateOrganizationSchema()),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateWebsiteSchema()),
-        }}
-      />
+      {/* Organization + WebSite schema live in the root layout */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}

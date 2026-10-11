@@ -24,12 +24,24 @@ function parseJwt(token: string) {
 
 const SAMPLE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjk5OTk5OTk5OTl9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
+// Defined at module level: a component declared inside another component is
+// re-created on every render, which remounts it (inputs lose focus, state resets).
+const copy = (obj: unknown) => { navigator.clipboard.writeText(JSON.stringify(obj, null, 2)); toast.success("Copied!"); };
+
+const JsonView = ({ data, label }: { data: unknown; label: string }) => (
+  <div className="w-full max-w-full rounded-xl border border-border overflow-hidden">
+    <div className="flex items-center justify-between px-3 py-2 bg-muted/20 border-b border-border">
+      <span className="text-xs font-medium">{label}</span>
+      <button onClick={() => copy(data)} className="p-1 rounded hover:bg-muted"><Copy className="w-3 h-3" /></button>
+    </div>
+    <pre className="p-3 text-xs font-mono overflow-x-auto whitespace-pre-wrap break-all">{JSON.stringify(data, null, 2)}</pre>
+  </div>
+);
+
 export function JwtInspectorTool() {
   const [token, setToken] = useState(SAMPLE);
 
   const parsed = useMemo(() => parseJwt(token), [token]);
-
-  const copy = (obj: unknown) => { navigator.clipboard.writeText(JSON.stringify(obj, null, 2)); toast.success("Copied!"); };
 
   const formatDate = (ts: number) => new Date(ts * 1000).toLocaleString();
 
@@ -40,16 +52,6 @@ export function JwtInspectorTool() {
   }, []);
 
   const expired = parsed?.payload?.exp && now > 0 ? parsed.payload.exp < now : null;
-
-  const JsonView = ({ data, label }: { data: unknown; label: string }) => (
-    <div className="w-full max-w-full rounded-xl border border-border overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-2 bg-muted/20 border-b border-border">
-        <span className="text-xs font-medium">{label}</span>
-        <button onClick={() => copy(data)} className="p-1 rounded hover:bg-muted"><Copy className="w-3 h-3" /></button>
-      </div>
-      <pre className="p-3 text-xs font-mono overflow-x-auto whitespace-pre-wrap break-all">{JSON.stringify(data, null, 2)}</pre>
-    </div>
-  );
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">

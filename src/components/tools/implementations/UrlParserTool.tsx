@@ -6,6 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Copy, Link2 } from "lucide-react";
 import { toast } from "sonner";
 
+// Defined at module level: a component declared inside another component is
+// re-created on every render, which remounts it (inputs lose focus, state resets).
+const copy = (text: string) => { navigator.clipboard.writeText(text); toast.success("Copied!"); };
+
+const Row = ({ label, value, mono = true }: { label: string; value: string; mono?: boolean }) => value ? (
+  <div className="flex items-start gap-3 py-2 border-b border-border/50 last:border-0">
+    <span className="text-xs text-muted-foreground w-24 shrink-0 pt-0.5">{label}</span>
+    <code className={`flex-1 text-sm break-all ${mono ? "font-mono" : ""}`}>{value}</code>
+    <button onClick={() => copy(value)} className="p-1 rounded hover:bg-muted shrink-0 mt-0.5"><Copy className="w-3 h-3 text-muted-foreground" /></button>
+  </div>
+) : null;
+
 export function UrlParserTool() {
   const [input, setInput] = useState("https://example.com:8080/path/to/page?q=hello+world&lang=en&page=1#section");
 
@@ -17,16 +29,6 @@ export function UrlParserTool() {
       return { ok: true, protocol: u.protocol, hostname: u.hostname, port: u.port, pathname: u.pathname, search: u.search, hash: u.hash, origin: u.origin, host: u.host, params };
     } catch { return { ok: false } as const; }
   }, [input]);
-
-  const copy = (text: string) => { navigator.clipboard.writeText(text); toast.success("Copied!"); };
-
-  const Row = ({ label, value, mono = true }: { label: string; value: string; mono?: boolean }) => value ? (
-    <div className="flex items-start gap-3 py-2 border-b border-border/50 last:border-0">
-      <span className="text-xs text-muted-foreground w-24 shrink-0 pt-0.5">{label}</span>
-      <code className={`flex-1 text-sm break-all ${mono ? "font-mono" : ""}`}>{value}</code>
-      <button onClick={() => copy(value)} className="p-1 rounded hover:bg-muted shrink-0 mt-0.5"><Copy className="w-3 h-3 text-muted-foreground" /></button>
-    </div>
-  ) : null;
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">

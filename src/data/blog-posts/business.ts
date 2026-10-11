@@ -98,7 +98,7 @@ export const businessPosts: BlogPost[] = [
     publishedAt: "2025-06-05",
     readingTime: 8,
     isFeatured: true,
-    seoTitle: "Freelance Pricing Guide: How to Set Your Rates in 2025 | AllConverter.tools",
+    seoTitle: "Freelance Pricing Guide: How to Set Your Rates | AllConverter.tools",
     metaDescription: "How to calculate your ideal freelance hourly rate, project pricing strategies, value-based pricing, and a free rate calculator for Indian and global freelancers.",
     h1: "Freelance Pricing Guide: How to Set Your Rates and Charge What You're Worth",
     primaryKeyword: "freelance pricing guide",

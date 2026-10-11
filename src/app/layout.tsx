@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { siteConfig } from '@/lib/seo-utils';
+import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
 import { AdBlockNotice } from '@/components/ads/AdBlockNotice';
 import { MobileAnchorAd } from '@/components/ads/MobileAnchorAd';
 import { CommandPalette } from '@/components/layout/CommandPalette';
@@ -137,18 +137,18 @@ export const metadata: Metadata = {
       'msvalidate.01': '17312e26fdd14193a4d15a11856afcb0',
     },
   },
+  // No title/description/url here on purpose: Next fills og:title and
+  // og:description from each page's own metadata, and twitter:* from its
+  // Open Graph block. Setting them here made every page without its own
+  // override inherit the homepage's values.
   openGraph: {
     type: 'website',
     locale: siteConfig.locale,
-    url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: siteConfig.description,
+    images: defaultOgImages,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: siteConfig.description,
     site: siteConfig.twitter,
   },
   icons: {
@@ -195,8 +195,8 @@ export default function RootLayout({
                   logo: {
                     '@type': 'ImageObject',
                     '@id': `${siteConfig.url}/#logo`,
-                    url: `${siteConfig.url}/logo.png`,
-                    contentUrl: `${siteConfig.url}/logo.png`,
+                    url: `${siteConfig.url}/icon-512.png`,
+                    contentUrl: `${siteConfig.url}/icon-512.png`,
                     caption: siteConfig.name,
                   },
                   description: siteConfig.description,
@@ -237,14 +237,6 @@ export default function RootLayout({
                   name: siteConfig.name,
                   description: siteConfig.description,
                   publisher: { '@id': `${siteConfig.url}/#organization` },
-                  potentialAction: {
-                    '@type': 'SearchAction',
-                    target: {
-                      '@type': 'EntryPoint',
-                      urlTemplate: `${siteConfig.url}/tools/?q={search_term_string}`,
-                    },
-                    'query-input': 'required name=search_term_string',
-                  },
                 },
               ],
             }).replace(/</g, '\\u003c'),

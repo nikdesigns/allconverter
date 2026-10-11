@@ -5,14 +5,15 @@ import {
   ShieldCheck, CreditCard, Eye, ArrowRight,
   CheckCircle2, Zap,
 } from "lucide-react";
-import { siteConfig } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: `Support the Project | ${siteConfig.name}`,
+  title: `Support the Project`,
   description:
     "AllConverter.tools is free for everyone, forever. If it's saved you time, consider a one-time contribution to help cover hosting, AI API costs, and new tool development.",
   alternates: { canonical: `${siteConfig.url}/support/` },
   openGraph: {
+    images: defaultOgImages,
     title: `Support AllConverter.tools`,
     description:
       "Built by one developer, kept free for everyone. A contribution of any size helps keep the lights on.",
@@ -206,8 +207,8 @@ export default function SupportPage() {
               <div className="pt-5 border-t border-[var(--border-default)]">
                 <blockquote>
                   <p className="text-xs text-[var(--body-subtle)] leading-relaxed italic">
-                    "I don't have a premium plan to sell you. This is an independent project I maintain
-                    because people find it genuinely useful. Every tool stays free — that's not changing."
+                    &quot;I don&apos;t have a premium plan to sell you. This is an independent project I maintain
+                    because people find it genuinely useful. Every tool stays free — that&apos;s not changing.&quot;
                   </p>
                   <footer className="mt-2 text-xs font-medium text-[var(--heading)]">
                     — Nitin Kaushik, Founder
@@ -281,8 +282,8 @@ export default function SupportPage() {
             Thank you for using AllConverter.tools
           </h2>
           <p className="text-sm text-[var(--body-subtle)] max-w-lg mx-auto mb-6 leading-relaxed">
-            Whether you contribute or not, every tool on this platform will always be free. If you'd like
-            to help keep it that way, we'd be genuinely grateful.
+            Whether you contribute or not, every tool on this platform will always be free. If you&apos;d like
+            to help keep it that way, we&apos;d be genuinely grateful.
           </p>
           <div className="flex flex-wrap justify-center items-center gap-4">
             <a

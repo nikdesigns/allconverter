@@ -124,7 +124,7 @@ function WordToPdf() {
         <>
           <div className="rounded-xl border border-border p-4 bg-white text-sm max-h-64 overflow-y-auto" dangerouslySetInnerHTML={{ __html: html }} />
           <Button onClick={printPdf} className="w-full gap-2"><Download className="w-4 h-4" />Print to PDF (Ctrl+P / ⌘P → Save as PDF)</Button>
-          <div className="text-xs text-muted-foreground">In the print dialog, choose "Save as PDF" or "Microsoft Print to PDF" as the destination.</div>
+          <div className="text-xs text-muted-foreground">In the print dialog, choose &quot;Save as PDF&quot; or &quot;Microsoft Print to PDF&quot; as the destination.</div>
         </>
       )}
     </div>

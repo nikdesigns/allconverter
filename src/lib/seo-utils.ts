@@ -13,7 +13,73 @@ export const siteConfig = {
     "250+ free online tools for PDF, images, audio, AI, developer & business tasks. 100% browser-based — no sign-up, no file uploads, no limits. Works on any device.",
   twitter: "@allconvertertools",
   locale: "en_US",
+  /**
+   * Date of the last site-wide content change. Used as the sitemap
+   * lastModified for tool and category pages — bump it when you ship changes
+   * to them, rather than stamping every URL with the build time.
+   */
+  lastUpdated: "2026-10-11",
 };
+
+/** Shared 1200×630 social preview image (public/og-default.png). */
+export const defaultOgImages = [
+  {
+    url: `${SITE_URL}/og-default.png`,
+    width: 1200,
+    height: 630,
+    alt: `${SITE_NAME} — 250+ Free Online Tools`,
+  },
+];
+
+/**
+ * Removes a trailing "| AllConverter.tools" from a title. The root layout's
+ * title template appends the brand once, so page titles must not include it.
+ */
+export function stripBrand(title: string): string {
+  return title.replace(/\s*\|\s*AllConverter\.tools\s*$/i, "").trim();
+}
+
+/** Shortens text to `max` chars at a sentence or word boundary — never mid-word. */
+export function truncateAtWord(text: string, max = 160): string {
+  const t = text.trim();
+  if (t.length <= max) return t;
+  const head = t.slice(0, max);
+  if (/[.!?]$/.test(head) && t[max] === " ") return head;
+  const sentenceEnd = Math.max(head.lastIndexOf(". "), head.lastIndexOf("! "), head.lastIndexOf("? "));
+  if (sentenceEnd >= 90) return head.slice(0, sentenceEnd + 1);
+  const cut = t.slice(0, max - 1);
+  const space = cut.lastIndexOf(" ");
+  return `${cut.slice(0, space > 0 ? space : cut.length).replace(/[\s,;:—–-]+$/, "")}…`;
+}
+
+/**
+ * Builds a meta description from sentences in priority order, keeping only
+ * the ones that fit within `max` chars so nothing is cut off mid-sentence.
+ */
+export function fitDescription(sentences: string[], max = 160): string {
+  const clean = sentences
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((s) => (/[.!?…]$/.test(s) ? s : `${s}.`));
+  let out = "";
+  for (const s of clean) {
+    const next = out ? `${out} ${s}` : s;
+    if (next.length <= max) out = next;
+    else if (!out) return truncateAtWord(s, max);
+  }
+  return out;
+}
+
+/** Open Graph block for pages that only need the defaults plus their own URL. */
+export function baseOpenGraph(path: string) {
+  return {
+    type: "website" as const,
+    locale: "en_US",
+    siteName: SITE_NAME,
+    url: `${SITE_URL}${path}`,
+    images: defaultOgImages,
+  };
+}
 
 // ── Smart title builder ────────────────────────────────────────────────────────
 
@@ -91,43 +157,55 @@ function buildMetaTitle(tool: Tool): string {
 // ── Smart description builder ──────────────────────────────────────────────────
 
 function buildMetaDescription(tool: Tool): string {
-  if (tool.metaDescription) return tool.metaDescription;
+  if (tool.metaDescription) return truncateAtWord(tool.metaDescription);
 
   const name = tool.name;
   const slug = tool.slug;
   const nameLower = name.toLowerCase();
-  const base = tool.description.replace(/\.$/, "");
+  const base = tool.description.trim().replace(/\.$/, "");
 
-  // X-to-Y converters
+  // Only these categories actually take file input — don't promise
+  // "no file upload" on a unit converter or a calculator.
+  const handlesFiles = ["pdf-tools", "image-tools", "audio-tools", "video-tools"].includes(tool.category);
+  const privacy = handlesFiles
+    ? "100% browser-based — files never leave your device"
+    : "Runs entirely in your browser";
+
+  // X-to-Y file converters
   const toMatch = slug.match(/^(.+?)-to-(.+)$/);
-  if (toMatch) {
-    const fromFmt = toMatch[1].toUpperCase().replace(/-/g, "/");
-    const toFmt   = toMatch[2].toUpperCase().replace(/-/g, "/");
-    return `Convert ${fromFmt} to ${toFmt} free online — no sign-up, no file upload, instant results. ${base}. Works in any browser.`.slice(0, 160);
+  if (toMatch && handlesFiles) {
+    const fromFmt = toMatch[1].toUpperCase().replace(/-/g, " ");
+    const toFmt   = toMatch[2].toUpperCase().replace(/-/g, " ");
+    return fitDescription([
+      `Convert ${fromFmt} to ${toFmt} free online — no sign-up, no file upload`,
+      base,
+      "Works in any browser",
+      "Instant results",
+    ]);
   }
 
   // Compressor
   if (nameLower.includes("compressor") || nameLower.includes("compress")) {
-    return `${name} — reduce file size online for free with no sign-up. ${base}. 100% browser-based, files never leave your device.`.slice(0, 160);
+    return fitDescription([base, "Free online with no sign-up", privacy]);
   }
 
   // Merger
   if (nameLower.includes("merger")) {
-    return `${name} — combine files free online, no registration needed. ${base}. Runs entirely in your browser — no uploads to any server.`.slice(0, 160);
+    return fitDescription([base, "Free online, no registration needed", privacy]);
   }
 
   // Calculator
   if (tool.category === "calculators") {
-    return `Free ${name} online — ${base}. Instant results, no sign-up required. Works on mobile and desktop.`.slice(0, 160);
+    return fitDescription([`Free ${name} online — ${base}`, "Instant results, no sign-up required", "Works on mobile and desktop"]);
   }
 
   // Generator
   if (nameLower.includes("generator")) {
-    return `Free ${name} online — ${base}. No sign-up needed, instant results, 100% browser-based.`.slice(0, 160);
+    return fitDescription([`Free ${name} online — ${base}`, "No sign-up needed", privacy]);
   }
 
-  // Default: use description + our value props
-  return `${base}. Free online, no sign-up required, 100% browser-based — files stay on your device. Works on any device.`.slice(0, 160);
+  // Default: description + value props
+  return fitDescription([base, "Free online, no sign-up required", privacy, "Works on any device"]);
 }
 
 // ── Keyword builder ────────────────────────────────────────────────────────────
@@ -170,7 +248,9 @@ function buildKeywords(tool: Tool): string[] {
 // ── Public API ─────────────────────────────────────────────────────────────────
 
 export function generateToolMetadata(tool: Tool) {
-  const title       = buildMetaTitle(tool);
+  // Layout template appends the brand to <title>; social titles carry it explicitly.
+  const title       = stripBrand(buildMetaTitle(tool));
+  const socialTitle = `${title} | ${SITE_NAME}`;
   const description = buildMetaDescription(tool);
   const keywords    = buildKeywords(tool);
   const canonical   = `${SITE_URL}/tools/${tool.slug}/`;
@@ -181,33 +261,32 @@ export function generateToolMetadata(tool: Tool) {
     keywords,
     canonical,
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url: canonical,
       siteName: SITE_NAME,
+      locale: "en_US",
       type: "website" as const,
-      images: [
-        {
-          url: `${SITE_URL}/og/${tool.slug}.png`,
-          width: 1200,
-          height: 630,
-          alt: `${tool.name} — ${SITE_NAME}`,
-        },
-      ],
+      images: defaultOgImages,
     },
     twitter: {
       card: "summary_large_image" as const,
-      title,
+      site: siteConfig.twitter,
+      title: socialTitle,
       description,
-      images: [`${SITE_URL}/og/${tool.slug}.png`],
+      images: defaultOgImages.map((i) => i.url),
     },
   };
 }
 
 export function generateCategoryMetadata(category: ToolCategory_Data, toolCount: number) {
   const catName    = category.name;
-  const title      = `Free ${catName} Online — ${toolCount} Tools, No Sign-Up | ${SITE_NAME}`;
-  const description = `${toolCount} free ${catName.toLowerCase()} — all browser-based, no registration, no file uploads. ${category.description}`;
+  const title       = `Free ${catName} Online — ${toolCount} Tools, No Sign-Up`;
+  const socialTitle = `${title} | ${SITE_NAME}`;
+  const description = fitDescription([
+    `${toolCount} free ${catName.toLowerCase()} — all browser-based, no registration`,
+    category.description,
+  ]);
   const canonical   = `${SITE_URL}/${category.slug}/`;
 
   return {
@@ -223,11 +302,13 @@ export function generateCategoryMetadata(category: ToolCategory_Data, toolCount:
     ],
     canonical,
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url: canonical,
       siteName: SITE_NAME,
+      locale: "en_US",
       type: "website" as const,
+      images: defaultOgImages,
     },
   };
 }
@@ -255,36 +336,6 @@ export function generateBreadcrumbs(tool?: Tool, category?: ToolCategory_Data): 
   }
 
   return crumbs;
-}
-
-export function generateOrganizationSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: SITE_NAME,
-    url: SITE_URL,
-    logo: `${SITE_URL}/logo.png`,
-    description: siteConfig.description,
-    sameAs: [`https://twitter.com/allconvertertools`],
-  };
-}
-
-export function generateWebsiteSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: SITE_NAME,
-    url: SITE_URL,
-    description: siteConfig.description,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
-  };
 }
 
 export function generateToolSchema(tool: Tool) {
@@ -322,13 +373,6 @@ export function generateToolSchema(tool: Tool) {
     softwareHelp: {
       "@type": "CreativeWork",
       url: `${SITE_URL}/tools/${tool.slug}/`,
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      ratingCount: "1247",
-      bestRating: "5",
-      worstRating: "1",
     },
   };
 }

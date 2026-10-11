@@ -116,8 +116,8 @@ export function GrammarCheckerTool() {
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium">{issue.message}</p>
-                  <code className="text-[11px] opacity-70 block mt-0.5 truncate">"{text.slice(issue.from, issue.to)}"</code>
-                  {issue.suggestion && <p className="text-[11px] mt-0.5">Suggestion: <strong>"{issue.suggestion}"</strong></p>}
+                  <code className="text-[11px] opacity-70 block mt-0.5 truncate">&quot;{text.slice(issue.from, issue.to)}&quot;</code>
+                  {issue.suggestion && <p className="text-[11px] mt-0.5">Suggestion: <strong>&quot;{issue.suggestion}&quot;</strong></p>}
                 </div>
                 {issue.suggestion && (
                   <Button size="sm" variant="ghost" onClick={() => applyFix(issue)} className="h-6 text-[11px] shrink-0">Fix</Button>

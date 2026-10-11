@@ -319,7 +319,7 @@ export const imageToolsPosts: BlogPost[] = [
     priorityScore: 8,
     publishedAt: "2025-06-20",
     readingTime: 6,
-    seoTitle: "Best Image Formats for E-Commerce Product Photos (2025) | AllConverter.tools",
+    seoTitle: "Best Image Formats for E-Commerce Product Photos | AllConverter.tools",
     metaDescription: "Which image formats work best for e-commerce product photos? Recommendations for Amazon, Shopify, Flipkart, and WooCommerce with platform-specific requirements.",
     h1: "Best Image Formats for E-Commerce Product Photos",
     primaryKeyword: "best image format ecommerce",

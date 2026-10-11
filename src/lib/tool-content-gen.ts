@@ -558,7 +558,30 @@ function traitFAQs(tool: Tool, traits: ToolTraits): FAQ[] {
   return faqs;
 }
 
-// ─── Introduction Generator (100-150 words) ───────────────────────────────────
+// ─── Introduction Generator (~350 words) ─────────────────────────────────────
+
+/**
+ * Small deterministic hash used to pick a stable paragraph variant per tool,
+ * so tools sharing a category don't all render the exact same sentence.
+ */
+function hashSlug(slug: string, mod: number): number {
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) {
+    h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  }
+  return h % mod;
+}
+
+/** A short, tool-specific clause built from this tool's own tags/tagline — never shared across tools. */
+function toolSpecificClause(tool: Tool, traits: ToolTraits): string {
+  const notableTags = tool.tags.filter(t => !["free", "online", "tool"].includes(t.toLowerCase())).slice(0, 3);
+  const tagPhrase = notableTags.length ? notableTags.join(", ") : tool.category.replace(/-/g, " ");
+
+  if (traits.isConverter && traits.inputFormat && traits.outputFormat) {
+    return `Built specifically for ${traits.inputFormat.toUpperCase()} to ${traits.outputFormat.toUpperCase()} conversion, it keeps its focus narrow: ${tool.tagline.toLowerCase()}.`;
+  }
+  return `Its focus is narrow and specific — ${tool.tagline.toLowerCase()} — covering ${tagPhrase} rather than trying to be a general-purpose tool.`;
+}
 
 const CAT_LABELS: Partial<Record<ToolCategory, string>> = {
   "pdf-tools":        "PDF management",
@@ -590,28 +613,184 @@ const AUDIENCE_MAP: Partial<Record<ToolCategory, string>> = {
   "network-tools":    "IT professionals, developers, system administrators, and network engineers",
 };
 
+const PAIN_POINTS: Partial<Record<ToolCategory, string[]>> = {
+  "pdf-tools": [
+    "Dealing with PDFs used to mean purchasing expensive desktop software, waiting for slow cloud uploads, or struggling with tools that added watermarks to every output. Many free alternatives cap file sizes, require account creation, or limit the number of operations per day.",
+    "Most people reach for a PDF tool only occasionally, which makes paying for a desktop licence hard to justify. Meanwhile, many free web tools bury the real function behind sign-up walls, daily usage caps, or watermarked output that defeats the purpose.",
+    "PDF problems tend to show up at the worst time — a form due in ten minutes, a file that won't attach to an email. Desktop software takes too long to install for a one-off task, and plenty of \"free\" online tools quietly upload your document to a server you know nothing about.",
+  ],
+  "image-tools": [
+    "Resizing, converting, or compressing images traditionally required desktop applications like Photoshop or paid cloud subscriptions. Free alternatives often compromise quality, impose file-size limits, or plaster watermarks across processed images.",
+    "A quick image edit shouldn't require installing a full design suite. Yet many browser-based alternatives route your photos through a remote server, add a logo to the output, or throttle how many images you can process before asking for payment.",
+    "Getting an image to the right size, format, or file weight is a five-second task in principle, but most tools turn it into a multi-step ordeal — sign up, upload, wait in a queue, then discover the output is watermarked or capped at a low resolution.",
+  ],
+  "text-tools": [
+    "Text formatting and analysis tasks seem simple but quickly become tedious without the right tool. Manually counting words, converting letter cases, or cleaning up messy content wastes time that could be spent on the actual writing.",
+    "Copy-pasting text between apps just to check a count, fix casing, or strip odd formatting adds friction to writing that should stay frictionless. Word processors bury these functions several menus deep, if they offer them at all.",
+    "Small text cleanup jobs — stripping line breaks, normalising spacing, converting case — rarely justify opening a full editor. A focused browser tool that does exactly one job well saves the detour.",
+  ],
+  "developer-tools": [
+    "Developers constantly need to encode, decode, format, validate, and transform data during everyday work. Jumping between different browser bookmarks, unreliable online utilities, or writing one-off scripts for routine tasks adds unnecessary friction to an already complex workflow.",
+    "Every developer collects a mental list of half-trusted online utilities for the small, repetitive jobs — formatting a payload, generating an ID, checking a regex. Many are ad-choked, slow, or quietly log what you paste into them.",
+    "Writing a throwaway script to format JSON or generate a UUID takes longer than the task itself deserves. What's actually needed is a fast, no-nonsense utility that doesn't ask for an account or send your data anywhere.",
+  ],
+  "seo-tools": [
+    "Search optimisation involves repetitive data-gathering tasks — checking meta tags, inspecting structured data, analysing keyword usage, and verifying technical configurations. Paid SEO suites cost hundreds per month; this tool gives you targeted functionality for free.",
+    "Most full SEO platforms bundle a hundred features to sell one subscription, when what you actually needed today was a single, specific check. That mismatch between what you need and what you're paying for is exactly what a focused, single-purpose tool avoids.",
+    "Technical SEO checks are easy to skip because the enterprise suites that run them are expensive and overkill for a single page or a quick audit. A lightweight, purpose-built checker closes that gap for free.",
+  ],
+  "calculators": [
+    "Financial decisions carry real consequences, and doing the maths by hand or in a spreadsheet leaves room for formula errors. A purpose-built calculator ensures the correct formula is applied every time, with a clear breakdown of how each result is reached.",
+    "Spreadsheets are flexible but unforgiving — one wrong cell reference and the whole projection is off, often without any obvious sign something's wrong. A dedicated calculator removes that risk by applying the correct formula every time.",
+    "Working out a financial scenario by hand is slow, and building a spreadsheet just to answer one question is overkill. A single-purpose calculator gets you a reliable answer in the time it takes to type the numbers in.",
+  ],
+  "unit-converters": [
+    "Unit conversion errors are surprisingly common — and costly. From recipe ingredients measured in unfamiliar units to engineering drawings that mix metric and imperial, having a fast and reliable converter on hand prevents mistakes before they happen.",
+    "Search engines are full of quick unit-conversion answers, but they rarely show the underlying precision or let you adjust for edge cases. A proper converter shows the full value and lets you work with it directly.",
+    "Switching between measurement systems mid-task — cooking, building, studying — breaks concentration every time you have to look up a conversion factor. Having it built into a fast, always-available tool keeps that friction out of the way.",
+  ],
+  "ai-tools": [
+    "Creating professional written content — cover letters, outlines, marketing copy — from scratch is time-consuming and often intimidating. AI-powered generation gives you a solid, well-structured starting point in seconds rather than staring at a blank page.",
+    "The blank page is the hardest part of most writing tasks. A structured starting point — even one you'll heavily edit — makes the difference between staring at a cursor and actually making progress.",
+    "General-purpose AI chat tools can write almost anything, but that flexibility means re-explaining the format and requirements every single time. A tool built for one specific document type skips that setup entirely.",
+  ],
+  "business-tools": [
+    "Professional business documents must look polished and contain all required legal and financial fields. Building them from scratch in a word processor is error-prone; dedicated generators ensure nothing important is missed.",
+    "Small businesses and freelancers rarely have a template library or admin staff to produce polished documents on demand. Formatting one correctly from a blank document eats time that should go toward the actual client work.",
+    "A document with a missing field or an inconsistent format looks unprofessional regardless of how good the underlying work is. A structured generator handles the formatting so attention stays on getting the details right.",
+  ],
+  "color-tools": [
+    "Working with colours across design tools, CSS, and brand guidelines means constantly converting between HEX, RGB, HSL, and other formats. Small discrepancies in colour values can cause visible inconsistencies between design mockups and the final product.",
+    "A colour that looks identical in a design file can render subtly differently once translated into CSS by hand. Converting formats accurately, rather than guessing or rounding, keeps a brand's colours consistent from mockup to production.",
+    "Design handoff often breaks down at the colour-value level — a designer works in HSL, a developer needs HEX, and manual conversion introduces small but visible drift. A reliable converter removes that gap.",
+  ],
+  "audio-tools": [
+    "Audio editing software like Audacity or Adobe Audition requires installation, a learning curve, and in many cases a paid licence. For focused tasks — trimming a clip, converting a format, or joining two files — a browser-based tool gets the job done without any of that overhead.",
+    "Installing a full audio workstation to trim one clip or convert one file is a lot of setup for a small job. Most of that software's power goes unused for tasks this simple.",
+    "A short, specific audio task — cutting a clip, changing a format — shouldn't require the same tool a podcast editor uses for a full production. A focused browser-based tool matches the size of the job.",
+  ],
+};
+
+const FEATURE_HIGHLIGHTS: Partial<Record<ToolCategory, string[]>> = {
+  "pdf-tools": [
+    "The tool processes files entirely within your browser, meaning your documents are never uploaded to a remote server. There are no file-size caps enforced by a subscription tier, no watermarks added to the output, and no limit on how many times you can use it.",
+    "Processing runs locally in your browser tab rather than on a remote server, so there's no upload wait and no copy of your document sitting on someone else's storage. Use it as often as needed with no daily cap.",
+    "Because nothing leaves your device, there's no upload queue and no server-side file retention to worry about. The output carries no watermark and there's no artificial limit on how many documents you process.",
+  ],
+  "image-tools": [
+    "Processing happens locally on your device using your browser's built-in capabilities — no server uploads, no quality degradation from re-compression in transit, and no waiting in a queue. The output file is ready to download the moment processing is complete.",
+    "Your image is handled directly in the browser, so there's no round trip to a server and no extra compression pass introduced by an upload/download cycle. The result is ready as soon as processing finishes.",
+    "Local, in-browser processing means the original file quality is preserved right up until you apply the change you actually asked for — nothing is re-compressed in transit, and there's no queue to wait in.",
+  ],
+  "text-tools": [
+    "The tool runs entirely client-side, so your content is never sent anywhere. Results appear instantly as you type, making it fast enough to use mid-task without breaking your flow. There are no character limits or paywalled features.",
+    "Everything updates live as you type, with no submit button and no round trip to a server — fast enough to use in the middle of writing without breaking concentration.",
+    "Because processing is entirely local, there's no meaningful limit on input length and nothing is logged or transmitted. Results appear as you type.",
+  ],
+  "developer-tools": [
+    "All operations execute directly in your browser — no API keys, no rate limits, and no server round-trips that slow down your workflow. The output is formatted for immediate use: copy to clipboard with one click, or download as a file.",
+    "There's no API key to request, no rate limit to hit, and no network round-trip in the middle of a debugging session. The result is ready to copy the instant it's generated.",
+    "Running entirely client-side means nothing you paste is logged or transmitted anywhere — useful when the data you're working with includes real keys, tokens, or production payloads.",
+  ],
+  "seo-tools": [
+    "Results are presented in a clear, structured format with actionable detail rather than a wall of raw data. Every finding links back to the specific element that needs attention, so you can act immediately rather than spending time interpreting the output.",
+    "Findings are grouped by what needs attention rather than dumped as raw data, so the first thing you see is what to actually fix, not a report you need to interpret first.",
+    "The output points directly at the specific tag, field, or setting that needs a change, cutting out the interpretation step that raw crawl data usually requires.",
+  ],
+  "calculators": [
+    "The calculator uses standard industry-accepted formulas and updates results in real time as you adjust any input. Every result includes a full breakdown showing exactly how the figure was derived — so you understand the outcome, not just the number.",
+    "Every input change recalculates the result instantly, and the breakdown underneath shows exactly how that number was reached — useful for sanity-checking the figure, not just reading it off.",
+    "Results update live as you adjust any field, with the full calculation shown alongside the answer so you can see which input is driving the outcome.",
+  ],
+  "unit-converters": [
+    "Conversions update instantly as you type, with full precision retained. The tool supports a comprehensive list of units within each measurement category, covering both common everyday values and specialist units used in science, engineering, and industry.",
+    "Full floating-point precision is kept behind the scenes even though the display rounds for readability, so the underlying value stays accurate if you need to copy it elsewhere.",
+    "The unit list covers both the everyday units most people expect and the less common ones used in specialist fields, so switching context doesn't mean switching tools.",
+  ],
+  "ai-tools": [
+    "The generated output is a professionally structured starting point — not a rigid template. Every result is editable, so you can personalise the content, add specific details from your own experience, and adapt the tone to match the role or audience.",
+    "The output is meant to be edited, not used verbatim — a structured first draft that already has the right sections and tone, so your own editing pass is about substance rather than formatting.",
+    "Rather than a fixed template, the generated draft adapts its structure and tone to the details you provide, giving you a more relevant starting point to personalise further.",
+  ],
+  "business-tools": [
+    "All generated documents can be downloaded as a print-ready PDF or copied as formatted text. Your entered details are saved locally in your browser so you can return and update a document without re-entering everything from scratch.",
+    "Your details are kept in your browser's local storage between visits, so producing a second document doesn't mean retyping the same company information again.",
+    "The finished document is ready to download as a print-ready PDF or copy as formatted text, with consistent formatting handled automatically.",
+  ],
+  "color-tools": [
+    "Enter a value in any supported format and the tool instantly shows the equivalent in all other colour spaces simultaneously. Colour swatches update live so you can visually verify the conversion before copying the value into your code or design file.",
+    "Every supported colour format updates simultaneously as you edit any one of them, with a live swatch so you can confirm the result visually before copying it into code.",
+    "Converting a colour shows every equivalent format at once rather than one at a time, so you can grab whichever value your current tool or codebase expects.",
+  ],
+  "audio-tools": [
+    "Audio processing runs in your browser using the Web Audio API and WebAssembly — giving near-native performance without any installation. Your audio files are never uploaded to external servers, which matters when working with recordings that contain sensitive content.",
+    "Using the Web Audio API directly in the browser gives near-native processing speed without installing anything, and the audio file never has to leave your device.",
+    "Because processing happens locally, there's no upload step and no server-side copy of the recording — relevant if the audio contains anything sensitive.",
+  ],
+};
+
 function generateIntroduction(tool: Tool, traits: ToolTraits): string {
-  const { name, description, category } = tool;
-  const catLabel = CAT_LABELS[category]  ?? "online utilities";
-  const audience = AUDIENCE_MAP[category] ?? "professionals and everyday users";
+  const { name, description, category, slug } = tool;
+  const catLabel  = CAT_LABELS[category]  ?? "online utilities";
+  const audience  = AUDIENCE_MAP[category] ?? "professionals and everyday users";
+
+  const painVariants     = PAIN_POINTS[category];
+  const featureVariants  = FEATURE_HIGHLIGHTS[category];
+  const painPoint = painVariants
+    ? painVariants[hashSlug(slug, painVariants.length)]
+    : `Getting this kind of task done online often means choosing between slow, ad-heavy tools that limit output quality, or paying for software that does far more than you actually need.`;
+  const features = featureVariants
+    ? featureVariants[hashSlug(slug + "-features", featureVariants.length)]
+    : `This tool runs entirely in your browser with no installation, no account required, and no data sent to external servers. Results are available immediately and can be downloaded or copied with a single click.`;
+  const specificClause = toolSpecificClause(tool, traits);
 
   const privacyNote = traits.usesExternalAPI
-    ? "No files are stored on our servers."
-    : "Your files never leave your browser — full privacy by design.";
+    ? "Only the minimal data needed to fulfil your request is sent to the processing service — no files or personal data are stored."
+    : "Everything runs locally in your browser. Your files and content are never transmitted to any server, keeping your data completely private.";
 
   const actionVerb = traits.hasFileInput
-    ? "upload"
+    ? "upload your file to"
     : traits.isCalculator
     ? "enter your values into"
     : traits.isGenerator
-    ? "fill in the form for"
+    ? "fill in the form in"
     : "paste your content into";
 
-  // Two-paragraph format: what it does + who uses it and why
-  return (
-    `${name} is a free, browser-based ${catLabel} tool. ${description}\n\n` +
-    `${audience.charAt(0).toUpperCase() + audience.slice(1)} use ${name} every day to save time and skip the overhead of desktop software or paid services. No installation, no account, and no technical knowledge required — just ${actionVerb} ${name} and get results in seconds. ${privacyNote}`
-  );
+  // Paragraph 3: trait-specific how-it-helps detail
+  let traitPara = "";
+  if (traits.isConverter && traits.inputFormat && traits.outputFormat) {
+    const inf  = traits.inputFormat.toUpperCase();
+    const outf = traits.outputFormat.toUpperCase();
+    traitPara = `Converting from ${inf} to ${outf} is one of the most common file-handling tasks, yet it often requires format-specific knowledge about codec compatibility, quality settings, and metadata preservation. ${name} handles those details automatically — you choose the output quality, and the tool selects the optimal encoding parameters for the target format. Batch conversion is supported so you can process multiple files simultaneously rather than repeating the operation one file at a time.`;
+  } else if (traits.isCompressor) {
+    traitPara = `${name} uses proven compression algorithms to reduce file size while preserving as much quality as the format allows. A quality slider lets you balance between file size and visual or audio fidelity, and a live before/after comparison shows you exactly what you are trading off. Reducing file sizes means faster page loads, smaller email attachments, and lower storage costs — all without sacrificing the content that matters.`;
+  } else if (traits.isCalculator) {
+    traitPara = `Behind the straightforward interface, ${name} applies the exact formulas used by financial professionals and follows standard mathematical conventions for rounding and precision. Each result comes with a step-by-step breakdown so you can verify the calculation and understand how each input affects the outcome. This makes it equally useful as a quick answer tool and as a learning resource for understanding the underlying mathematics.`;
+  } else if (traits.isGenerator && !traits.hasFileInput) {
+    traitPara = `${name} is built around a structured template informed by professional standards and real-world examples. The form guides you through every required field in a logical order, and the generated output is formatted consistently and correctly. Because the output is editable plain text or a downloadable file, you retain full control to customise, reorder, or expand any section after generation.`;
+  } else if (traits.isAnalyzer) {
+    traitPara = `${name} analyses your input and returns a structured report that surfaces both issues and opportunities. Rather than presenting raw data that requires interpretation, the results are organised by priority — the most important findings appear first, with enough detail to act on each one immediately. You do not need to be a specialist to understand the output; plain-language explanations accompany every finding.`;
+  } else if (traits.hasFileInput) {
+    traitPara = `${name} processes your file entirely within your browser tab. Depending on your device, files are typically processed in a few seconds even at high quality settings. Once complete, the output is available to download immediately — no waiting for an email link, no expiring download window, and no account required to retrieve your file.`;
+  } else {
+    traitPara = `${name} is optimised for speed and ease of use. The interface is intentionally simple — no menus to navigate, no settings to configure before you can begin. Paste or enter your content, adjust the options that matter, and the result is ready to copy or download within seconds.`;
+  }
+
+  // Paragraph 5: privacy + availability
+  const closingPara = `${name} is available on every modern browser — Chrome, Firefox, Safari, and Edge — and works equally well on smartphones, tablets, and desktop computers. No app download is required. ${privacyNote} Use it as many times as you need, completely free, with no usage limits and no sign-up required.`;
+
+  return [
+    // P1: What it is (unique per tool via its own description)
+    `${name} is a free, browser-based ${catLabel} tool. ${description} ${specificClause}`,
+    // P2: The problem it solves (rotated per-category variant)
+    painPoint,
+    // P3: Trait-specific technical detail
+    traitPara,
+    // P4: Key feature highlights for this category (rotated per-category variant)
+    features,
+    // P5: Availability + privacy closer
+    closingPara,
+  ].join("\n\n");
 }
 
 // ─── HowTo Fallback ───────────────────────────────────────────────────────────

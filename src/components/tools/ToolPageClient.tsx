@@ -22,7 +22,9 @@ import {
 import { ToolInterface } from "./ToolInterface";
 import { AdUnit } from "@/components/ads/AdUnit";
 import type { Tool, ToolCategory_Data, BreadcrumbItem } from "@/types";
+import type { BlogPost } from "@/types/blog";
 import { cn } from "@/lib/utils";
+import { BookOpen, Clock } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   FileText, FileDown, FilePlus2, ScissorsLineDashed, FileOutput, FileImage, FilePlus,
@@ -42,6 +44,7 @@ interface ToolPageClientProps {
   category: ToolCategory_Data;
   relatedTools: Tool[];
   breadcrumbs: BreadcrumbItem[];
+  relatedGuides: BlogPost[];
 }
 
 export function ToolPageClient({
@@ -49,6 +52,7 @@ export function ToolPageClient({
   category,
   relatedTools,
   breadcrumbs,
+  relatedGuides,
 }: ToolPageClientProps) {
   const Icon = iconMap[tool.icon] || FileText;
 
@@ -222,6 +226,43 @@ export function ToolPageClient({
                     </AccordionItem>
                   ))}
                 </Accordion>
+              </div>
+            )}
+
+            {/* Related Guides */}
+            {relatedGuides.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <BookOpen className="w-4 h-4 text-primary" />
+                  <h2 className="text-xl font-semibold">Related Guides from Our Blog</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {relatedGuides.map((post) => (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.category}/${post.slug}/`}
+                      className="group flex flex-col gap-2 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:bg-primary/5 transition-all"
+                    >
+                      <h3 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-snug line-clamp-2">
+                        {post.h1}
+                      </h3>
+                      {post.excerpt && (
+                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-3 mt-auto pt-1 text-xs text-muted-foreground">
+                        {post.readingTime && (
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {post.readingTime} min read
+                          </span>
+                        )}
+                        <span className="text-primary font-medium group-hover:underline">Read article →</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>

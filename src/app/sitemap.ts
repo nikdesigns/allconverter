@@ -9,23 +9,22 @@ export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  // Stable dates for pages that don't change often — avoids signalling
+  // "everything changed" on every deploy, which wastes crawl budget.
+  const d = (s: string) => new Date(s);
 
   const staticPages: MetadataRoute.Sitemap = [
-    { url: `${siteConfig.url}/`,           lastModified: now, changeFrequency: "daily",   priority: 1.0 },
-    { url: `${siteConfig.url}/tools/`,     lastModified: now, changeFrequency: "daily",   priority: 0.9 },
-    { url: `${siteConfig.url}/blog/`,      lastModified: now, changeFrequency: "daily",   priority: 0.9 },
-    { url: `${siteConfig.url}/about/`,     lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${siteConfig.url}/changelog/`, lastModified: now, changeFrequency: "weekly",  priority: 0.6 },
-    { url: `${siteConfig.url}/contact/`,   lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${siteConfig.url}/sitemap/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.5 },
-    { url: `${siteConfig.url}/video-tools/`,    lastModified: now, changeFrequency: "weekly",  priority: 0.85 },
-    { url: `${siteConfig.url}/support/`,       lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${siteConfig.url}/author/nitin/`,  lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${siteConfig.url}/privacy/`,   lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
-    { url: `${siteConfig.url}/terms/`,     lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
-    { url: `${siteConfig.url}/cookies/`,   lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
-    { url: `${siteConfig.url}/security/`,  lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
-    { url: `${siteConfig.url}/disclaimer/`,lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
+    { url: `${siteConfig.url}/`,           lastModified: now,              changeFrequency: "daily",   priority: 1.0 },
+    { url: `${siteConfig.url}/tools/`,     lastModified: now,              changeFrequency: "daily",   priority: 0.9 },
+    { url: `${siteConfig.url}/blog/`,      lastModified: now,              changeFrequency: "daily",   priority: 0.9 },
+    { url: `${siteConfig.url}/about/`,     lastModified: d("2025-01-01"),  changeFrequency: "monthly", priority: 0.6 },
+    { url: `${siteConfig.url}/changelog/`, lastModified: now,              changeFrequency: "weekly",  priority: 0.6 },
+    { url: `${siteConfig.url}/contact/`,   lastModified: d("2025-01-01"),  changeFrequency: "monthly", priority: 0.5 },
+    { url: `${siteConfig.url}/sitemap/`,   lastModified: now,              changeFrequency: "weekly",  priority: 0.5 },
+    { url: `${siteConfig.url}/video-tools/`,   lastModified: now,          changeFrequency: "weekly",  priority: 0.85 },
+    { url: `${siteConfig.url}/support/`,       lastModified: d("2025-01-01"), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${siteConfig.url}/author/nitin/`,  lastModified: d("2025-01-01"), changeFrequency: "monthly", priority: 0.5 },
+    // privacy/terms/cookies/disclaimer excluded — boilerplate, consume crawl budget without ranking value
   ];
 
   const toolCategoryPages: MetadataRoute.Sitemap = categories.map((cat) => ({

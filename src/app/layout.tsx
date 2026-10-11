@@ -1,13 +1,15 @@
 import type { Metadata, Viewport } from 'next';
 import { JetBrains_Mono } from 'next/font/google';
 import Script from 'next/script';
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { siteConfig } from '@/lib/seo-utils';
 import { AdBlockNotice } from '@/components/ads/AdBlockNotice';
 import { MobileAnchorAd } from '@/components/ads/MobileAnchorAd';
+import { CommandPalette } from '@/components/layout/CommandPalette';
+import { PWAInstallPrompt } from '@/components/layout/PWAInstallPrompt';
 import './globals.css';
 
 // Using SF Pro (Apple's system font) via native stack for best performance and native feel on Apple devices.
@@ -156,6 +158,7 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-touch-icon.png',
   },
+  manifest: '/site.webmanifest',
 };
 
 export const viewport: Viewport = {
@@ -174,13 +177,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Google AdSense — must be in <head> for site verification */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6648091987919638"
-          crossOrigin="anonymous"
-        />
+      <body
+        className={`${jetbrainsMono.variable} min-h-screen flex flex-col antialiased`}
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -248,13 +247,9 @@ export default function RootLayout({
                   },
                 },
               ],
-            }),
+            }).replace(/</g, '\\u003c'),
           }}
         />
-      </head>
-      <body
-        className={`${jetbrainsMono.variable} min-h-screen flex flex-col antialiased`}
-      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -267,7 +262,16 @@ export default function RootLayout({
           <Toaster />
           <AdBlockNotice />
           <MobileAnchorAd />
+          <CommandPalette />
+          <PWAInstallPrompt />
         </ThemeProvider>
+
+        {/* Google AdSense */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6648091987919638"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
 
         {/* Google Analytics 4 */}
         <Script

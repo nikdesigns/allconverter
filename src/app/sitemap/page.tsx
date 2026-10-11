@@ -14,7 +14,7 @@ import { blogCategories } from "@/data/blog-categories";
 export const metadata: Metadata = {
   title: "Sitemap — All Tools & Pages",
   description:
-    "Complete sitemap of AllConverter.tools — browse all 100+ free online tools organized by category: PDF, image, text, developer, SEO, business, audio, AI tools and more.",
+    "Complete sitemap of AllConverter.tools — browse all 250+ free online tools organized by category: PDF, image, text, developer, SEO, business, audio, AI tools and more.",
   alternates: { canonical: `${siteConfig.url}/sitemap/` },
   robots: { index: true, follow: true },
 };

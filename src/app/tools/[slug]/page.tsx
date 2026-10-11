@@ -13,6 +13,8 @@ import {
 } from "@/lib/seo-utils";
 import { getEnrichedTool } from "@/lib/tool-content-gen";
 import { ToolPageClient } from "@/components/tools/ToolPageClient";
+import { allBlogPosts } from "@/data/blog-posts";
+import type { BlogPost } from "@/types/blog";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -50,6 +52,11 @@ export default async function ToolPage({ params }: Props) {
   const relatedTools = getRelatedTools(tool, 4);
   const breadcrumbs  = generateBreadcrumbs(tool, category);
 
+  // Blog posts that reference this tool — shown as "Related Guides"
+  const relatedGuides: BlogPost[] = allBlogPosts
+    .filter((p) => p.relatedToolSlugs?.includes(tool.slug))
+    .slice(0, 3);
+
   const schemas = [
     generateToolSchema(tool),
     generateBreadcrumbSchema(breadcrumbs),
@@ -71,6 +78,7 @@ export default async function ToolPage({ params }: Props) {
         category={category!}
         relatedTools={relatedTools}
         breadcrumbs={breadcrumbs}
+        relatedGuides={relatedGuides}
       />
     </>
   );

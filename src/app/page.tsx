@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/home/HeroSection";
 import { CategoriesGrid } from "@/components/home/CategoriesGrid";
+import { NewToolsStrip } from "@/components/home/NewToolsStrip";
 import { PopularTools } from "@/components/home/PopularTools";
+import { RecentlyUsedTools } from "@/components/home/RecentlyUsedTools";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FounderSection } from "@/components/home/FounderSection";
@@ -61,8 +63,10 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
       />
       <HeroSection />
+      <RecentlyUsedTools />
       <CategoriesGrid />
       <PopularTools />
+      <NewToolsStrip />
       <LatestArticles />
       <BenefitsSection />
       <FAQSection />

@@ -39,7 +39,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-[var(--body-subtle)] leading-relaxed mb-4 max-w-[220px]">
-              Convert Anything. All in One Place. 100+ free online tools — no sign-up required.
+              Convert Anything. All in One Place. 250+ free online tools — no sign-up required.
             </p>
             <div className="flex items-center gap-3">
               <a

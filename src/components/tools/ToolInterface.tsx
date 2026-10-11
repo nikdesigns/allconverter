@@ -1,8 +1,9 @@
 "use client";
 
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import type { Tool } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { addRecentTool } from "@/lib/recently-used";
 
 // ── Original tools ─────────────────────────────────────────────────────────────
 const JsonFormatterTool = lazy(() => import("./implementations/JsonFormatterTool").then(m => ({ default: m.JsonFormatterTool })));
@@ -34,6 +35,7 @@ const ImageResizerTool = lazy(() => import("./implementations/ImageResizerTool")
 const ImageFormatConverterTool = lazy(() => import("./implementations/ImageFormatConverterTool").then(m => ({ default: m.ImageFormatConverterTool })));
 const ImageCropperTool = lazy(() => import("./implementations/ImageCropperTool").then(m => ({ default: m.ImageCropperTool })));
 const BackgroundRemoverTool = lazy(() => import("./implementations/BackgroundRemoverTool").then(m => ({ default: m.BackgroundRemoverTool })));
+const SmartBackgroundRemoverTool = lazy(() => import("./implementations/SmartBackgroundRemoverTool").then(m => ({ default: m.SmartBackgroundRemoverTool })));
 const SvgToPngTool = lazy(() => import("./implementations/SvgToPngTool").then(m => ({ default: m.SvgToPngTool })));
 const AvifImageTool = lazy(() => import("./implementations/AvifImageTool").then(m => ({ default: m.AvifImageTool })));
 const ImageDpiConverterTool = lazy(() => import("./implementations/ImageDpiConverterTool").then(m => ({ default: m.ImageDpiConverterTool })));
@@ -178,6 +180,7 @@ const toolComponentMap: Record<string, React.ComponentType> = {
   "webp-to-jpg": ImageFormatConverterTool,
   "image-cropper": ImageCropperTool,
   "background-remover": BackgroundRemoverTool,
+  "smart-background-remover": SmartBackgroundRemoverTool,
   "svg-to-png": SvgToPngTool,
   "avif-to-jpg": AvifImageTool,
   "avif-to-png": AvifImageTool,
@@ -486,6 +489,10 @@ interface ToolInterfaceProps {
 
 export function ToolInterface({ tool }: ToolInterfaceProps) {
   const Component = toolComponentMap[tool.slug];
+
+  useEffect(() => {
+    addRecentTool(tool.slug);
+  }, [tool.slug]);
 
   if (!Component) {
     return (

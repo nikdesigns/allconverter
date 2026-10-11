@@ -18,7 +18,7 @@ import { siteConfig } from "@/lib/seo-utils";
 export const metadata: Metadata = {
   title: "About Us — Who We Are & Our Mission",
   description:
-    "Learn about AllConverter.tools — a free browser-based platform with 100+ online tools for PDF conversion, image editing, developer utilities, SEO, business documents, AI content, and more. No sign-up. No uploads. Just results.",
+    "Learn about AllConverter.tools — a free browser-based platform with 250+ online tools for PDF conversion, image editing, developer utilities, SEO, business documents, AI content, and more. No sign-up. No uploads. Just results.",
   alternates: { canonical: `${siteConfig.url}/about/` },
 };
 
@@ -136,7 +136,7 @@ export default function AboutPage() {
             Built to make everyday<br className="hidden sm:block" /> digital tasks effortless.
           </h1>
           <p className="text-base text-[var(--body-subtle)] leading-relaxed max-w-2xl">
-            AllConverter.tools is a free online platform with 100+ browser-based utilities — from PDF
+            AllConverter.tools is a free online platform with 250+ browser-based utilities — from PDF
             conversion and image editing to developer tools, SEO analysis, business documents, and
             AI-powered content generation. No installation. No account. No file uploads. Just open a
             tool and get things done.

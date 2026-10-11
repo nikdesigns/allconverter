@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/layout/ThemeProvider";
 import {
   Menu, X, Sun, Moon, Zap, ChevronDown, Search,
   FileText, Image as ImageIcon, Type, Code2, SearchCheck,
@@ -28,10 +28,8 @@ const catIconMap: Record<string, React.ElementType> = {
 };
 
 const quickNavLinks = [
+  { href: "/workflows/", label: "Workflows" },
   { href: "/blog/", label: "Blog" },
-  { href: "/pdf-tools/", label: "PDF Tools" },
-  { href: "/developer-tools/", label: "Developer" },
-  { href: "/calculators/", label: "Calculators" },
 ];
 
 export function Header() {
@@ -96,7 +94,7 @@ export function Header() {
             >
               <button
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium rounded-[var(--radius-default)] transition-all duration-150 leading-none",
+                  "flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium rounded-[var(--radius-default)] transition-all duration-150 leading-none",
                   toolsOpen
                     ? "text-[var(--heading)] bg-[var(--neutral-secondary-medium)]"
                     : "text-[var(--body-subtle)] hover:text-[var(--heading)] hover:bg-[var(--neutral-secondary-soft)]"
@@ -135,7 +133,7 @@ export function Header() {
                         href="/tools/"
                         className="text-xs text-[var(--fg-brand)] hover:underline flex items-center gap-1 font-medium"
                       >
-                        View all 100+ tools
+                        View all 250+ tools
                         <ArrowRight className="w-3 h-3" />
                       </Link>
                     </div>
@@ -175,7 +173,7 @@ export function Header() {
                     {/* Panel footer */}
                     <div className="flex items-center justify-between px-5 py-3 border-t border-[var(--border-default)] bg-[var(--neutral-secondary-soft)]/40">
                       <p className="text-[11px] text-[var(--body-subtle)]">
-                        100+ free tools · No sign-up · Browser-based
+                        250+ free tools · No sign-up · Browser-based
                       </p>
                       <Link href="/tools/">
                         <Button size="sm" className="h-7 text-[11px] px-3 gap-1">
@@ -196,7 +194,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3.5 py-2 text-[13px] font-medium text-[var(--body-subtle)] hover:text-[var(--heading)] rounded-[var(--radius-default)] hover:bg-[var(--neutral-secondary-soft)] transition-colors"
+                className="px-3 py-2 text-[13px] font-medium text-[var(--body-subtle)] hover:text-[var(--heading)] rounded-[var(--radius-default)] hover:bg-[var(--neutral-secondary-soft)] transition-colors"
               >
                 {item.label}
               </Link>
@@ -206,17 +204,19 @@ export function Header() {
           {/* ── Right actions ──────────────────────────────── */}
           <div className="flex items-center gap-1.5">
 
-            {/* Search pill */}
-            <Link
-              href="/tools/"
-              className="hidden md:flex items-center gap-2 px-3 py-[5px] text-[12px] text-[var(--body-subtle)] hover:text-[var(--heading)] rounded-[var(--radius-default)] border border-[var(--border-default)] hover:border-[var(--border-brand)] bg-[var(--neutral-secondary-soft)] hover:bg-[var(--brand-softer)] transition-all"
+            {/* Search pill — opens command palette */}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
+              aria-label="Search tools"
+              className="hidden md:flex items-center gap-2 px-2.5 py-[5px] text-[12px] text-[var(--body-subtle)] hover:text-[var(--heading)] rounded-[var(--radius-default)] border border-[var(--border-default)] hover:border-[var(--border-brand)] bg-[var(--neutral-secondary-soft)] hover:bg-[var(--brand-softer)] transition-all"
             >
               <Search className="w-3.5 h-3.5 shrink-0" />
-              <span>Search tools…</span>
-              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] border border-[var(--border-default)] rounded bg-[var(--neutral-primary-soft)] text-[var(--body-subtle)] font-mono leading-none">
+              <span className="hidden xl:inline">Search tools…</span>
+              <kbd className="hidden xl:inline-flex items-center px-1.5 py-0.5 text-[10px] border border-[var(--border-default)] rounded bg-[var(--neutral-primary-soft)] text-[var(--body-subtle)] font-mono leading-none">
                 ⌘K
               </kbd>
-            </Link>
+            </button>
 
             {/* Theme toggle */}
             <Button
@@ -234,7 +234,7 @@ export function Header() {
             <Link
               href="/support/"
               title="Support the project"
-              className="hidden sm:flex items-center justify-center w-8 h-8 rounded-(--radius-default) text-rose-400 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
+              className="hidden xl:flex items-center justify-center w-8 h-8 rounded-(--radius-default) text-rose-400 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
             >
               <Heart className="w-4 h-4" />
             </Link>
@@ -276,7 +276,7 @@ export function Header() {
                       className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--neutral-secondary-soft)] text-sm text-[var(--body-subtle)]"
                     >
                       <Search className="w-4 h-4 shrink-0" />
-                      Search 100+ tools…
+                      Search 250+ tools…
                     </Link>
                   </div>
 

@@ -8,6 +8,7 @@ export const pdfToolsPosts: BlogPost[] = [
     intent: "informational",
     priorityScore: 10,
     publishedAt: "2025-06-01",
+    updatedAt: "2026-10-12",
     readingTime: 12,
     isFeatured: true,
     isPillar: true,

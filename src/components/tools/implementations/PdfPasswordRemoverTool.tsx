@@ -20,26 +20,18 @@ export function PdfPasswordRemoverTool() {
     if (!file) return;
     setLoading(true);
     try {
-      const { PDFDocument } = await import("pdf-lib");
-      const buffer = await file.arrayBuffer();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const doc = await PDFDocument.load(buffer, { ignoreEncryption: true } as any);
-      const saved = await doc.save();
-      const blob = new Blob([saved as unknown as BlobPart], { type: "application/pdf" });
+      const { decryptPdf } = await import("@/lib/qpdf");
+      const out = await decryptPdf(new Uint8Array(await file.arrayBuffer()), password);
+      const blob = new Blob([new Uint8Array(out)], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `unlocked_${file.name}`;
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
       toast.success("Password removed — PDF downloaded");
     } catch (e) {
-      const msg = (e as Error).message;
-      if (msg.includes("password") || msg.includes("decrypt")) {
-        toast.error("Wrong password or encrypted with unsupported algorithm");
-      } else {
-        toast.error("Failed: " + msg);
-      }
+      toast.error(e instanceof Error ? e.message : "Could not unlock this PDF.");
     }
     setLoading(false);
   };
@@ -52,7 +44,7 @@ export function PdfPasswordRemoverTool() {
       </div>
       <div className="p-5 space-y-4">
         <div className="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs text-amber-400">
-          Only use this tool on PDFs you own or have authorization to modify. Supports standard PDF password encryption (RC4/AES).
+          Only use this on PDFs you own or are authorised to modify. You need the current password: this tool removes a password you know, it cannot recover one you have forgotten.
         </div>
         <div role="button" tabIndex={0} onKeyDown={activateOnKey}
           className="border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all"
@@ -65,7 +57,7 @@ export function PdfPasswordRemoverTool() {
         </div>
         <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
         <div>
-          <label className="text-xs text-muted-foreground mb-1 block">PDF Password (leave empty if no user password)</label>
+          <label className="text-xs text-muted-foreground mb-1 block">Current PDF password (leave empty if the file opens without one and is only restricted)</label>
           <Input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter PDF password if required…" className="text-sm" />
         </div>
         <Button onClick={remove} disabled={!file || loading} className="w-full gap-2">

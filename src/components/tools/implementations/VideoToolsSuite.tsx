@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { runFfmpeg, ffmpegInputName, ffmpegTime } from "@/lib/ffmpeg";
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -123,102 +124,121 @@ function ResultCard({ blob, filename, onReset }: { blob: Blob; filename: string;
   );
 }
 
+// ─── FFmpeg-backed tools ───────────────────────────────────────────────────────
+
+/** Shared state for one FFmpeg run: loading the engine, progress, result or error. */
+function useFfmpegJob() {
+  const [state, setState]       = useState<CaptureState>("idle");
+  const [stage, setStage]       = useState("");
+  const [progress, setProgress] = useState(0);
+  const [outBlob, setOutBlob]   = useState<Blob | null>(null);
+  const [outName, setOutName]   = useState("");
+  const [error, setError]       = useState("");
+
+  const reset = useCallback(() => { setState("idle"); setProgress(0); setOutBlob(null); setError(""); setStage(""); }, []);
+
+  const run = useCallback(async (file: File, args: (input: string, output: string) => string[], outExt: string, mime: string, suffix: string) => {
+    setState("processing"); setProgress(0); setError(""); setOutBlob(null);
+    setStage("Loading video engine (about 30 MB, first time only)…");
+    const input = ffmpegInputName(file);
+    const output = `output.${outExt}`;
+    try {
+      const res = await runFfmpeg({
+        inputs: [{ name: input, file }],
+        args: args(input, output),
+        outputs: [output],
+        onReady: () => setStage("Processing…"),
+        onProgress: setProgress,
+      });
+      const data = res.files.get(output);
+      if (!data || data.length === 0) {
+        const hint = res.log.filter((l) => /error|invalid|not found|unsupported|does not contain/i.test(l)).slice(-2).join(" ");
+        throw new Error(hint || "This video could not be processed. It may use a format the engine does not support.");
+      }
+      setOutBlob(new Blob([new Uint8Array(data)], { type: mime }));
+      setOutName(file.name.replace(/\.[^.]+$/, "") + suffix + "." + outExt);
+      setState("done");
+      toast.success("Done");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Processing failed.");
+      setState("error");
+    }
+  }, []);
+
+  return { state, stage, progress, outBlob, outName, error, run, reset };
+}
+
+function EngineNote() {
+  return (
+    <div className="flex gap-2 rounded-xl border border-border bg-muted/30 p-3">
+      <AlertCircle className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+      <p className="text-xs text-muted-foreground">
+        Encoding runs on your device with FFmpeg, so nothing is uploaded. Speed depends on your computer: long or
+        high-resolution videos can take several minutes. Keep this tab open while it works.
+      </p>
+    </div>
+  );
+}
+
+function JobStatus({ job }: { job: ReturnType<typeof useFfmpegJob> }) {
+  if (job.state === "processing") return <div role="status"><ProgressBar value={job.progress} label={job.stage} /></div>;
+  if (job.state === "error") {
+    return <div role="alert" className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-500">{job.error}</div>;
+  }
+  return null;
+}
+
+const selectClass = "w-full h-10 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
+
 // ─── 1. Video to Audio ─────────────────────────────────────────────────────────
 
+const AUDIO_OUTPUTS = {
+  mp3: { label: "MP3", ext: "mp3", mime: "audio/mpeg", args: (kbps: number) => ["-c:a", "libmp3lame", "-b:a", `${kbps}k`] },
+  m4a: { label: "M4A (AAC)", ext: "m4a", mime: "audio/mp4", args: (kbps: number) => ["-c:a", "aac", "-b:a", `${kbps}k`] },
+  wav: { label: "WAV (lossless)", ext: "wav", mime: "audio/wav", args: () => ["-c:a", "pcm_s16le"] },
+} as const;
+
 function VideoToAudio() {
-  const [file, setFile]       = useState<File | null>(null);
-  const [state, setState]     = useState<CaptureState>("idle");
-  const [progress, setProgress] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [outBlob, setOutBlob] = useState<Blob | null>(null);
-  const [error, setError]     = useState("");
-  const videoRef  = useRef<HTMLVideoElement | null>(null);
-  const recRef    = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
-  const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [file, setFile]     = useState<File | null>(null);
+  const [format, setFormat] = useState<keyof typeof AUDIO_OUTPUTS>("mp3");
+  const [kbps, setKbps]     = useState(192);
+  const job = useFfmpegJob();
+  const out = AUDIO_OUTPUTS[format];
 
-  const reset = () => { setFile(null); setState("idle"); setOutBlob(null); setError(""); setProgress(0); setElapsed(0); };
-
-  const extract = async () => {
+  const start = () => {
     if (!file) return;
-    setState("processing"); setError(""); setProgress(0);
-
-    const video = document.createElement("video");
-    video.src = URL.createObjectURL(file);
-    video.preload = "metadata";
-
-    await new Promise<void>((res, rej) => {
-      video.onloadedmetadata = () => { setDuration(video.duration); res(); };
-      video.onerror = () => rej(new Error("Could not load video"));
-      setTimeout(rej, 10000);
-    }).catch(e => { setError(String(e)); setState("error"); });
-
-    if (state === "error") return;
-
-    const stream = (video as HTMLVideoElement & { captureStream: () => MediaStream }).captureStream();
-    const audioTracks = stream.getAudioTracks();
-    if (!audioTracks.length) {
-      setError("No audio track found in this video file.");
-      setState("error"); return;
-    }
-
-    const audioStream = new MediaStream(audioTracks);
-    const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus" : "audio/webm";
-    const recorder = new MediaRecorder(audioStream, { mimeType: mime });
-    chunksRef.current = [];
-    recorder.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-    recorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: mime });
-      setOutBlob(blob); setState("done");
-      URL.revokeObjectURL(video.src);
-    };
-
-    recRef.current = recorder;
-    recorder.start(100);
-    video.play();
-
-    const start = performance.now();
-    timerRef.current = setInterval(() => {
-      const el = (performance.now() - start) / 1000;
-      setElapsed(el);
-      setProgress(Math.min(el / video.duration, 0.99));
-    }, 300);
-
-    video.onended = () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      setProgress(1);
-      recorder.stop();
-    };
-    video.onerror = () => { recorder.stop(); setError("Playback error."); setState("error"); };
+    void job.run(file, (input, output) => ["-i", input, "-vn", ...out.args(kbps), output], out.ext, out.mime, "");
   };
 
   return (
     <div className="space-y-4">
-      {!file ? (
-        <DropZone onFile={setFile} label="Drop a video file to extract audio" />
-      ) : (
+      {!file ? <DropZone onFile={(f) => { setFile(f); job.reset(); }} label="Drop a video file to extract audio" /> : (
         <>
-          <FileChip file={file} onRemove={reset} />
-          <RealtimeNote />
-          {state === "idle" && (
-            <Button onClick={extract} className="w-full gap-2 h-11">
-              <Music className="w-4 h-4" /> Extract Audio
-            </Button>
-          )}
-          {state === "processing" && (
-            <div className="space-y-3">
-              <ProgressBar value={progress} label={`Extracting… ${fmtTime(elapsed)} / ${fmtTime(duration)}`} />
+          <FileChip file={file} onRemove={() => { setFile(null); job.reset(); }} />
+          {job.state !== "done" && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="va-format" className="text-xs font-medium text-muted-foreground mb-1.5 block">Audio format</label>
+                <select id="va-format" value={format} onChange={(e) => setFormat(e.target.value as keyof typeof AUDIO_OUTPUTS)} className={selectClass}>
+                  {Object.entries(AUDIO_OUTPUTS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="va-kbps" className="text-xs font-medium text-muted-foreground mb-1.5 block">Bitrate</label>
+                <select id="va-kbps" value={kbps} disabled={format === "wav"} onChange={(e) => setKbps(Number(e.target.value))} className={cn(selectClass, format === "wav" && "opacity-50")}>
+                  {[128, 192, 256, 320].map((b) => <option key={b} value={b}>{b} kbps</option>)}
+                </select>
+              </div>
             </div>
           )}
-          {state === "done" && outBlob && (
-            <ResultCard blob={outBlob} filename={file.name.replace(/\.[^.]+$/, "") + ".webm"} onReset={reset} />
+          <JobStatus job={job} />
+          {job.state !== "processing" && job.state !== "done" && (
+            <Button onClick={start} className="w-full gap-2"><Music className="w-4 h-4" /> Extract audio as {out.label}</Button>
           )}
-          {state === "error" && (
-            <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-3 text-sm text-rose-400 flex gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" /> {error || "Extraction failed."}
-            </div>
+          {job.state === "done" && job.outBlob && (
+            <ResultCard blob={job.outBlob} filename={job.outName} onReset={() => { setFile(null); job.reset(); }} />
           )}
+          <EngineNote />
         </>
       )}
     </div>
@@ -232,100 +252,78 @@ function VideoTrimmer() {
   const [startStr, setStartStr] = useState("0:00");
   const [endStr, setEndStr]     = useState("0:30");
   const [duration, setDuration] = useState(0);
-  const [state, setState]       = useState<CaptureState>("idle");
-  const [progress, setProgress] = useState(0);
-  const [elapsed, setElapsed]   = useState(0);
-  const [outBlob, setOutBlob]   = useState<Blob | null>(null);
-  const [error, setError]       = useState("");
-  const chunksRef = useRef<Blob[]>([]);
-  const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const reset = () => { setFile(null); setState("idle"); setOutBlob(null); setError(""); setProgress(0); setElapsed(0); };
+  const [mode, setMode]         = useState<"fast" | "precise">("precise");
+  const job = useFfmpegJob();
 
   const onFile = (f: File) => {
-    setFile(f);
-    const v = document.createElement("video");
-    v.src = URL.createObjectURL(f);
-    v.onloadedmetadata = () => { setDuration(v.duration); setEndStr(fmtTime(Math.min(30, v.duration))); URL.revokeObjectURL(v.src); };
+    setFile(f); job.reset(); setDuration(0);
+    // Read the length so the end time can default to the whole video.
+    const probe = document.createElement("video");
+    probe.preload = "metadata";
+    probe.onloadedmetadata = () => {
+      if (Number.isFinite(probe.duration)) { setDuration(probe.duration); setEndStr(fmtTime(Math.min(30, probe.duration))); }
+      URL.revokeObjectURL(probe.src);
+    };
+    probe.src = URL.createObjectURL(f);
   };
 
-  const trim = async () => {
+  const start = () => {
     if (!file) return;
-    const startSec = parseSecs(startStr);
-    const endSec   = parseSecs(endStr);
-    if (endSec <= startSec) { toast.error("End time must be after start time"); return; }
-    const clipDur = endSec - startSec;
-
-    setState("processing"); setError(""); setProgress(0);
-
-    const video = document.createElement("video");
-    video.src = URL.createObjectURL(file);
-    await new Promise<void>(r => { video.onloadedmetadata = () => r(); });
-
-    video.currentTime = startSec;
-    await new Promise<void>(r => { video.onseeked = () => r(); });
-
-    const stream = (video as HTMLVideoElement & { captureStream: () => MediaStream }).captureStream();
-    const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") ? "video/webm;codecs=vp8,opus" : "video/webm";
-    const recorder = new MediaRecorder(stream, { mimeType: mime });
-    chunksRef.current = [];
-    recorder.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-    recorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: mime });
-      setOutBlob(blob); setState("done");
-      URL.revokeObjectURL(video.src);
-    };
-
-    recorder.start(100);
-    video.play();
-
-    const start = performance.now();
-    timerRef.current = setInterval(() => {
-      const el = (performance.now() - start) / 1000;
-      setElapsed(el);
-      setProgress(Math.min(el / clipDur, 0.99));
-      if (el >= clipDur) {
-        clearInterval(timerRef.current!);
-        video.pause();
-        setProgress(1);
-        recorder.stop();
-      }
-    }, 150);
+    const s = parseSecs(startStr), e = parseSecs(endStr);
+    if (e <= s) { toast.error("End time must be after start time"); return; }
+    const length = String(e - s);
+    const ext = (file.name.match(/\.([a-z0-9]+)$/i)?.[1] ?? "mp4").toLowerCase();
+    if (mode === "fast") {
+      // Stream copy: no re-encoding, so it is quick and lossless but can only cut on keyframes.
+      const keep = ["mp4", "mov", "m4v", "webm", "mkv"].includes(ext) ? (ext === "m4v" ? "mp4" : ext) : "mp4";
+      const mime = keep === "webm" ? "video/webm" : keep === "mkv" ? "video/x-matroska" : keep === "mov" ? "video/quicktime" : "video/mp4";
+      void job.run(file, (input, output) => ["-ss", ffmpegTime(s), "-i", input, "-t", length, "-c", "copy", "-avoid_negative_ts", "make_zero", output], keep, mime, "_trimmed");
+    } else {
+      void job.run(file, (input, output) => [
+        "-ss", ffmpegTime(s), "-i", input, "-t", length,
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "22", "-pix_fmt", "yuv420p",
+        "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", output,
+      ], "mp4", "video/mp4", "_trimmed");
+    }
   };
 
   return (
     <div className="space-y-4">
-      {!file ? (
-        <DropZone onFile={onFile} label="Drop a video file to trim" />
-      ) : (
+      {!file ? <DropZone onFile={onFile} label="Drop a video file to trim" /> : (
         <>
-          <FileChip file={file} onRemove={reset} />
-          {duration > 0 && <p className="text-xs text-muted-foreground">Video duration: {fmtTime(duration)}</p>}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs text-muted-foreground mb-1.5 block">Start time (m:ss)</label>
-              <Input value={startStr} onChange={e => setStartStr(e.target.value)} placeholder="0:00" className="h-10 text-sm font-mono" disabled={state === "processing"} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground mb-1.5 block">End time (m:ss)</label>
-              <Input value={endStr} onChange={e => setEndStr(e.target.value)} placeholder="0:30" className="h-10 text-sm font-mono" disabled={state === "processing"} />
-            </div>
-          </div>
-          <RealtimeNote />
-          {state === "idle" && (
-            <Button onClick={trim} className="w-full gap-2 h-11">
-              <Scissors className="w-4 h-4" /> Trim Video
-            </Button>
+          <FileChip file={file} onRemove={() => { setFile(null); job.reset(); }} />
+          {job.state !== "done" && (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="vt-start" className="text-xs font-medium text-muted-foreground mb-1.5 block">Start time (m:ss)</label>
+                  <Input id="vt-start" value={startStr} onChange={(e) => setStartStr(e.target.value)} className="h-10 font-mono" />
+                </div>
+                <div>
+                  <label htmlFor="vt-end" className="text-xs font-medium text-muted-foreground mb-1.5 block">End time (m:ss)</label>
+                  <Input id="vt-end" value={endStr} onChange={(e) => setEndStr(e.target.value)} className="h-10 font-mono" />
+                </div>
+              </div>
+              {duration > 0 && <p className="text-xs text-muted-foreground">Video length: {fmtTime(duration)}</p>}
+              <div className="grid grid-cols-2 gap-2" role="group" aria-label="Trim method">
+                {([["precise", "Precise", "Exact cut, MP4 output"], ["fast", "Fast", "No re-encode, cuts at keyframes"]] as const).map(([m, label, hint]) => (
+                  <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}
+                    className={cn("py-2.5 rounded-xl border text-xs font-medium transition-all",
+                      mode === m ? "border-primary/40 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground")}>
+                    {label}<span className="block text-[10px] opacity-70 mt-0.5">{hint}</span>
+                  </button>
+                ))}
+              </div>
+            </>
           )}
-          {state === "processing" && (
-            <ProgressBar value={progress} label={`Trimming… ${fmtTime(elapsed)} / ${fmtTime(parseSecs(endStr) - parseSecs(startStr))}`} />
+          <JobStatus job={job} />
+          {job.state !== "processing" && job.state !== "done" && (
+            <Button onClick={start} className="w-full gap-2"><Scissors className="w-4 h-4" /> Trim Video</Button>
           )}
-          {state === "done" && outBlob && (
-            <ResultCard blob={outBlob} filename={file.name.replace(/\.[^.]+$/, "") + "-trimmed.webm"} onReset={reset} />
+          {job.state === "done" && job.outBlob && (
+            <ResultCard blob={job.outBlob} filename={job.outName} onReset={() => { setFile(null); job.reset(); }} />
           )}
-          {state === "error" && (
-            <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-3 text-sm text-rose-400">{error || "Trim failed."}</div>
-          )}
+          <EngineNote />
         </>
       )}
     </div>
@@ -335,125 +333,75 @@ function VideoTrimmer() {
 // ─── 3. Video Compressor ───────────────────────────────────────────────────────
 
 const RES_OPTIONS = [
-  { label: "360p", width: 640,  height: 360,  bitrate: 500_000 },
-  { label: "480p", width: 854,  height: 480,  bitrate: 1_000_000 },
-  { label: "720p", width: 1280, height: 720,  bitrate: 2_500_000 },
+  { label: "Keep original", height: 0 },
+  { label: "1080p", height: 1080 },
+  { label: "720p", height: 720 },
+  { label: "480p", height: 480 },
+  { label: "360p", height: 360 },
+];
+
+const QUALITY_OPTIONS = [
+  { label: "High quality", hint: "Larger file", crf: 23 },
+  { label: "Balanced", hint: "Recommended", crf: 28 },
+  { label: "Smallest", hint: "Visible loss", crf: 33 },
 ];
 
 function VideoCompressor() {
   const [file, setFile]       = useState<File | null>(null);
-  const [res, setRes]         = useState(0); // index into RES_OPTIONS
-  const [state, setState]     = useState<CaptureState>("idle");
-  const [progress, setProgress] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [outBlob, setOutBlob] = useState<Blob | null>(null);
-  const [error, setError]     = useState("");
-  const chunksRef = useRef<Blob[]>([]);
-  const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
-  const rafRef    = useRef<number>(0);
+  const [res, setRes]         = useState(2); // index into RES_OPTIONS
+  const [quality, setQuality] = useState(1); // index into QUALITY_OPTIONS
+  const job = useFfmpegJob();
 
-  const reset = () => { setFile(null); setState("idle"); setOutBlob(null); setError(""); setProgress(0); setElapsed(0); };
-
-  const onFile = (f: File) => {
-    setFile(f);
-    const v = document.createElement("video");
-    v.src = URL.createObjectURL(f);
-    v.onloadedmetadata = () => { setDuration(v.duration); URL.revokeObjectURL(v.src); };
-  };
-
-  const compress = async () => {
+  const start = () => {
     if (!file) return;
-    const opt = RES_OPTIONS[res]!;
-    setState("processing"); setError(""); setProgress(0);
-
-    const video = document.createElement("video");
-    video.src = URL.createObjectURL(file);
-    video.muted = true;
-    await new Promise<void>(r => { video.onloadedmetadata = () => r(); });
-
-    // Scale maintaining aspect ratio
-    const aspect = video.videoWidth / (video.videoHeight || 1);
-    const tw = opt.width;
-    const th = Math.round(tw / aspect / 2) * 2;
-
-    const canvas = document.createElement("canvas");
-    canvas.width = tw; canvas.height = th;
-    const ctx = canvas.getContext("2d")!;
-
-    const canvasStream = (canvas as HTMLCanvasElement & { captureStream: (fps: number) => MediaStream }).captureStream(30);
-    const videoStream  = (video as HTMLVideoElement & { captureStream: () => MediaStream }).captureStream();
-    const audioTracks  = videoStream.getAudioTracks();
-    const combined     = new MediaStream([...canvasStream.getVideoTracks(), ...audioTracks]);
-
-    const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") ? "video/webm;codecs=vp8,opus" : "video/webm";
-    const recorder = new MediaRecorder(combined, { mimeType: mime, videoBitsPerSecond: opt.bitrate });
-    chunksRef.current = [];
-    recorder.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-    recorder.onstop = () => {
-      cancelAnimationFrame(rafRef.current);
-      const blob = new Blob(chunksRef.current, { type: mime });
-      setOutBlob(blob); setState("done");
-      URL.revokeObjectURL(video.src);
-    };
-
-    const drawFrame = () => {
-      if (video.paused || video.ended) return;
-      ctx.drawImage(video, 0, 0, tw, th);
-      rafRef.current = requestAnimationFrame(drawFrame);
-    };
-
-    recorder.start(100);
-    video.play();
-    rafRef.current = requestAnimationFrame(drawFrame);
-
-    const start = performance.now();
-    timerRef.current = setInterval(() => {
-      const el = (performance.now() - start) / 1000;
-      setElapsed(el);
-      setProgress(Math.min(el / video.duration, 0.99));
-    }, 300);
-
-    video.onended = () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      setProgress(1);
-      recorder.stop();
-    };
+    const h = RES_OPTIONS[res]!.height;
+    // Never upscale: cap the height at the source's, keep the width even for H.264.
+    const scale = h ? ["-vf", `scale=-2:min(${h}\\,ih)`] : [];
+    void job.run(file, (input, output) => [
+      "-i", input, ...scale,
+      "-c:v", "libx264", "-preset", "veryfast", "-crf", String(QUALITY_OPTIONS[quality]!.crf), "-pix_fmt", "yuv420p",
+      "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", output,
+    ], "mp4", "video/mp4", "_compressed");
   };
 
   return (
     <div className="space-y-4">
-      {!file ? (
-        <DropZone onFile={onFile} label="Drop a video file to compress" />
-      ) : (
+      {!file ? <DropZone onFile={(f) => { setFile(f); job.reset(); }} label="Drop a video file to compress" /> : (
         <>
-          <FileChip file={file} onRemove={reset} />
-          <div>
-            <label className="text-xs text-muted-foreground mb-2 block">Output resolution</label>
-            <div className="flex gap-2">
-              {RES_OPTIONS.map((o, i) => (
-                <button key={o.label} onClick={() => setRes(i)} disabled={state === "processing"}
-                  className={cn("flex-1 py-2 rounded-xl border text-sm font-semibold transition-all",
-                    res === i ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:border-primary/40")}
-                >{o.label}</button>
-              ))}
-            </div>
-          </div>
-          <RealtimeNote />
-          {state === "idle" && (
-            <Button onClick={compress} className="w-full gap-2 h-11">
-              <Minimize2 className="w-4 h-4" /> Compress to {RES_OPTIONS[res]!.label}
-            </Button>
+          <FileChip file={file} onRemove={() => { setFile(null); job.reset(); }} />
+          {job.state !== "done" && (
+            <>
+              <div>
+                <label htmlFor="vc-res" className="text-xs font-medium text-muted-foreground mb-1.5 block">Output resolution</label>
+                <select id="vc-res" value={res} onChange={(e) => setRes(Number(e.target.value))} className={selectClass}>
+                  {RES_OPTIONS.map((o, i) => <option key={o.label} value={i}>{o.label}</option>)}
+                </select>
+              </div>
+              <div className="grid grid-cols-3 gap-2" role="group" aria-label="Quality">
+                {QUALITY_OPTIONS.map((q, i) => (
+                  <button key={q.label} type="button" aria-pressed={quality === i} onClick={() => setQuality(i)}
+                    className={cn("py-2.5 rounded-xl border text-xs font-medium transition-all",
+                      quality === i ? "border-primary/40 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground")}>
+                    {q.label}<span className="block text-[10px] opacity-70 mt-0.5">{q.hint}</span>
+                  </button>
+                ))}
+              </div>
+            </>
           )}
-          {state === "processing" && (
-            <ProgressBar value={progress} label={`Compressing… ${fmtTime(elapsed)} / ${fmtTime(duration)}`} />
+          <JobStatus job={job} />
+          {job.state !== "processing" && job.state !== "done" && (
+            <Button onClick={start} className="w-full gap-2"><Minimize2 className="w-4 h-4" /> Compress to MP4</Button>
           )}
-          {state === "done" && outBlob && (
-            <ResultCard blob={outBlob} filename={file.name.replace(/\.[^.]+$/, "") + `-${RES_OPTIONS[res]!.label}.webm`} onReset={reset} />
+          {job.state === "done" && job.outBlob && (
+            <>
+              <ResultCard blob={job.outBlob} filename={job.outName} onReset={() => { setFile(null); job.reset(); }} />
+              <p className="text-xs text-muted-foreground">
+                Original {fmtBytes(file.size)} → {fmtBytes(job.outBlob.size)}
+                {job.outBlob.size < file.size ? ` (${Math.round((1 - job.outBlob.size / file.size) * 100)}% smaller)` : " — the original was already well compressed; try a lower resolution or the Smallest setting."}
+              </p>
+            </>
           )}
-          {state === "error" && (
-            <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-3 text-sm text-rose-400">{error}</div>
-          )}
+          <EngineNote />
         </>
       )}
     </div>

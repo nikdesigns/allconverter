@@ -1,6 +1,7 @@
 "use client";
 
 
+import { useHandoff } from "@/lib/handoff";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { Volume2, Gauge, AudioLines, Upload, Download, Loader2, CheckCircle2, X } from "lucide-react";
@@ -49,6 +50,8 @@ export function AudioEffectsTool({ slug = "audio-volume-booster" }: Props) {
   const [ratio, setRatio] = useState(4);         // compressor ratio
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useHandoff("audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg", false, (files) => { void handleFile(files[0]); });
 
   async function handleFile(f: File) {
     setFile(f);

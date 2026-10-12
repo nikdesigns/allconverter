@@ -1,6 +1,7 @@
 "use client";
 
 
+import { downloadZip } from "@/lib/zip";
 import { localPdfWorkerUrl } from "@/lib/pdf-worker";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -67,7 +68,7 @@ export function PdfToJpgTool() {
     }
   };
 
-  const downloadAll = () => results.forEach(r => { const a = document.createElement("a"); a.href = r.url; a.download = r.name; a.click(); });
+  const downloadAll = () => downloadZip(results.map((r) => ({ name: r.name, url: r.url })), "pdf-pages.zip");
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
@@ -124,7 +125,7 @@ export function PdfToJpgTool() {
                   <p className="text-xs font-medium text-muted-foreground">{results.length} images</p>
                   {results.length > 1 && (
                     <Button size="sm" variant="outline" onClick={downloadAll} className="h-7 text-xs gap-1">
-                      <Download className="w-3 h-3" />Download All
+                      <Download className="w-3 h-3" />Download all (ZIP)
                     </Button>
                   )}
                 </div>

@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "copy-vendor": "node scripts/copy-vendor.mjs",
+    "predev": "node scripts/copy-vendor.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-vendor.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -14,7 +17,9 @@
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@breezystack/lamejs": "^1.2.7",
+    "@ffmpeg/core": "^0.12.6",
     "@imgly/background-removal": "^1.7.0",
+    "@neslinesli93/qpdf-wasm": "^0.3.0",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -1,5 +1,6 @@
 "use client";
 
+import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -107,9 +108,9 @@ export function SvgToPngTool() {
               <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">PNG: {outputSize.w}×{outputSize.h}px</p>
               <p className="text-xs text-muted-foreground">{scale}× scale</p>
             </div>
-            <a href={outputUrl} download={outputName}>
+            <div className="flex items-center gap-2 flex-wrap justify-end"><a href={outputUrl} download={outputName}>
               <Button size="sm" className="gap-1.5"><Download className="w-3.5 h-3.5" />Download</Button>
-            </a>
+            </a><SendToTool url={outputUrl} name={outputName} /></div>
           </div>
         )}
       </div>

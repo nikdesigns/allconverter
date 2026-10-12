@@ -1,6 +1,8 @@
 "use client";
 
 
+import { usePersistentState } from "@/lib/persist";
+import { useHandoff } from "@/lib/handoff";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -43,12 +45,14 @@ export function AudioConverterTool({ slug = "mp3-to-wav" }: Props) {
   const [status, setStatus] = useState<"idle" | "processing" | "done" | "error">("idle");
   const [error, setError] = useState("");
   const [progress, setProgress] = useState("");
-  const [kbps, setKbps] = useState(192);
+  const [kbps, setKbps] = usePersistentState("audio-converter.kbps", 192);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const proc = useProcessing({ category: "audio" });
   const info = LABEL[slug] ?? LABEL["mp3-to-wav"];
   const format = AUDIO_FORMAT_INFO[info.format];
+
+  useHandoff(ACCEPT[slug] ?? "audio/*", false, (files) => handleFile(files[0]));
 
   function handleFile(f: File) {
     setFile(f);

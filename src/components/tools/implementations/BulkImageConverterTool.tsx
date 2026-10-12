@@ -1,6 +1,7 @@
 "use client";
 
 
+import { downloadZip } from "@/lib/zip";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -59,15 +60,14 @@ export function BulkImageConverterTool() {
     toast.success(`Converted ${updated.filter(f=>f.status==="done").length} images`);
   };
 
-  const downloadAll = () => {
-    files.forEach(({ file, dataUrl }) => {
-      if (!dataUrl) return;
-      const a = document.createElement("a");
-      a.href = dataUrl;
-      a.download = file.name.replace(/\.[^.]+$/, `.${format === "jpeg" ? "jpg" : format}`);
-      a.click();
-    });
-  };
+  const downloadAll = () =>
+    downloadZip(
+      files.filter((f) => f.dataUrl).map(({ file, dataUrl }) => ({
+        name: file.name.replace(/\.[^.]+$/, `.${format === "jpeg" ? "jpg" : format}`),
+        url: dataUrl!,
+      })),
+      "converted-images.zip",
+    );
 
   const downloadOne = (entry: FileEntry) => {
     if (!entry.dataUrl) return;
@@ -131,7 +131,7 @@ export function BulkImageConverterTool() {
                 {converting ? "Converting…" : `Convert ${files.length} images`}
               </Button>
               {files.some(f=>f.status==="done") && (
-                <Button onClick={downloadAll} variant="outline" className="gap-2"><Download className="w-4 h-4" />Download All</Button>
+                <Button onClick={downloadAll} variant="outline" className="gap-2"><Download className="w-4 h-4" />Download all (ZIP)</Button>
               )}
             </div>
             <button onClick={()=>setFiles([])} className="w-full text-xs text-muted-foreground hover:text-foreground transition-colors">Clear all</button>

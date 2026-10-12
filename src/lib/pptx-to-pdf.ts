@@ -320,7 +320,7 @@ function layoutLines(ctx: CanvasRenderingContext2D, paras: Para[], maxWidth: num
 
 function drawText(
   deck: Deck, ctx: CanvasRenderingContext2D, txBody: Element, box: Box, kind: string,
-  inherited: Element | null, cellSize?: number,
+  inherited: Element | null, cellSize?: number, shrink = true,
 ) {
   const paras = readParagraphs(deck, txBody, kind, inherited, cellSize);
   if (!paras.some((p) => p.runs.some((r) => r.text.trim()))) return;
@@ -338,7 +338,7 @@ function drawText(
   let scale = num(child(bodyPr, "normAutofit"), "fontScale", 100000) / 100000;
   let lines = layoutLines(ctx, paras, innerW, scale);
   let total = lines.reduce((a, l) => a + l.height, 0);
-  for (let i = 0; i < 8 && total > innerH && scale > 0.45; i++) {
+  for (let i = 0; shrink && i < 8 && total > innerH && scale > 0.45; i++) {
     scale *= 0.9;
     lines = layoutLines(ctx, paras, innerW, scale);
     total = lines.reduce((a, l) => a + l.height, 0);
@@ -366,6 +366,13 @@ function drawText(
     }
     y += line.height;
   }
+}
+
+/** Height a table cell needs to show its text at full size, including padding. */
+function cellTextHeight(deck: Deck, ctx: CanvasRenderingContext2D, txBody: Element, width: number, size: number): number {
+  const paras = readParagraphs(deck, txBody, "", null, size);
+  const lines = layoutLines(ctx, paras, Math.max(40, width - 2 * 91440 * PX), 1);
+  return lines.reduce((a, l) => a + l.height, 0) + 2 * 45720 * PX;
 }
 
 // ─── Pictures ────────────────────────────────────────────────────────────────
@@ -453,7 +460,12 @@ async function drawTree(deck: Deck, ctx: CanvasRenderingContext2D, tree: Element
       const cols = children(child(tbl, "tblGrid"), "gridCol").map((c) => num(c, "w") * t.sx * PX);
       let y = box.y;
       for (const tr of children(tbl, "tr")) {
-        const h = num(tr, "h") * t.sy * PX;
+        // Rows grow to fit their text, as they do in PowerPoint; the stored height is only a minimum.
+        const needed = children(tr, "tc").map((tc, i) => {
+          const body = child(tc, "txBody");
+          return body && (cols[i] ?? 0) > 0 ? cellTextHeight(deck, ctx, body, cols[i]!, 14) : 0;
+        });
+        const h = Math.max(num(tr, "h") * t.sy * PX, ...needed);
         let x = box.x;
         children(tr, "tc").forEach((tc, i) => {
           const w = cols[i] ?? 0;
@@ -462,7 +474,7 @@ async function drawTree(deck: Deck, ctx: CanvasRenderingContext2D, tree: Element
           if (fill) { ctx.fillStyle = fill; ctx.fillRect(x, y, w, h); }
           ctx.strokeStyle = "#BFBFBF"; ctx.lineWidth = 1; ctx.strokeRect(x, y, w, h);
           const txBody = child(tc, "txBody");
-          if (txBody && w > 0) drawText(deck, ctx, txBody, cell, "", null, 14);
+          if (txBody && w > 0) drawText(deck, ctx, txBody, cell, "", null, 14, false);
           x += w;
         });
         y += h;

@@ -1,3 +1,4 @@
+import { FavoriteTools } from "@/components/home/FavoriteTools";
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/home/HeroSection";
 import { CategoriesGrid } from "@/components/home/CategoriesGrid";
@@ -50,6 +51,7 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
       />
       <HeroSection />
+      <FavoriteTools />
       <RecentlyUsedTools />
       <CategoriesGrid />
       <PopularTools />

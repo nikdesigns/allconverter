@@ -2,6 +2,7 @@
 
 
 
+import { useHandoff } from "@/lib/handoff";
 import { localPdfWorkerUrl } from "@/lib/pdf-worker";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
@@ -18,6 +19,7 @@ function PdfPageNumberAdder() {
   const [startNum, setStartNum] = useState(1);
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  useHandoff(".pdf,application/pdf", false, (files) => setFile(files[0]));
 
   const process = async () => {
     if (!file) return;

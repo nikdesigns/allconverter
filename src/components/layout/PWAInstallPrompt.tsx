@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Download, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -19,6 +20,19 @@ export function PWAInstallPrompt() {
     if ("serviceWorker" in navigator) {
       if (process.env.NODE_ENV === "production") {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
+        // Hand the worker the files this page loaded so the tool works offline
+        // next time, even though the worker was not in control during this load.
+        const warm = () => {
+          const urls = [
+            window.location.pathname,
+            ...performance.getEntriesByType("resource").map((e) => e.name).filter((u) => u.startsWith(window.location.origin)),
+          ];
+          navigator.serviceWorker.ready
+            .then((reg) => reg.active?.postMessage({ type: "CACHE_URLS", urls }))
+            .catch(() => {});
+        };
+        const timer = window.setTimeout(warm, 4000);
+        window.addEventListener("pagehide", () => window.clearTimeout(timer), { once: true });
       } else {
         // Clean up a stray SW from a previous production preview so it can't
         // serve stale chunks and break Turbopack's dev module registry.
@@ -35,8 +49,16 @@ export function PWAInstallPrompt() {
       setVisible(true);
     }
 
+    const onOffline = () => toast.message("You're offline", { description: "Tools you've opened before still work. Your files never needed the network." });
+    const onOnline = () => toast.success("Back online");
+    window.addEventListener("offline", onOffline);
+    window.addEventListener("online", onOnline);
     window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-    return () => window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+      window.removeEventListener("offline", onOffline);
+      window.removeEventListener("online", onOnline);
+    };
   }, []);
 
   function dismiss() {
@@ -69,7 +91,7 @@ export function PWAInstallPrompt() {
         <div className="min-w-0">
           <p className="text-sm font-semibold text-(--heading)">Install AllConverter</p>
           <p className="text-xs text-(--body-subtle) mt-0.5">
-            Add to your home screen for fast, app-like access to all tools.
+            Install for one-tap access. Tools you have used keep working offline, and you can share files to it from other apps.
           </p>
         </div>
       </div>

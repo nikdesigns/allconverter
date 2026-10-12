@@ -1,5 +1,6 @@
 "use client";
 
+import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
@@ -125,9 +126,9 @@ export function BackgroundRemoverTool() {
                 {processing ? <><div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Processing…</> : <><Layers className="w-4 h-4" />Remove Background</>}
               </Button>
               {outputUrl && (
-                <a href={outputUrl} download={outputName}>
+                <div className="flex items-center gap-2 flex-wrap justify-end"><a href={outputUrl} download={outputName}>
                   <Button variant="outline" className="gap-1.5"><Download className="w-4 h-4" />PNG</Button>
-                </a>
+                </a><SendToTool url={outputUrl} name={outputName} /></div>
               )}
             </div>
 

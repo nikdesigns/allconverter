@@ -3,54 +3,55 @@ import type { ToolCopyMap } from "./types";
 export const videoToolsCopy: ToolCopyMap = {
   "video-audio-extractor": {
     intro:
-      "Video to Audio Extractor pulls the soundtrack out of a video file and saves it as a WebM audio file encoded with Opus. Drop in an MP4, WebM or MOV and the tool plays the video silently in the background while recording its audio track.\n\nBecause it records playback, extraction happens in real time: a five-minute video takes about five minutes. Nothing is uploaded. The output is WebM, not MP3; it plays in browsers and VLC, and can be converted with the audio tools on this site if you need another format.",
+      "Video to Audio Extractor pulls the soundtrack out of a video and saves it as MP3, M4A or WAV. Choose the format and, for MP3 and M4A, a bitrate from 128 to 320 kbps. The work is done by FFmpeg, the engine behind most professional video software, running inside your browser.\n\nNothing is uploaded, so it is safe for recorded meetings and personal footage. The engine is a download of about 30 MB the first time you use a video tool and is cached after that. Extraction is usually much faster than the length of the video.",
     steps: [
-      ["Drop a video file", "MP4, WebM, MOV and other formats your browser can play."],
-      ["Extract", "Keep the tab open while it runs in real time."],
-      ["Download the audio", "Saved as a .webm audio file."],
+      ["Drop a video file", "MP4, MOV, WebM, MKV, AVI and most other formats."],
+      ["Choose format and bitrate", "MP3 at 192 kbps suits most uses. WAV is lossless and large."],
+      ["Extract and download", "Keep the tab open while it runs."],
     ],
     faqs: [
-      ["Why does it take as long as the video?", "The browser captures audio as the video plays; it cannot go faster than playback."],
-      ["Can I get an MP3?", "The output is WebM Opus. Convert it afterwards if you need MP3."],
-      ["Why does it say no audio track was found?", "The video is silent, or uses an audio codec your browser cannot decode."],
+      ["Which format should I choose?", "MP3 plays everywhere. M4A is slightly better quality at the same size and suits Apple devices. WAV is uncompressed, for editing."],
+      ["Why does the first run take longer?", "The FFmpeg engine, about 30 MB, has to download once. After that it loads from your browser's cache."],
+      ["Why does it say no audio was produced?", "The video has no audio track, or the file is damaged."],
     ],
     uses: [
-      "Saving the audio of a recorded lecture",
+      "Saving the audio of a recorded lecture or meeting",
       "Pulling a voice track for transcription",
       "Getting music or sound from your own footage",
     ],
   },
   "video-trimmer": {
     intro:
-      "Video Trimmer cuts a clip out of a longer video. Enter a start and end time in minutes and seconds, and the tool plays that section and records it to a new WebM file at the video's own resolution.\n\nThe selected portion is re-encoded in real time in your browser, so a 30-second clip takes about 30 seconds to produce and nothing leaves your device. Output is WebM with VP8 video and Opus audio, which plays in all modern browsers.",
+      "Video Trimmer cuts a section out of a longer video. Enter a start and end time and choose one of two methods. Precise re-encodes the selection so the cut lands exactly where you asked and saves a standard MP4 (H.264 video, AAC audio) that plays on any device. Fast copies the original streams without re-encoding: it finishes in seconds and loses no quality, but it can only start at the nearest keyframe, so the cut may be off by a second or two.\n\nBoth methods use FFmpeg running in your browser, and the video is never uploaded.",
     steps: [
-      ["Drop a video", "MP4, WebM or MOV."],
-      ["Set start and end", "In m:ss format, for example 0:15 to 0:45."],
-      ["Trim and download", "Wait for real-time processing to finish."],
+      ["Drop a video", "MP4, MOV, WebM, MKV and most other formats."],
+      ["Set start and end", "In m:ss format, for example 0:15 to 0:45, and pick Precise or Fast."],
+      ["Trim and download", "Precise takes longer on long or high-resolution clips."],
     ],
     faqs: [
-      ["Is the output MP4?", "No. Browsers can record to WebM only. Convert afterwards if a platform needs MP4."],
-      ["Is quality lost?", "Yes, slightly. The clip is re-encoded, not cut losslessly."],
-      ["How long a clip can I make?", "There is no fixed limit, but the tab must stay open for the full length of the clip."],
+      ["Precise or Fast: which should I use?", "Precise when the exact frame matters or you need an MP4. Fast when you want a quick, lossless cut and a second either way does not matter."],
+      ["Why does my Fast cut start earlier than I set?", "Video can only be copied from a keyframe, so the cut moves back to the nearest one. Use Precise for an exact start."],
+      ["Is quality lost?", "Not with Fast. Precise re-encodes at high quality; the difference is not normally visible."],
     ],
     uses: [
       "Cutting a highlight from a screen recording",
-      "Removing dead time from the start of a video",
+      "Removing dead time from the start and end of a video",
       "Making a short clip to share in chat",
     ],
   },
   "video-compressor": {
     intro:
-      "Video Compressor makes a video file smaller by re-recording it at a lower resolution and bitrate. Three presets are offered: 360p at about 0.5 Mbps, 480p at 1 Mbps and 720p at 2.5 Mbps.\n\nThe video is drawn frame by frame and encoded in your browser as it plays, so compression runs in real time and the file is never uploaded. Output is WebM. Expect large savings on phone and screen recordings, which are usually stored at very high bitrates.",
+      "Video Compressor makes a video file smaller by re-encoding it to MP4 with the H.264 codec, the format every phone, browser and messaging app plays. Choose an output resolution, from keeping the original down to 360p, and one of three quality levels. It never enlarges a video: a 720p clip stays 720p even if you select 1080p.\n\nEncoding is done by FFmpeg in your browser, so the video is not uploaded. Phone and screen recordings are stored at very high bitrates and often shrink to a fraction of their size. Encoding is demanding: expect roughly the length of the video for 720p on a modern laptop, longer on phones.",
     steps: [
       ["Drop a video", "The file stays on your device."],
-      ["Choose a resolution", "Lower means smaller."],
-      ["Compress and download", "Processing takes as long as the video lasts."],
+      ["Choose resolution and quality", "720p Balanced is a good default for sharing."],
+      ["Compress and download", "Keep the tab open. The result shows how much smaller the file is."],
     ],
     faqs: [
-      ["How much smaller will the file be?", "Roughly bitrate times duration: one minute is about 4 MB at 360p, 8 MB at 480p and 19 MB at 720p."],
-      ["Why is the output WebM?", "It is the format browsers can encode natively."],
-      ["Can I compress a long video?", "Yes, but it takes the full running time and the tab must remain open and visible."],
+      ["How much smaller will it get?", "It depends on the source. Phone footage commonly shrinks by 60 to 90 percent at 720p Balanced. A file that is already compressed may barely change."],
+      ["Which setting should I use for WhatsApp or email?", "480p or 720p on Balanced. Drop to Smallest only if the file is still over the limit."],
+      ["Why is it slow?", "Video encoding is heavy work, and it runs on your device instead of a server. Lower resolutions encode much faster."],
+      ["Is there a file size limit?", "About 700 MB, because the video has to fit in the browser's memory."],
     ],
     uses: [
       "Getting a clip under an email or chat size limit",

@@ -1,5 +1,6 @@
 "use client";
 
+import { downloadZip } from "@/lib/zip";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -92,7 +93,7 @@ export function ImageFormatConverterTool() {
     }
   };
 
-  const downloadAll = () => results.forEach((r) => { const a = document.createElement("a"); a.href = r.url; a.download = r.name; a.click(); });
+  const downloadAll = () => downloadZip(results.map((r) => ({ name: r.name, url: r.url })), "converted-images.zip");
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">

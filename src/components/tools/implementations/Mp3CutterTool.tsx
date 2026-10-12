@@ -1,6 +1,7 @@
 "use client";
 
 
+import { useHandoff } from "@/lib/handoff";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -26,6 +27,8 @@ export function Mp3CutterTool() {
   const previewUrlRef = useRef<string | null>(null);
 
   const proc = useProcessing({ category: "audio" });
+
+  useHandoff("audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg", false, (files) => { void handleFile(files[0]); });
 
   async function handleFile(f: File) {
     setFile(f);

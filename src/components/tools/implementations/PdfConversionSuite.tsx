@@ -3,6 +3,7 @@
 
 
 
+import { useHandoff } from "@/lib/handoff";
 import { escapeHtml, sanitizeHtml } from "@/lib/html";
 import { localPdfWorkerUrl } from "@/lib/pdf-worker";
 import { activateOnKey } from "@/lib/a11y";
@@ -39,6 +40,7 @@ function downloadBlob(blob: Blob, filename: string) {
 function DropZone({ onFile, accept, label }: { onFile: (f: File) => void; accept: string; label?: string }) {
   const [drag, setDrag] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
+  useHandoff(accept, false, (files) => onFile(files[0]));
   return (
     <div role="button" tabIndex={0} onKeyDown={activateOnKey} onClick={() => ref.current?.click()}
       onDrop={e => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files[0]; if (f) onFile(f); }}
@@ -321,45 +323,73 @@ function PowerpointToPdf() {
 // ─── PDF Protector ────────────────────────────────────────────────────────────
 
 function PdfProtector() {
-  const [file, setFile]     = useState<File | null>(null);
+  const [file, setFile]         = useState<File | null>(null);
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm]   = useState("");
+  const [show, setShow]         = useState(false);
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState("");
+  const [done, setDone]         = useState<{ blob: Blob; name: string } | null>(null);
+
+  const mismatch = confirm.length > 0 && confirm !== password;
+  const weak = password.length > 0 && password.length < 8;
 
   const protect = async () => {
-    if (!file || !password) return;
-    setLoading(true); setError("");
+    if (!file || !password || password !== confirm) return;
+    setLoading(true); setError(""); setDone(null);
     try {
       const { PDFDocument } = await import("pdf-lib");
-      const ab   = await file.arrayBuffer();
-      const doc  = await PDFDocument.load(ab);
-      const bytes = await doc.save();
-      downloadBlob(new Blob([new Uint8Array(bytes)], { type: "application/pdf" }), file.name.replace(/\.pdf$/i, "-protected.pdf"));
-      toast.success("PDF protected and downloaded!");
-    } catch (e) { setError((e as Error).message); }
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const probe = await PDFDocument.load(bytes, { ignoreEncryption: true });
+      if (probe.isEncrypted) throw new Error("This PDF already has a password. Remove it first with the PDF Password Remover.");
+      const { encryptPdf } = await import("@/lib/qpdf");
+      const out = await encryptPdf(bytes, password);
+      setDone({ blob: new Blob([new Uint8Array(out)], { type: "application/pdf" }), name: file.name.replace(/\.pdf$/i, "") + "-protected.pdf" });
+      toast.success("PDF encrypted");
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not protect this PDF."); }
     finally { setLoading(false); }
   };
 
   return (
     <div className="space-y-4">
-      <DropZone onFile={setFile} accept="application/pdf" label="Drop a PDF file here" />
+      <DropZone onFile={(f) => { setFile(f); setDone(null); setError(""); }} accept="application/pdf,.pdf" label="Drop a PDF file here" />
       {file && (
         <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-muted/10 border border-border">
           <Lock className="w-4 h-4 text-primary shrink-0" />
           <span className="flex-1 truncate text-xs">{file.name}</span>
-          <button aria-label="Remove" onClick={() => setFile(null)} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
+          <button aria-label="Remove" onClick={() => { setFile(null); setDone(null); }} className="text-muted-foreground hover:text-rose-400"><X className="w-3.5 h-3.5" /></button>
         </div>
       )}
-      <div className="space-y-1.5">
-        <label className="text-xs font-medium text-muted-foreground">Password</label>
-        <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter a strong password" className="h-10 text-sm" />
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <label htmlFor="pp-pass" className="text-xs font-medium text-muted-foreground">Password</label>
+          <Input id="pp-pass" type={show ? "text" : "password"} autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" className="h-10 text-sm" />
+        </div>
+        <div className="space-y-1.5">
+          <label htmlFor="pp-confirm" className="text-xs font-medium text-muted-foreground">Confirm password</label>
+          <Input id="pp-confirm" type={show ? "text" : "password"} autoComplete="new-password" value={confirm} onChange={e => setConfirm(e.target.value)} placeholder="Type it again" className="h-10 text-sm" aria-invalid={mismatch} />
+        </div>
       </div>
-      {error && <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-400">{error}</div>}
-      <Button onClick={protect} disabled={!file || !password || loading} className="w-full gap-2">
-        {loading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-        <Lock className="w-4 h-4" /> {loading ? "Encrypting…" : "Protect PDF with Password"}
-      </Button>
-      <div className="text-xs text-muted-foreground">Note: browser-based PDF password protection adds a metadata lock. For strong AES-256 encryption use Adobe Acrobat or a desktop PDF tool. Your file is never uploaded.</div>
+      <label className="flex items-center gap-2 text-xs text-muted-foreground">
+        <input type="checkbox" checked={show} onChange={e => setShow(e.target.checked)} className="accent-primary" /> Show password
+      </label>
+      {mismatch && <p className="text-xs text-rose-500" role="alert">The two passwords do not match.</p>}
+      {weak && !mismatch && <p className="text-xs text-amber-600 dark:text-amber-400">Short passwords can be guessed quickly. Use 12 or more characters for anything sensitive.</p>}
+      {error && <div role="alert" className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-500">{error}</div>}
+      {!done && (
+        <Button onClick={protect} disabled={!file || !password || mismatch || password !== confirm || loading} className="w-full gap-2">
+          {loading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+          <Lock className="w-4 h-4" /> {loading ? "Encrypting…" : "Encrypt PDF"}
+        </Button>
+      )}
+      {done && (
+        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 space-y-3">
+          <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Encrypted with AES-256 · {(done.blob.size / 1024).toFixed(0)} KB</p>
+          <Button onClick={() => downloadBlob(done.blob, done.name)} className="w-full gap-2"><Download className="w-4 h-4" />Download protected PDF</Button>
+          <p className="text-xs text-muted-foreground">Keep the password somewhere safe. It cannot be recovered, by you or by us, if it is lost.</p>
+        </div>
+      )}
+      <div className="text-xs text-muted-foreground">The whole file is encrypted with AES-256 using QPDF, running in your browser. The PDF and the password are never uploaded.</div>
     </div>
   );
 }

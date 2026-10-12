@@ -1,5 +1,7 @@
 "use client";
 
+import { usePersistentState } from "@/lib/persist";
+import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -32,10 +34,10 @@ export function PdfCompressorTool() {
   const [file, setFile] = useState<File | null>(null);
   const [outputUrl, setOutputUrl] = useState("");
   const [outputSize, setOutputSize] = useState(0);
-  const [level, setLevel] = useState<Level>("medium");
+  const [level, setLevel] = usePersistentState<Level>("pdf-compressor.level", "medium");
   const [processing, setProcessing] = useState(false);
   const [note, setNote] = useState("");
-  const [targetKb, setTargetKb] = useState("200");
+  const [targetKb, setTargetKb] = usePersistentState("pdf-compressor.targetKb", "200");
 
   const proc = useProcessing({ category: "pdf" });
 
@@ -213,9 +215,9 @@ export function PdfCompressorTool() {
                   <p className="text-xs text-muted-foreground">Original: {formatBytes2(file.size)}</p>
                   {note && <p className="text-xs text-muted-foreground mt-1">{note}</p>}
                 </div>
-                <a href={outputUrl} download={file.name.replace(".pdf", "_compressed.pdf")}>
+                <div className="flex items-center gap-2 flex-wrap justify-end"><a href={outputUrl} download={file.name.replace(".pdf", "_compressed.pdf")}>
                   <Button size="sm" className="gap-1.5"><Download className="w-3.5 h-3.5" />Download</Button>
-                </a>
+                </a><SendToTool url={outputUrl} name={file.name.replace(".pdf", "_compressed.pdf")} /></div>
               </div>
             )}
           </>

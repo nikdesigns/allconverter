@@ -18,7 +18,7 @@ export const siteConfig = {
    * lastModified for tool and category pages — bump it when you ship changes
    * to them, rather than stamping every URL with the build time.
    */
-  lastUpdated: "2026-10-11",
+  lastUpdated: "2026-10-12",
 };
 
 /** Shared 1200×630 social preview image (public/og-default.png). */

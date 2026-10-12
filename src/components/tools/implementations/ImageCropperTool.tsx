@@ -1,5 +1,6 @@
 "use client";
 
+import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
@@ -439,11 +440,11 @@ export function ImageCropperTool() {
                   </p>
                   <p className="text-xs text-muted-foreground mt-0.5">{file?.name}</p>
                 </div>
-                <a href={outputUrl} download={outputName}>
+                <div className="flex items-center gap-2 flex-wrap justify-end"><a href={outputUrl} download={outputName}>
                   <Button size="sm" className="gap-1.5">
                     <Download className="w-3.5 h-3.5" />Download
                   </Button>
-                </a>
+                </a><SendToTool url={outputUrl} name={outputName} /></div>
               </div>
             )}
           </>

@@ -1,5 +1,6 @@
 "use client";
 
+import { usePersistentState } from "@/lib/persist";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -76,12 +77,12 @@ const FORMAT_OPTS = [
 
 export function ImageCompressorTool() {
   const [files, setFiles]               = useState<File[]>([]);
-  const [quality, setQuality]           = useState(80);
+  const [quality, setQuality]           = usePersistentState("image-compressor.quality", 80);
   const [maxWidth, setMaxWidth]         = useState("");
-  const [outputFormat, setOutputFormat] = useState("auto");
+  const [outputFormat, setOutputFormat] = usePersistentState("image-compressor.format", "auto");
   const [results, setResults]           = useState<CompressedFile[]>([]);
-  const [mode, setMode]                 = useState<"quality" | "target">("quality");
-  const [targetKb, setTargetKb]         = useState("100");
+  const [mode, setMode]                 = usePersistentState<"quality" | "target">("image-compressor.mode", "quality");
+  const [targetKb, setTargetKb]         = usePersistentState("image-compressor.targetKb", "100");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const proc = useProcessing({ category: "image" });

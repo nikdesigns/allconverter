@@ -1,6 +1,7 @@
 "use client";
 
 
+import { downloadZip } from "@/lib/zip";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
@@ -74,11 +75,7 @@ function CanvasConverter({
     toast.success(`Converted ${out.length} file${out.length !== 1 ? "s" : ""}!`);
   };
 
-  const downloadAll = () => {
-    results.forEach(r => {
-      const a = document.createElement("a"); a.href = r.url; a.download = r.name; a.click();
-    });
-  };
+  const downloadAll = () => downloadZip(results.map((r) => ({ name: r.name, url: r.url })), "converted-images.zip");
 
   return (
     <div className="space-y-4">
@@ -132,7 +129,7 @@ function CanvasConverter({
             <span className="text-xs text-muted-foreground font-medium">Converted files</span>
             {results.length > 1 && (
               <Button size="sm" variant="ghost" onClick={downloadAll} className="h-7 text-xs gap-1">
-                <Download className="w-3 h-3" /> Download all
+                <Download className="w-3 h-3" /> Download all (ZIP)
               </Button>
             )}
           </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -140,9 +141,9 @@ export function JpgToPdfTool() {
                   <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">PDF ready!</p>
                   <p className="text-xs text-muted-foreground">{files.length} pages · {formatBytes2(outputSize)}</p>
                 </div>
-                <a href={outputUrl} download="images.pdf">
+                <div className="flex items-center gap-2 flex-wrap justify-end"><a href={outputUrl} download="images.pdf">
                   <Button size="sm" className="gap-1.5"><Download className="w-3.5 h-3.5" />Download</Button>
-                </a>
+                </a><SendToTool url={outputUrl} name="images.pdf" /></div>
               </div>
             )}
           </>

@@ -5,6 +5,7 @@ import { activateOnKey } from "@/lib/a11y";
 import { useRef, useState } from "react";
 import { Upload, X, FileIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useHandoff } from "@/lib/handoff";
 
 interface FileUploadZoneProps {
   accept?: string;
@@ -48,6 +49,9 @@ export function FileUploadZone({
     }
     if (validFiles.length > 0) onFiles(validFiles);
   };
+
+  // A file sent here from another tool ("Use in another tool") loads as if it had been dropped.
+  useHandoff(accept, multiple, onFiles);
 
   return (
     <div className={cn("space-y-2", className)}>

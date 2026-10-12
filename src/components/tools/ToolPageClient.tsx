@@ -1,5 +1,6 @@
 "use client";
 
+import { FavoriteButton } from "./shared/FavoriteButton";
 import Link from "next/link";
 import {
   FileText, FileDown, FilePlus2, ScissorsLineDashed, FileOutput, FileImage, FilePlus,
@@ -77,6 +78,7 @@ export function ToolPageClient({
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                   {tool.name}
                 </h1>
+                <FavoriteButton slug={tool.slug} name={tool.name} />
                 {tool.isNew && (
                   <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs">
                     NEW

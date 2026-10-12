@@ -1,10 +1,12 @@
 "use client";
 
+import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone, formatBytes2 } from "@/components/tools/shared/FileUploadZone";
 import { Crop, Download, Trash2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePersistentState } from "@/lib/persist";
 import { compressToTarget, loadImage, type TargetResult } from "@/lib/target-size";
 
 type Unit = "px" | "cm" | "mm" | "in";
@@ -39,13 +41,13 @@ const inputClass = "w-full h-9 px-3 rounded-xl border border-input bg-background
 export function FormPhotoResizerTool() {
   const [file, setFile]       = useState<File | null>(null);
   const [bitmap, setBitmap]   = useState<ImageBitmap | null>(null);
-  const [presetId, setPreset] = useState("photo");
-  const [width, setWidth]     = useState("3.5");
-  const [height, setHeight]   = useState("4.5");
-  const [unit, setUnit]       = useState<Unit>("cm");
-  const [dpi, setDpi]         = useState("200");
-  const [minKb, setMinKb]     = useState("20");
-  const [maxKb, setMaxKb]     = useState("50");
+  const [presetId, setPreset] = usePersistentState("form-photo.preset", "photo");
+  const [width, setWidth]     = usePersistentState("form-photo.width", "3.5");
+  const [height, setHeight]   = usePersistentState("form-photo.height", "4.5");
+  const [unit, setUnit]       = usePersistentState<Unit>("form-photo.unit", "cm");
+  const [dpi, setDpi]         = usePersistentState("form-photo.dpi", "200");
+  const [minKb, setMinKb]     = usePersistentState("form-photo.minKb", "20");
+  const [maxKb, setMaxKb]     = usePersistentState("form-photo.maxKb", "50");
   const [zoom, setZoom]       = useState(1);
   const [focusX, setFocusX]   = useState(0.5);
   const [focusY, setFocusY]   = useState(0.5);
@@ -226,6 +228,9 @@ export function FormPhotoResizerTool() {
                   <a href={result.url} download={outName} className="block">
                     <Button className="w-full gap-2"><Download className="w-4 h-4" />Download JPG</Button>
                   </a>
+                )}
+                {result && (
+                  <SendToTool url={result.url} name={outName} />
                 )}
               </div>
             </div>

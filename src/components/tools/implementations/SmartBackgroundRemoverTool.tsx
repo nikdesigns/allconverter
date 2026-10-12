@@ -1,5 +1,6 @@
 "use client";
 
+import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
@@ -126,11 +127,11 @@ export function SmartBackgroundRemoverTool() {
                 </Button>
               )}
               {outputUrl && (
-                <a href={outputUrl} download={file.name.replace(/\.[^.]+$/, "_no-bg.png")} className="flex-1">
+                <div className="flex items-center gap-2 flex-wrap justify-end flex-1"><a href={outputUrl} download={file.name.replace(/\.[^.]+$/, "_no-bg.png")} className="flex-1">
                   <Button className="w-full gap-1.5">
                     <Download className="w-4 h-4" /> Download PNG
                   </Button>
-                </a>
+                </a><SendToTool url={outputUrl} name={file.name.replace(/\.[^.]+$/, "_no-bg.png")} /></div>
               )}
             </div>
 

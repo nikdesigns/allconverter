@@ -204,20 +204,22 @@ export const pdfToolsCopy: ToolCopyMap = {
   },
   "pdf-password-remover": {
     intro:
-      "PDF Password Remover is not working reliably in this version and has been switched off. Decrypting a protected PDF needs a decryption engine that this browser-based build does not yet include, so the tool cannot guarantee a usable, unlocked file.\n\nIf you know the password, the dependable route today is your PDF reader: open the file, enter the password, and use Print to PDF or Save As to create an unprotected copy. Only remove protection from documents you own or are authorised to change.",
+      "PDF Password Remover takes a password-protected PDF and saves a copy that opens without one. Enter the current password, and the file is decrypted in your browser with QPDF, the standard open-source PDF tool. It handles every standard PDF encryption type, from old 40-bit RC4 to AES-256.\n\nIt removes a password you know; it does not crack or recover a forgotten one. PDFs that open freely but block printing or copying are also unlocked, and for those you can leave the password box empty. The file and the password stay on your device.",
     steps: [
-      ["Open the PDF in a reader", "Use Adobe Acrobat Reader, Preview on macOS, or your browser, and enter the password."],
-      ["Print to PDF", "Choose Print and select Save as PDF as the destination."],
-      ["Save the new copy", "The saved file opens without a password."],
+      ["Add the protected PDF", "Drop it in or click to choose it."],
+      ["Enter the current password", "Leave it empty if the PDF opens without one and is only restricted."],
+      ["Download the unlocked copy", "It is saved with unlocked_ in front of the file name."],
     ],
     faqs: [
-      ["Why is this tool unavailable?", "Removing PDF encryption correctly requires decrypting every object in the file. The current build cannot do that, and we would rather switch the tool off than hand back a broken document."],
-      ["Can a forgotten password be recovered?", "No. Neither this site nor the print method can open a PDF without its password."],
+      ["Can it open a PDF if I have forgotten the password?", "No. Without the password the contents cannot be decrypted. Ask whoever sent the file."],
+      ["Why would I remove a password from my own PDF?", "Bank statements, payslips and tax documents often arrive locked. An unlocked copy can be merged, compressed, searched or uploaded to portals that reject protected files."],
       ["Is it legal to remove a PDF password?", "It is fine for your own documents. Removing protection from files you have no right to modify may breach copyright or contract terms."],
+      ["Does unlocking change the content?", "No. Pages, text and images are identical; only the encryption is removed."],
     ],
     uses: [
-      "Making an unprotected archive copy of your own statement",
-      "Preparing a protected file for a tool that cannot open encrypted PDFs",
+      "Unlocking a bank statement so it can be uploaded to a loan or visa portal",
+      "Making a payslip mergeable with other documents",
+      "Removing print and copy restrictions from your own report",
     ],
   },
   "pdf-to-word": {
@@ -342,20 +344,22 @@ export const pdfToolsCopy: ToolCopyMap = {
   },
   "pdf-protector": {
     intro:
-      "PDF Password Protector is switched off in this version. Proper PDF protection means encrypting the file's contents with AES, and the browser build of this site does not yet include an encryption engine that can do that. A tool that only relabels a file would give a false sense of security, so it is disabled until real encryption is in place.\n\nTo protect a PDF today, use software that encrypts it: Adobe Acrobat, Preview on macOS (Export, then Permissions or Encrypt), LibreOffice's PDF export options, or Microsoft Word's Save as PDF options.",
+      "PDF Password Protector encrypts a PDF so that it cannot be opened without the password you set. It uses AES-256, the strongest encryption the PDF format supports, applied by QPDF, the standard open-source PDF tool, running inside your browser. The file's text, images and attachments are all encrypted, not just flagged as locked.\n\nNeither the PDF nor the password leaves your device. Enter the password twice to guard against typing mistakes, encrypt, and download the protected copy. There is no way to recover a lost password, so store it in a password manager before you delete the original.",
     steps: [
-      ["Open the PDF in a desktop app", "Preview on macOS and LibreOffice are free options."],
-      ["Choose the encrypt option on export", "Set an open password of at least twelve characters."],
-      ["Test the result", "Close and reopen the file to confirm it asks for the password."],
+      ["Add your PDF", "Drop the file onto the upload area. It must not already be password-protected."],
+      ["Set a password", "Type it twice. Use 12 or more characters for anything sensitive."],
+      ["Encrypt and download", "Save the protected copy, then open it once to confirm it asks for the password."],
     ],
     faqs: [
-      ["Why is this tool unavailable?", "It could not genuinely encrypt files, and a PDF that looks protected but is not is worse than no tool at all."],
-      ["What makes PDF protection strong?", "AES-256 encryption with a long, unique open password. Permission-only restrictions without an open password are easily bypassed."],
-      ["Can a protected PDF still be compressed or merged?", "Usually not until the password is removed, because other tools cannot read encrypted content."],
+      ["How strong is the protection?", "The file is encrypted with AES-256. Its real strength depends on your password: a long, unique password is effectively unbreakable, while a short or common one can be guessed."],
+      ["Can I recover the PDF if I forget the password?", "No. Nobody can, including us. Keep the password safe, or keep an unencrypted original somewhere secure."],
+      ["Will the protected PDF open in any reader?", "Yes in all current readers, including Adobe Acrobat, browsers, and the built-in viewers on phones. Very old software from before 2009 may not support AES-256."],
+      ["How should I send the password?", "By a different channel from the file. If you email the PDF, share the password by phone or message."],
     ],
     uses: [
-      "Sending payslips or contracts by email",
-      "Storing identity documents in shared cloud folders",
+      "Sending payslips, statements or contracts by email",
+      "Protecting scanned identity documents before uploading them to cloud storage",
+      "Sharing a confidential report with a client",
     ],
   },
   "ocr-pdf": {

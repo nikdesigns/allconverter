@@ -36,7 +36,7 @@ const founderSchema = {
 
 export const metadata: Metadata = {
   // absolute: the brand is already in the title, so skip the layout template
-  title: { absolute: `${siteConfig.name} — ${siteConfig.tagline}` },
+  title: { absolute: "All Converter — Free Online PDF, Image & Audio Converter | AllConverter.tools" },
   description: siteConfig.description,
   alternates: { canonical: `${siteConfig.url}/` },
   openGraph: baseOpenGraph("/"),

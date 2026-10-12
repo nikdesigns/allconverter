@@ -56,7 +56,7 @@ export function MobileAnchorAd() {
   return (
     // Only visible below lg breakpoint — desktop uses sidebar ad instead
     <div className="ad-slot lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[var(--neutral-primary-soft)] border-t border-[var(--border-default)] shadow-[0_-2px_12px_rgba(0,0,0,0.08)]">
-      <div className="relative w-full flex items-center justify-center py-1 px-8 min-h-[60px]">
+      <div className="relative w-full flex items-center justify-center py-1 px-8 h-[68px] overflow-hidden">
         {/* Dismiss button */}
         <button
           onClick={() => setDismissed(true)}
@@ -66,18 +66,18 @@ export function MobileAnchorAd() {
           <X className="w-3 h-3 text-[var(--body-subtle)]" />
         </button>
 
-        <div className="w-full max-w-sm">
+        <div className="w-[320px] max-w-full text-center">
           <p className="text-center text-[9px] text-[var(--body-subtle)] opacity-40 mb-0.5 select-none">
             Advertisement
           </p>
           <ins
             ref={insRef}
             className="adsbygoogle"
-            style={{ display: "block", minHeight: "50px" }}
+            // A fixed 320×50 unit: a responsive one let AdSense resize the bar after it
+            // appeared, which PageSpeed counted as a 0.24 layout shift on every mobile page.
+            style={{ display: "inline-block", width: "320px", height: "50px" }}
             data-ad-client={PUB_ID}
             data-ad-slot={SLOT_ID}
-            data-ad-format="auto"
-            data-full-width-responsive="true"
           />
         </div>
       </div>

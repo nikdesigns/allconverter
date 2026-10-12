@@ -12,7 +12,7 @@ export const textToolsPosts: BlogPost[] = [
     isFeatured: true,
     isPillar: true,
     seoTitle: "Content Length Guide: Ideal Word Counts for Every Content Type | AllConverter.tools",
-    metaDescription: "Complete guide to content length — ideal word counts for blog posts, product pages, landing pages, emails, and social media. What actually works for SEO in 2025.",
+    metaDescription: "Complete guide to content length — ideal word counts for blog posts, product pages, landing pages, emails, and social media. What actually works for SEO.",
     h1: "Content Length Guide: Ideal Word Counts for Every Content Type",
     primaryKeyword: "content length guide",
     secondaryKeywords: ["ideal blog post length", "word count for SEO", "how long should content be", "content word count"],

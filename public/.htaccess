@@ -1,6 +1,15 @@
 # AllConverter.tools — static host configuration (Apache / LiteSpeed).
 # Copied into the export by Next.js; upload it with the rest of ./out.
 
+# ── One address for the whole site ───────────────────────────────────────
+# www.allconverter.tools serves the same pages, which Google indexes as
+# duplicates. Send every www request to the plain domain permanently.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^www\.allconverter\.tools$ [NC]
+  RewriteRule ^(.*)$ https://allconverter.tools/$1 [R=301,L]
+</IfModule>
+
 # ── Custom 404 page instead of the host default ──────────────────────────
 ErrorDocument 404 /404.html
 
@@ -40,10 +49,19 @@ ErrorDocument 404 /404.html
   <Files "sw.js">
     Header set Cache-Control "no-cache"
   </Files>
+  # Stylesheets and fonts only ever come from the hashed build output, so they
+  # are safe to cache for a year by extension (works on hosts without <If>).
+  <FilesMatch "\.(css|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
   # Build output under /_next/static/ is content-hashed, so it can be cached
   # for a year. Set last so it overrides the extension rules above.
   <IfModule mod_setenvif.c>
     SetEnvIf Request_URI "^/_next/static/" HASHED_ASSET=1
     Header set Cache-Control "public, max-age=31536000, immutable" env=HASHED_ASSET
   </IfModule>
+  # Same rule for hosts where env= is not honoured (PageSpeed saw 7-day caching).
+  <If "%{REQUEST_URI} =~ m#^/_next/static/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
 </IfModule>

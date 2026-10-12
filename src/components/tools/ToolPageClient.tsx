@@ -21,6 +21,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ToolInterface } from "./ToolInterface";
+import { ReferenceTables } from "./ReferenceTables";
 import { AdUnit } from "@/components/ads/AdUnit";
 import type { Tool, ToolCategory_Data, BreadcrumbItem } from "@/types";
 import type { BlogPost } from "@/types/blog";
@@ -170,6 +171,9 @@ export function ToolPageClient({
                 </div>
               </div>
             )}
+
+            {/* Conversion tables (converter tools only) */}
+            <ReferenceTables slug={tool.slug} />
 
             {/* Use cases */}
             {tool.useCases && tool.useCases.length > 0 && (

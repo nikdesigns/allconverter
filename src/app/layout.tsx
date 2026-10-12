@@ -235,7 +235,10 @@ export default function RootLayout({
                   '@id': `${siteConfig.url}/#website`,
                   url: siteConfig.url,
                   name: siteConfig.name,
+                  // How people actually search for the site ("all converter").
+                  alternateName: ['All Converter', 'AllConverter'],
                   description: siteConfig.description,
+                  inLanguage: 'en',
                   publisher: { '@id': `${siteConfig.url}/#organization` },
                 },
               ],
@@ -259,10 +262,15 @@ export default function RootLayout({
           <PWAInstallPrompt />
         </ThemeProvider>
 
+        {/* Ads and analytics load only in production builds, so local development and
+            testing never count as visits or ad impressions. */}
+        {process.env.NODE_ENV === "production" && (<>
         {/* Google AdSense */}
         <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6648091987919638"
-          strategy="afterInteractive"
+          // After the page has loaded: the ad script was ~300 ms of main-thread work
+          // competing with the tool itself during start-up.
+          strategy="lazyOnload"
           crossOrigin="anonymous"
         />
 
@@ -276,12 +284,16 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-Y2VB10R753', {
-              page_path: window.location.pathname,
-              send_page_view: true
-            });
+            // Only the live site reports: a local production preview stays out of the stats.
+            if (location.hostname === 'allconverter.tools') {
+              gtag('config', 'G-Y2VB10R753', {
+                page_path: window.location.pathname,
+                send_page_view: true
+              });
+            }
           `}
         </Script>
+        </>)}
       </body>
     </html>
   );

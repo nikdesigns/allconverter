@@ -1,4 +1,4 @@
-import { Shield, Zap, Globe, Lock, LayoutGrid, Sparkles, Check, X } from "lucide-react";
+import { Shield, Zap, Globe, Lock, LayoutGrid, Sparkles } from "lucide-react";
 
 const benefits = [
   {
@@ -97,12 +97,6 @@ const compareRows = [
     usGood:   true,
   },
 ];
-
-function Tick({ good }: { good: boolean }) {
-  return good
-    ? <Check className="w-4 h-4 text-emerald-500 mx-auto" />
-    : <X     className="w-4 h-4 text-red-400 mx-auto" />;
-}
 
 export function BenefitsSection() {
   return (

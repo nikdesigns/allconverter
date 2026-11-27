@@ -4,7 +4,7 @@ import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
-import { Download, Layers, Sliders } from "lucide-react";
+import { Download, Layers } from "lucide-react";
 import { toast } from "sonner";
 
 function removeBackground(

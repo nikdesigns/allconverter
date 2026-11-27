@@ -50,11 +50,11 @@ export function JsonDiffTool() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">JSON A (original)</label>
-            <Textarea value={a} onChange={e => setA(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
+            <Textarea aria-label="JSON A (original)" value={a} onChange={e => setA(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">JSON B (modified)</label>
-            <Textarea value={b} onChange={e => setB(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
+            <Textarea aria-label="JSON B (modified)" value={b} onChange={e => setB(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
           </div>
         </div>
 

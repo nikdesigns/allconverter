@@ -63,7 +63,7 @@ function quantizeColors(imageData: ImageData, k = 8): ColorSwatch[] {
   for (let i = 0; i < data.length; i += step) {
     const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
     if (a < 128) continue;
-    const [, s, l] = rgbToHsl(r, g, b);
+    const [, , l] = rgbToHsl(r, g, b);
     if (l < 3 || l > 97) continue; // skip near-black and near-white extremes
     pixels.push([r, g, b]);
   }

@@ -56,6 +56,7 @@ export function PasswordGeneratorTool() {
 
   // Auto-generate when length or options change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- random output is generated on the client, not during render
     generate(length, options);
   }, [length, options, generate]);
 

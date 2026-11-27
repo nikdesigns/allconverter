@@ -132,7 +132,7 @@ export function PdfSplitterTool() {
                 <label className="text-xs text-muted-foreground mb-1 block">
                   Page ranges (e.g. <code className="font-mono">1-3, 4-6, 7</code>)
                 </label>
-                <Input value={rangeInput} onChange={e => setRangeInput(e.target.value)}
+                <Input aria-label="Page ranges (e.g. 1-3, 4-6, 7)" value={rangeInput} onChange={e => setRangeInput(e.target.value)}
                   placeholder={`1-3, 4-${Math.max(pageCount,6)}`} className="font-mono text-sm" />
                 <p className="text-xs text-muted-foreground mt-1">PDF has {pageCount} pages. Each comma-separated range becomes one PDF.</p>
               </div>

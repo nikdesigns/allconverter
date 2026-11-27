@@ -180,25 +180,25 @@ td:last-child{text-align:right;font-family:monospace;font-weight:600}
         <div className="space-y-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Company</p>
           <div className="grid grid-cols-2 gap-2">
-            <Input value={company.name} onChange={e => setCompany(p=>({...p,name:e.target.value}))} placeholder="Company name" className="text-sm" />
-            <Input value={company.address} onChange={e => setCompany(p=>({...p,address:e.target.value}))} placeholder="Address" className="text-sm" />
+            <Input aria-label="Company name" value={company.name} onChange={e => setCompany(p=>({...p,name:e.target.value}))} placeholder="Company name" className="text-sm" />
+            <Input aria-label="Address" value={company.address} onChange={e => setCompany(p=>({...p,address:e.target.value}))} placeholder="Address" className="text-sm" />
           </div>
         </div>
 
         {/* Period */}
         <div className="flex items-center gap-3">
           <p className="text-xs font-medium text-muted-foreground shrink-0">Pay Period</p>
-          <select value={period.month} onChange={e => setPeriod(p=>({...p,month:e.target.value}))} className="h-10 px-3 rounded-xl border border-input bg-background text-sm">
+          <select aria-label="Month" value={period.month} onChange={e => setPeriod(p=>({...p,month:e.target.value}))} className="h-10 px-3 rounded-xl border border-input bg-background text-sm">
             {MONTHS.map(m => <option key={m} value={m}>{m}</option>)}
           </select>
-          <select value={period.year} onChange={e => setPeriod(p=>({...p,year:e.target.value}))} className="h-10 px-3 rounded-xl border border-input bg-background text-sm">
+          <select aria-label="Year" value={period.year} onChange={e => setPeriod(p=>({...p,year:e.target.value}))} className="h-10 px-3 rounded-xl border border-input bg-background text-sm">
             {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
           </select>
           <div className="flex items-center gap-2 ml-auto">
             <label className="text-xs text-muted-foreground">Working Days</label>
-            <Input type="number" value={workingDays} onChange={e => setWorkingDays(e.target.value)} className="w-16 text-sm text-center" />
+            <Input aria-label="Working Days" type="number" value={workingDays} onChange={e => setWorkingDays(e.target.value)} className="w-16 text-sm text-center" />
             <label className="text-xs text-muted-foreground">Present</label>
-            <Input type="number" value={presentDays} onChange={e => setPresentDays(e.target.value)} className="w-16 text-sm text-center" />
+            <Input aria-label="Present" type="number" value={presentDays} onChange={e => setPresentDays(e.target.value)} className="w-16 text-sm text-center" />
           </div>
         </div>
 
@@ -206,14 +206,14 @@ td:last-child{text-align:right;font-family:monospace;font-weight:600}
         <div className="space-y-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Employee</p>
           <div className="grid grid-cols-2 gap-2">
-            <Input value={employee.name} onChange={e => setEmployee(p=>({...p,name:e.target.value}))} placeholder="Full name" className="text-sm" />
-            <Input value={employee.id} onChange={e => setEmployee(p=>({...p,id:e.target.value}))} placeholder="Employee ID" className="text-sm font-mono" />
-            <Input value={employee.designation} onChange={e => setEmployee(p=>({...p,designation:e.target.value}))} placeholder="Designation" className="text-sm" />
-            <Input value={employee.department} onChange={e => setEmployee(p=>({...p,department:e.target.value}))} placeholder="Department" className="text-sm" />
-            <Input value={employee.bank} onChange={e => setEmployee(p=>({...p,bank:e.target.value}))} placeholder="Bank name" className="text-sm" />
-            <Input value={employee.accountNo} onChange={e => setEmployee(p=>({...p,accountNo:e.target.value}))} placeholder="Account number" className="text-sm font-mono" />
-            <Input value={employee.pan} onChange={e => setEmployee(p=>({...p,pan:e.target.value}))} placeholder="PAN" className="text-sm font-mono uppercase" />
-            <Input value={employee.pfNo} onChange={e => setEmployee(p=>({...p,pfNo:e.target.value}))} placeholder="PF number (optional)" className="text-sm font-mono" />
+            <Input aria-label="Full name" value={employee.name} onChange={e => setEmployee(p=>({...p,name:e.target.value}))} placeholder="Full name" className="text-sm" />
+            <Input aria-label="Employee ID" value={employee.id} onChange={e => setEmployee(p=>({...p,id:e.target.value}))} placeholder="Employee ID" className="text-sm font-mono" />
+            <Input aria-label="Designation" value={employee.designation} onChange={e => setEmployee(p=>({...p,designation:e.target.value}))} placeholder="Designation" className="text-sm" />
+            <Input aria-label="Department" value={employee.department} onChange={e => setEmployee(p=>({...p,department:e.target.value}))} placeholder="Department" className="text-sm" />
+            <Input aria-label="Bank name" value={employee.bank} onChange={e => setEmployee(p=>({...p,bank:e.target.value}))} placeholder="Bank name" className="text-sm" />
+            <Input aria-label="Account number" value={employee.accountNo} onChange={e => setEmployee(p=>({...p,accountNo:e.target.value}))} placeholder="Account number" className="text-sm font-mono" />
+            <Input aria-label="PAN" value={employee.pan} onChange={e => setEmployee(p=>({...p,pan:e.target.value}))} placeholder="PAN" className="text-sm font-mono uppercase" />
+            <Input aria-label="PF number (optional)" value={employee.pfNo} onChange={e => setEmployee(p=>({...p,pfNo:e.target.value}))} placeholder="PF number (optional)" className="text-sm font-mono" />
           </div>
         </div>
 
@@ -224,8 +224,8 @@ td:last-child{text-align:right;font-family:monospace;font-weight:600}
             <div className="space-y-1.5">
               {earnings.map(e => (
                 <div key={e.id} className="grid grid-cols-[1fr_88px_24px] gap-1.5 items-center">
-                  <Input value={e.label} onChange={ev => updEarning(e.id,"label",ev.target.value)} placeholder="Component" className="text-xs" />
-                  <Input type="number" value={e.amount} onChange={ev => updEarning(e.id,"amount",ev.target.value)} placeholder="0" className="text-xs font-mono" min="0" />
+                  <Input aria-label="Component" value={e.label} onChange={ev => updEarning(e.id,"label",ev.target.value)} placeholder="Component" className="text-xs" />
+                  <Input aria-label="Earning amount" type="number" value={e.amount} onChange={ev => updEarning(e.id,"amount",ev.target.value)} placeholder="0" className="text-xs font-mono" min="0" />
                   <button aria-label="Remove" onClick={() => removeEarning(e.id)} disabled={earnings.length===1} className="p-0.5 hover:text-destructive text-muted-foreground disabled:opacity-25"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               ))}
@@ -238,8 +238,8 @@ td:last-child{text-align:right;font-family:monospace;font-weight:600}
             <div className="space-y-1.5">
               {deductions.map(d => (
                 <div key={d.id} className="grid grid-cols-[1fr_88px_24px] gap-1.5 items-center">
-                  <Input value={d.label} onChange={ev => updDed(d.id,"label",ev.target.value)} placeholder="Component" className="text-xs" />
-                  <Input type="number" value={d.amount} onChange={ev => updDed(d.id,"amount",ev.target.value)} placeholder="0" className="text-xs font-mono" min="0" />
+                  <Input aria-label="Component" value={d.label} onChange={ev => updDed(d.id,"label",ev.target.value)} placeholder="Component" className="text-xs" />
+                  <Input aria-label="Deduction amount" type="number" value={d.amount} onChange={ev => updDed(d.id,"amount",ev.target.value)} placeholder="0" className="text-xs font-mono" min="0" />
                   <button aria-label="Remove" onClick={() => removeDed(d.id)} className="p-0.5 hover:text-destructive text-muted-foreground"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               ))}

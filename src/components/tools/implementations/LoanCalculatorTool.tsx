@@ -10,7 +10,6 @@ export function LoanCalculatorTool() {
   const [amount, setAmount] = useState("250000");
   const [rate, setRate] = useState("6.5");
   const [term, setTerm] = useState("30");
-  const [type, setType] = useState<"monthly" | "annuity">("monthly");
 
   const results = useMemo(() => {
     const P = parseFloat(amount) || 0;
@@ -48,15 +47,15 @@ export function LoanCalculatorTool() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Loan Amount ($)</label>
-            <Input value={amount} onChange={e => setAmount(e.target.value)} type="number" min="0" className="font-mono text-sm" />
+            <Input aria-label="Loan Amount ($)" value={amount} onChange={e => setAmount(e.target.value)} type="number" min="0" className="font-mono text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Annual Interest Rate (%)</label>
-            <Input value={rate} onChange={e => setRate(e.target.value)} type="number" min="0" max="50" step="0.1" className="font-mono text-sm" />
+            <Input aria-label="Annual Interest Rate (%)" value={rate} onChange={e => setRate(e.target.value)} type="number" min="0" max="50" step="0.1" className="font-mono text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Loan Term (years)</label>
-            <Input value={term} onChange={e => setTerm(e.target.value)} type="number" min="1" max="50" className="font-mono text-sm" />
+            <Input aria-label="Loan Term (years)" value={term} onChange={e => setTerm(e.target.value)} type="number" min="1" max="50" className="font-mono text-sm" />
           </div>
         </div>
 

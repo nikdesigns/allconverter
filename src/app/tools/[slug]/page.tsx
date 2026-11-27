@@ -16,6 +16,7 @@ import { toolCopy } from "@/data/tool-content";
 import { ToolPageClient } from "@/components/tools/ToolPageClient";
 import { allBlogPosts } from "@/data/blog-posts";
 import type { BlogPost } from "@/types/blog";
+import { jsonLd } from "@/lib/html";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -72,7 +73,7 @@ export default async function ToolPage({ params }: Props) {
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(schema) }}
         />
       ))}
       <ToolPageClient

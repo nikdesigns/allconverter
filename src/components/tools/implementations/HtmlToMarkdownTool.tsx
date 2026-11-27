@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Copy, FileCode2 } from "lucide-react";
@@ -47,9 +47,7 @@ const SAMPLE = `<h1>Hello World</h1>
 
 export function HtmlToMarkdownTool() {
   const [input, setInput] = useState(SAMPLE);
-  const [output, setOutput] = useState("");
-
-  useEffect(() => { setOutput(htmlToMd(input)); }, [input]);
+  const output = useMemo(() => htmlToMd(input), [input]);
 
   const copy = () => { navigator.clipboard.writeText(output); toast.success("Markdown copied!"); };
 
@@ -63,14 +61,14 @@ export function HtmlToMarkdownTool() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">HTML Input</label>
-            <Textarea value={input} onChange={e => setInput(e.target.value)} className="min-h-[320px] resize-none text-xs font-mono" />
+            <Textarea aria-label="HTML Input" value={input} onChange={e => setInput(e.target.value)} className="min-h-[320px] resize-none text-xs font-mono" />
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="text-xs text-muted-foreground">Markdown Output</label>
               <Button size="sm" variant="ghost" onClick={copy} className="h-6 text-xs gap-1"><Copy className="w-3 h-3" />Copy</Button>
             </div>
-            <Textarea readOnly value={output} className="min-h-[320px] resize-none text-xs font-mono bg-muted/10" />
+            <Textarea aria-label="Output" readOnly value={output} className="min-h-[320px] resize-none text-xs font-mono bg-muted/10" />
           </div>
         </div>
       </div>

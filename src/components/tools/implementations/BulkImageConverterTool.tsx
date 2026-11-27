@@ -107,7 +107,7 @@ export function BulkImageConverterTool() {
           {format !== "png" && (
             <div className="w-28">
               <label className="text-xs text-muted-foreground mb-1 block">Quality: {quality}%</label>
-              <Input type="number" min={10} max={100} step={5} value={quality} onChange={e=>setQuality(+e.target.value)} className="text-sm font-mono" />
+              <Input aria-label={`Quality: ${quality}%`} type="number" min={10} max={100} step={5} value={quality} onChange={e=>setQuality(+e.target.value)} className="text-sm font-mono" />
             </div>
           )}
         </div>

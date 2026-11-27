@@ -103,7 +103,7 @@ export function TextSummarizerTool() {
             <label className="text-xs text-muted-foreground">Input Text</label>
             <span className="text-xs text-muted-foreground">{wordCount} words · {sentenceCount} sentences</span>
           </div>
-          <Textarea value={input} onChange={e => setInput(e.target.value)}
+          <Textarea aria-label="Input Text" value={input} onChange={e => setInput(e.target.value)}
             className="min-h-[180px] resize-none text-sm" placeholder="Paste article or text to summarize…" />
         </div>
 

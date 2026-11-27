@@ -50,12 +50,12 @@ function JsonValidator() {
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">JSON input</label>
-          <Textarea value={input} onChange={e => { setInput(e.target.value); setStatus("idle"); }}
+          <Textarea aria-label="JSON input" value={input} onChange={e => { setInput(e.target.value); setStatus("idle"); }}
             placeholder={'{"key": "value"}'} className="min-h-[220px] text-sm font-mono resize-y" />
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Formatted output</label>
-          <Textarea value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
+          <Textarea aria-label="Formatted output" value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
         </div>
       </div>
 
@@ -132,9 +132,9 @@ function HtmlFormatter() {
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-3">
-        <Textarea value={input} onChange={e => setInput(e.target.value)}
+        <Textarea aria-label="Paste HTML here" value={input} onChange={e => setInput(e.target.value)}
           placeholder="Paste HTML here…" className="min-h-[220px] text-sm font-mono resize-y" />
-        <Textarea value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
+        <Textarea aria-label="Output" value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
       </div>
       <div className="flex gap-2">
         <Button onClick={format} disabled={!input.trim()} className="gap-1.5"><RefreshCw className="w-3.5 h-3.5" />Format HTML</Button>
@@ -170,9 +170,9 @@ function CssFormatter() {
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-3">
-        <Textarea value={input} onChange={e => setInput(e.target.value)}
+        <Textarea aria-label="Paste CSS here" value={input} onChange={e => setInput(e.target.value)}
           placeholder="Paste CSS here…" className="min-h-[220px] text-sm font-mono resize-y" />
-        <Textarea value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
+        <Textarea aria-label="Output" value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
       </div>
       <div className="flex gap-2">
         <Button onClick={format} disabled={!input.trim()} className="gap-1.5"><RefreshCw className="w-3.5 h-3.5" />Format CSS</Button>
@@ -218,9 +218,9 @@ function JsFormatter() {
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-3">
-        <Textarea value={input} onChange={e => setInput(e.target.value)}
+        <Textarea aria-label="Paste JavaScript here" value={input} onChange={e => setInput(e.target.value)}
           placeholder="Paste JavaScript here…" className="min-h-[220px] text-sm font-mono resize-y" />
-        <Textarea value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
+        <Textarea aria-label="Output" value={output} readOnly className="min-h-[220px] text-sm font-mono resize-y bg-muted/5" />
       </div>
       <div className="flex gap-2">
         <Button onClick={format} disabled={!input.trim()} className="gap-1.5"><RefreshCw className="w-3.5 h-3.5" />Format JS</Button>

@@ -691,12 +691,12 @@ export function ContentGeneratorTool() {
         {tool.hasTopicInput ? (
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Topic / Subject</label>
-            <Input value={topic} onChange={e=>setTopic(e.target.value)} placeholder={`Enter your topic… e.g. "remote work productivity"`} className="text-sm" />
+            <Input aria-label="Topic / Subject" value={topic} onChange={e=>setTopic(e.target.value)} placeholder={`Enter your topic… e.g. "remote work productivity"`} className="text-sm" />
           </div>
         ) : (
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Text to rewrite</label>
-            <Textarea value={text} onChange={e=>setText(e.target.value)} className="min-h-[120px] resize-none text-sm" placeholder="Paste your text here…" />
+            <Textarea aria-label="Text to rewrite" value={text} onChange={e=>setText(e.target.value)} className="min-h-[120px] resize-none text-sm" placeholder="Paste your text here…" />
           </div>
         )}
         <Button onClick={generate} disabled={!(tool.hasTopicInput ? topic : text).trim()} className="w-full gap-2">
@@ -708,7 +708,7 @@ export function ContentGeneratorTool() {
               <span className="text-xs text-muted-foreground">Generated content</span>
               <Button size="sm" variant="ghost" onClick={copy} className="h-6 text-xs gap-1"><Copy className="w-3 h-3" />Copy</Button>
             </div>
-            <Textarea readOnly value={output} className="min-h-[400px] resize-none text-sm font-mono bg-muted/20" />
+            <Textarea aria-label="Output" readOnly value={output} className="min-h-[400px] resize-none text-sm font-mono bg-muted/20" />
           </div>
         )}
       </div>

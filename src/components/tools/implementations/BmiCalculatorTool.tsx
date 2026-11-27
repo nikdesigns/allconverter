@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -129,7 +128,7 @@ export function BmiCalculatorTool() {
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wide">
               Weight ({unit === "metric" ? "kg" : "lbs"})
             </label>
-            <Input
+            <Input aria-label={`Weight (${unit === "metric" ? "kg" : "lbs"})`}
               type="number"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
@@ -144,7 +143,7 @@ export function BmiCalculatorTool() {
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wide">
                 Height (cm)
               </label>
-              <Input
+              <Input aria-label="Height (cm)"
                 type="number"
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
@@ -159,7 +158,7 @@ export function BmiCalculatorTool() {
                 Height (ft + in)
               </label>
               <div className="flex gap-2">
-                <Input
+                <Input aria-label="Height (feet)"
                   type="number"
                   value={heightFt}
                   onChange={(e) => setHeightFt(e.target.value)}
@@ -167,7 +166,7 @@ export function BmiCalculatorTool() {
                   min="0"
                   className="h-11"
                 />
-                <Input
+                <Input aria-label="Height (inches)"
                   type="number"
                   value={heightIn}
                   onChange={(e) => setHeightIn(e.target.value)}

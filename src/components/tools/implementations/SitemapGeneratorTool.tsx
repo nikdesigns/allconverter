@@ -76,7 +76,7 @@ ${entries.filter(e => e.url).map(e => `  <url>
                   <span />
                 </>
               )}
-              <Input value={e.url} onChange={ev => update(e.id, "url", ev.target.value)} placeholder="https://example.com/page" className="text-xs font-mono h-9" />
+              <Input aria-label="Page URL" value={e.url} onChange={ev => update(e.id, "url", ev.target.value)} placeholder="https://example.com/page" className="text-xs font-mono h-9" />
               <select aria-label="Priority" value={e.priority} onChange={ev => update(e.id, "priority", ev.target.value)}
                 className="h-9 px-2 rounded-xl border border-input bg-background text-xs">
                 {["1.0","0.9","0.8","0.7","0.6","0.5","0.4","0.3","0.2","0.1"].map(v => <option key={v}>{v}</option>)}
@@ -85,7 +85,7 @@ ${entries.filter(e => e.url).map(e => `  <url>
                 className="h-9 px-2 rounded-xl border border-input bg-background text-xs">
                 {["always","hourly","daily","weekly","monthly","yearly","never"].map(v => <option key={v}>{v}</option>)}
               </select>
-              <Input type="date" value={e.lastmod} onChange={ev => update(e.id, "lastmod", ev.target.value)} className="text-xs h-9" />
+              <Input aria-label="Last modified date" type="date" value={e.lastmod} onChange={ev => update(e.id, "lastmod", ev.target.value)} className="text-xs h-9" />
               <button aria-label="Remove" onClick={() => removeEntry(e.id)} className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-destructive">
                 <Trash2 className="w-3.5 h-3.5" />
               </button>

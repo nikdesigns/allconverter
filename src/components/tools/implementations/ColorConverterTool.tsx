@@ -147,7 +147,7 @@ export function ColorConverterTool() {
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wide">
               HEX Color
             </label>
-            <Input
+            <Input aria-label="HEX Color"
               value={hex}
               onChange={(e) => syncFromInput(e.target.value)}
               placeholder="#6366F1"

@@ -58,8 +58,8 @@ function FaqSchemaGenerator() {
             <span className="text-xs font-medium text-muted-foreground">Q&A #{i + 1}</span>
             {items.length > 1 && <button aria-label="Remove" onClick={() => del(i)} className="text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>}
           </div>
-          <Input value={it.q} onChange={e => upd(i, "q", e.target.value)} placeholder="Question" className="h-9 text-sm" />
-          <Textarea value={it.a} onChange={e => upd(i, "a", e.target.value)} placeholder="Answer" className="text-sm min-h-[70px]" />
+          <Input aria-label="Question" value={it.q} onChange={e => upd(i, "q", e.target.value)} placeholder="Question" className="h-9 text-sm" />
+          <Textarea aria-label="Answer" value={it.a} onChange={e => upd(i, "a", e.target.value)} placeholder="Answer" className="text-sm min-h-[70px]" />
         </div>
       ))}
       <Button variant="outline" size="sm" onClick={add} className="gap-1 text-xs"><Plus className="w-3 h-3" />Add Q&A</Button>
@@ -117,7 +117,7 @@ function ArticleSchemaGenerator() {
         {fields.map(f2 => (
           <div key={f2.k} className="space-y-1">
             <label className="text-[10px] font-medium text-muted-foreground">{f2.label}</label>
-            <Input type={f2.type ?? "text"} value={f[f2.k]} onChange={e => upd(f2.k, e.target.value)} className="h-8 text-xs" />
+            <Input aria-label={f2.label} type={f2.type ?? "text"} value={f[f2.k]} onChange={e => upd(f2.k, e.target.value)} className="h-8 text-xs" />
           </div>
         ))}
       </div>
@@ -166,7 +166,7 @@ function OrganizationSchemaGenerator() {
         ].map((f2) => (
           <div key={f2.k} className="space-y-1">
             <label className="text-[10px] font-medium text-muted-foreground">{f2.label}</label>
-            <Input value={f[f2.k as keyof typeof f]} onChange={e => upd(f2.k as keyof typeof f, e.target.value)} className="h-8 text-xs" />
+            <Input aria-label={f2.label} value={f[f2.k as keyof typeof f]} onChange={e => upd(f2.k as keyof typeof f, e.target.value)} className="h-8 text-xs" />
           </div>
         ))}
       </div>
@@ -177,7 +177,7 @@ function OrganizationSchemaGenerator() {
         </div>
         {socials.map((s,i) => (
           <div key={i} className="flex gap-2">
-            <Input value={s} onChange={e => setSocials(p => p.map((x,j)=>j===i?e.target.value:x))} placeholder="https://twitter.com/yourbrand" className="flex-1 h-8 text-xs" />
+            <Input aria-label="Social profile URL" value={s} onChange={e => setSocials(p => p.map((x,j)=>j===i?e.target.value:x))} placeholder="https://twitter.com/yourbrand" className="flex-1 h-8 text-xs" />
             {socials.length > 1 && <button aria-label="Remove" onClick={() => setSocials(p=>p.filter((_,j)=>j!==i))} className="text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>}
           </div>
         ))}
@@ -238,7 +238,7 @@ function RedirectChecker() {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={url} onChange={e => setUrl(e.target.value)} onKeyDown={e => e.key==="Enter"&&check()}
+        <Input aria-label="URL to check" value={url} onChange={e => setUrl(e.target.value)} onKeyDown={e => e.key==="Enter"&&check()}
           placeholder="https://example.com/old-url" className="h-10 text-sm" />
         <Button onClick={check} disabled={!url.trim() || loading} className="h-10 shrink-0 gap-1.5 px-4">
           <Search className="w-3.5 h-3.5" /> Check
@@ -329,7 +329,7 @@ function CanonicalTagChecker() {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={url} onChange={e => setUrl(e.target.value)} onKeyDown={e => e.key==="Enter"&&check()}
+        <Input aria-label="Page URL" value={url} onChange={e => setUrl(e.target.value)} onKeyDown={e => e.key==="Enter"&&check()}
           placeholder="https://example.com/page" className="h-10 text-sm" />
         <Button onClick={check} disabled={!url.trim() || loading} className="h-10 shrink-0 gap-1.5 px-4">
           <Search className="w-3.5 h-3.5" /> Check

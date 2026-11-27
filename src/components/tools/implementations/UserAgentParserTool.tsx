@@ -76,7 +76,7 @@ export function UserAgentParserTool() {
       </div>
       <div className="p-5 space-y-4">
         <div className="flex gap-2">
-          <Input
+          <Input aria-label="Paste a user agent string"
             value={ua}
             onChange={(e) => setUa(e.target.value)}
             className="text-xs font-mono flex-1"

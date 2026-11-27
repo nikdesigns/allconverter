@@ -13,10 +13,11 @@ import {
   Lock,
   ArrowRight,
 } from "lucide-react";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/html";
 
 export const metadata: Metadata = {
-  title: "About Us — Who We Are & Our Mission",
+  title: brandedTitle("About Us — Who We Are & Our Mission"),
   description:
     "About AllConverter.tools — a free, browser-based platform with 250+ online tools for PDF, images, developer, SEO and business tasks. No sign-up, no uploads.",
   alternates: { canonical: `${siteConfig.url}/about/` },
@@ -121,7 +122,7 @@ export default function AboutPage() {
     <div className="min-h-screen pt-20">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(aboutSchema) }}
       />
 
       {/* Hero */}

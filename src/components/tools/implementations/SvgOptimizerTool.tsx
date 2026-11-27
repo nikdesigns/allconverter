@@ -77,7 +77,7 @@ export function SvgOptimizerTool() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Input SVG</label>
-            <Textarea value={input} onChange={e=>setInput(e.target.value)} className="min-h-[280px] resize-none text-xs font-mono" />
+            <Textarea aria-label="Input SVG" value={input} onChange={e=>setInput(e.target.value)} className="min-h-[280px] resize-none text-xs font-mono" />
             <p className="text-xs text-muted-foreground mt-1">{input.length} bytes</p>
           </div>
           <div>
@@ -90,7 +90,7 @@ export function SvgOptimizerTool() {
                 </div>
               )}
             </div>
-            <Textarea readOnly value={output} className="min-h-[280px] resize-none text-xs font-mono bg-muted/10" placeholder="Optimized SVG will appear here…" />
+            <Textarea aria-label="Optimized SVG" readOnly value={output} className="min-h-[280px] resize-none text-xs font-mono bg-muted/10" placeholder="Optimized SVG will appear here…" />
             {stats && <p className="text-xs text-muted-foreground mt-1">{stats.optimized} bytes</p>}
           </div>
         </div>
@@ -118,7 +118,6 @@ export function SvgOptimizerTool() {
             <div className="flex items-center justify-center p-8 border border-border rounded-xl bg-muted/10 min-h-[100px]">
               {/* Rendered through <img>, not injected as markup: scripts and event
                   handlers inside an SVG do not run in an image context. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 alt="Preview of the optimised SVG"
                 src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(/\bxmlns=/.test(output) ? output : output.replace(/<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"'))}`}

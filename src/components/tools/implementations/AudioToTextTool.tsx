@@ -51,6 +51,7 @@ export function AudioToTextTool() {
   useEffect(() => {
     const SpeechRec =
       window.SpeechRecognition || window.webkitSpeechRecognition;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- feature detection needs window
     if (!SpeechRec) setSupported(false);
   }, []);
 

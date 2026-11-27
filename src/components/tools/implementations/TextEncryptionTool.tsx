@@ -72,12 +72,12 @@ export function TextEncryptionTool() {
 
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Password</label>
-          <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter encryption password…" className="text-sm" />
+          <Input aria-label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter encryption password…" className="text-sm" />
         </div>
 
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Input text (or encrypted data)</label>
-          <Textarea value={input} onChange={e => setInput(e.target.value)} className="min-h-[120px] resize-none text-sm font-mono" placeholder="Paste text to encrypt, or encrypted data to decrypt…" />
+          <Textarea aria-label="Input text (or encrypted data)" value={input} onChange={e => setInput(e.target.value)} className="min-h-[120px] resize-none text-sm font-mono" placeholder="Paste text to encrypt, or encrypted data to decrypt…" />
         </div>
 
         <div className="flex gap-2">
@@ -97,7 +97,7 @@ export function TextEncryptionTool() {
               <span className="text-xs text-muted-foreground">Output</span>
               <Button size="sm" variant="ghost" onClick={copy} className="h-6 text-xs gap-1"><Copy className="w-3 h-3" />Copy</Button>
             </div>
-            <Textarea readOnly value={output} className="min-h-[120px] resize-none text-sm font-mono bg-muted/20" />
+            <Textarea aria-label="Output" readOnly value={output} className="min-h-[120px] resize-none text-sm font-mono bg-muted/20" />
           </div>
         )}
       </div>

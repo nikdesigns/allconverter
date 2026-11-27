@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages, brandedTitle } from "@/lib/seo-utils";
 import { AllToolsClient } from "@/components/tools/AllToolsClient";
 
 export const metadata: Metadata = {
-  title: `All Free Online Tools — PDF, Image, Developer, SEO & More`,
+  title: brandedTitle(`All Free Online Tools — PDF, Image, Developer, SEO & More`),
   description:
     "Browse 250+ free online tools: PDF compressor, image converter, JSON formatter, UUID generator, word counter, and more. No sign-up, no limits, all browser-based.",
   alternates: { canonical: `${siteConfig.url}/tools/` },

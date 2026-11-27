@@ -41,6 +41,7 @@ export function UuidGeneratorTool() {
 
   // Initial generation + auto-regenerate when version or count changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- random output is generated on the client, not during render
     generate(version, count);
   }, [version, count, generate]);
 
@@ -80,7 +81,7 @@ export function UuidGeneratorTool() {
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Count (1–50)</label>
-            <Input type="number" min={1} max={50} value={count}
+            <Input aria-label="Count (1–50)" type="number" min={1} max={50} value={count}
               onChange={e => setCount(Math.min(50, Math.max(1, +e.target.value)))}
               className="text-sm font-mono" />
           </div>

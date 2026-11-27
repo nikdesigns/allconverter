@@ -30,7 +30,7 @@ function TitleChecker() {
     <div className="space-y-4">
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">Title Tag</label>
-        <Input value={title} onChange={e => setTitle(e.target.value)} className="text-sm" />
+        <Input aria-label="Title Tag" value={title} onChange={e => setTitle(e.target.value)} className="text-sm" />
         <p className="text-xs text-muted-foreground mt-1">{len} / 60 characters — {len > 60 ? "⚠️ Too long" : len < 30 ? "Too short" : "Good"}</p>
       </div>
       <div className="p-3 rounded-xl bg-muted/20 border border-border text-sm font-medium truncate text-primary">{title || "No title"}</div>
@@ -52,7 +52,7 @@ function DescChecker() {
     <div className="space-y-4">
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">Meta Description</label>
-        <Textarea value={desc} onChange={e => setDesc(e.target.value)} className="text-sm min-h-[80px] resize-none" />
+        <Textarea aria-label="Meta Description" value={desc} onChange={e => setDesc(e.target.value)} className="text-sm min-h-[80px] resize-none" />
         <p className="text-xs text-muted-foreground mt-1">{len} / 160 characters</p>
       </div>
       <CheckList checks={checks} />
@@ -86,7 +86,7 @@ function UtmBuilder() {
         {[["Website URL *","url",url,setUrl],["Campaign Source *","e.g. google, newsletter",source,setSource],["Campaign Medium *","e.g. cpc, email",medium,setMedium],["Campaign Name *","e.g. summer_sale",campaign,setCampaign],["Campaign Term","keyword",term,setTerm],["Campaign Content","ad variant",content,setContent]] .map(([label,placeholder,val,set]) => (
           <div key={label as string}>
             <label className="text-xs text-muted-foreground mb-1 block">{label as string}</label>
-            <Input value={val as string} onChange={e => (set as (v:string)=>void)(e.target.value)} placeholder={placeholder as string} className="text-sm" />
+            <Input aria-label={label as string} value={val as string} onChange={e => (set as (v:string)=>void)(e.target.value)} placeholder={placeholder as string} className="text-sm" />
           </div>
         ))}
       </div>
@@ -115,12 +115,12 @@ function SerpPreview() {
     <div className="space-y-4">
       <div className="grid gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">Page Title</label>
-          <Input value={title} onChange={e=>setTitle(e.target.value)} className="text-sm" />
+          <Input aria-label="Page Title" value={title} onChange={e=>setTitle(e.target.value)} className="text-sm" />
           <p className="text-xs text-muted-foreground mt-0.5">{title.length}/60</p></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Page URL</label>
-          <Input value={url} onChange={e=>setUrl(e.target.value)} className="text-sm" /></div>
+          <Input aria-label="Page URL" value={url} onChange={e=>setUrl(e.target.value)} className="text-sm" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Meta Description</label>
-          <Textarea value={desc} onChange={e=>setDesc(e.target.value)} className="text-sm min-h-[80px] resize-none" />
+          <Textarea aria-label="Meta Description" value={desc} onChange={e=>setDesc(e.target.value)} className="text-sm min-h-[80px] resize-none" />
           <p className="text-xs text-muted-foreground mt-0.5">{desc.length}/155</p></div>
       </div>
       <div className="p-4 rounded-xl border border-border bg-white/5">
@@ -161,7 +161,7 @@ function HreflangGen() {
           </div>
           <div className="flex-1">
             <label className="text-xs text-muted-foreground mb-1 block">URL</label>
-            <Input value={row.url} onChange={e=>update(i,"url",e.target.value)} className="text-sm" placeholder="https://…" />
+            <Input aria-label="URL" value={row.url} onChange={e=>update(i,"url",e.target.value)} className="text-sm" placeholder="https://…" />
           </div>
           <Button variant="ghost" size="sm" onClick={()=>removeRow(i)} className="text-red-400 h-10">✕</Button>
         </div>
@@ -242,16 +242,16 @@ function RobotsTester() {
     <div className="space-y-4">
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">robots.txt content</label>
-        <Textarea value={robots} onChange={e=>setRobots(e.target.value)} className="min-h-[160px] resize-none text-sm font-mono" />
+        <Textarea aria-label="robots.txt content" value={robots} onChange={e=>setRobots(e.target.value)} className="min-h-[160px] resize-none text-sm font-mono" />
       </div>
       <div className="flex gap-2">
         <div className="flex-1">
           <label className="text-xs text-muted-foreground mb-1 block">Test URL path</label>
-          <Input value={testUrl} onChange={e=>setTestUrl(e.target.value)} className="text-sm font-mono" placeholder="/admin/page" />
+          <Input aria-label="Test URL path" value={testUrl} onChange={e=>setTestUrl(e.target.value)} className="text-sm font-mono" placeholder="/admin/page" />
         </div>
         <div className="w-40">
           <label className="text-xs text-muted-foreground mb-1 block">User-agent</label>
-          <Input value={userAgent} onChange={e=>setUserAgent(e.target.value)} className="text-sm font-mono" />
+          <Input aria-label="User-agent" value={userAgent} onChange={e=>setUserAgent(e.target.value)} className="text-sm font-mono" />
         </div>
       </div>
       {r && (
@@ -302,7 +302,7 @@ function SchemaValidator() {
     <div className="space-y-4">
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">Schema markup (JSON-LD)</label>
-        <Textarea value={input} onChange={e=>setInput(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
+        <Textarea aria-label="Schema markup (JSON-LD)" value={input} onChange={e=>setInput(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
       </div>
       <Button onClick={validate} className="w-full gap-2"><Search className="w-4 h-4" />Validate Schema</Button>
       {checks.length > 0 && <CheckList checks={checks} />}
@@ -350,7 +350,7 @@ function SitemapValidator() {
     <div className="space-y-4">
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">Sitemap XML</label>
-        <Textarea value={input} onChange={e=>setInput(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
+        <Textarea aria-label="Sitemap XML" value={input} onChange={e=>setInput(e.target.value)} className="min-h-[200px] resize-none text-xs font-mono" />
       </div>
       <Button onClick={validate} className="w-full gap-2"><Search className="w-4 h-4" />Validate Sitemap</Button>
       {checks.length > 0 && <CheckList checks={checks} />}
@@ -397,7 +397,7 @@ function MetaAnalyzer() {
     <div className="space-y-4">
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">Paste HTML (head section)</label>
-        <Textarea value={input} onChange={e=>setInput(e.target.value)} className="min-h-[180px] resize-none text-xs font-mono" />
+        <Textarea aria-label="Paste HTML (head section)" value={input} onChange={e=>setInput(e.target.value)} className="min-h-[180px] resize-none text-xs font-mono" />
       </div>
       <Button onClick={analyze} className="w-full gap-2"><Search className="w-4 h-4" />Analyze Meta Tags</Button>
       {checks.length > 0 && <CheckList checks={checks} />}

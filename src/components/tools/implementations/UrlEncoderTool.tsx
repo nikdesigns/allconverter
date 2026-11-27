@@ -74,7 +74,7 @@ export function UrlEncoderTool() {
           <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wide">
             {mode === "encode" ? "URL / Text to Encode" : "Encoded URL to Decode"}
           </label>
-          <Textarea
+          <Textarea aria-label={mode === "encode" ? "URL / Text to Encode" : "Encoded URL to Decode"}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={

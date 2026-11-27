@@ -184,34 +184,34 @@ tbody td{padding:11px 12px;border-bottom:1px solid #f4f4f5;font-size:13px;color:
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your Details</p>
-            <Input value={from.name} onChange={e => setFrom_("name",e.target.value)} placeholder="Company name" className="text-sm" />
-            <Textarea value={from.address} onChange={e => setFrom_("address",e.target.value)} className="text-sm resize-none min-h-[60px]" placeholder="Address" />
-            <Input value={from.email} onChange={e => setFrom_("email",e.target.value)} placeholder="Email" className="text-sm" />
+            <Input aria-label="Company name" value={from.name} onChange={e => setFrom_("name",e.target.value)} placeholder="Company name" className="text-sm" />
+            <Textarea aria-label="Your address" value={from.address} onChange={e => setFrom_("address",e.target.value)} className="text-sm resize-none min-h-[60px]" placeholder="Address" />
+            <Input aria-label="Your email" value={from.email} onChange={e => setFrom_("email",e.target.value)} placeholder="Email" className="text-sm" />
             <div className="grid grid-cols-2 gap-2">
-              <Input value={from.phone} onChange={e => setFrom_("phone",e.target.value)} placeholder="Phone" className="text-sm" />
-              <Input value={from.website} onChange={e => setFrom_("website",e.target.value)} placeholder="Website" className="text-sm" />
+              <Input aria-label="Your phone" value={from.phone} onChange={e => setFrom_("phone",e.target.value)} placeholder="Phone" className="text-sm" />
+              <Input aria-label="Your website" value={from.website} onChange={e => setFrom_("website",e.target.value)} placeholder="Website" className="text-sm" />
             </div>
           </div>
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Client Details</p>
-            <Input value={to.name} onChange={e => setTo_("name",e.target.value)} placeholder="Client name" className="text-sm" />
-            <Textarea value={to.address} onChange={e => setTo_("address",e.target.value)} className="text-sm resize-none min-h-[60px]" placeholder="Address" />
-            <Input value={to.email} onChange={e => setTo_("email",e.target.value)} placeholder="Email" className="text-sm" />
+            <Input aria-label="Client name" value={to.name} onChange={e => setTo_("name",e.target.value)} placeholder="Client name" className="text-sm" />
+            <Textarea aria-label="Client address" value={to.address} onChange={e => setTo_("address",e.target.value)} className="text-sm resize-none min-h-[60px]" placeholder="Address" />
+            <Input aria-label="Client email" value={to.email} onChange={e => setTo_("email",e.target.value)} placeholder="Email" className="text-sm" />
           </div>
         </div>
 
         {/* Meta */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div><label className="text-xs text-muted-foreground mb-1 block">{isProposal?"Proposal #":"Quote #"}</label><Input value={meta.number} onChange={e => setMeta_("number",e.target.value)} className="text-sm font-mono" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">{isProposal?"Proposal #":"Quote #"}</label><Input aria-label={isProposal?"Proposal #":"Quote #"} value={meta.number} onChange={e => setMeta_("number",e.target.value)} className="text-sm font-mono" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Currency</label>
             <select aria-label="Currency" value={meta.currency} onChange={e => setMeta_("currency",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
             </select>
           </div>
-          <div><label className="text-xs text-muted-foreground mb-1 block">Date</label><Input type="date" value={meta.date} onChange={e => setMeta_("date",e.target.value)} className="text-sm" /></div>
-          <div><label className="text-xs text-muted-foreground mb-1 block">Valid Until</label><Input type="date" value={meta.validUntil} onChange={e => setMeta_("validUntil",e.target.value)} className="text-sm" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Date</label><Input aria-label="Date" type="date" value={meta.date} onChange={e => setMeta_("date",e.target.value)} className="text-sm" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Valid Until</label><Input aria-label="Valid Until" type="date" value={meta.validUntil} onChange={e => setMeta_("validUntil",e.target.value)} className="text-sm" /></div>
         </div>
-        <Input value={meta.subject} onChange={e => setMeta_("subject",e.target.value)} placeholder={`${isProposal?"Proposal":"Quote"} subject / project title (optional)`} className="text-sm" />
+        <Input aria-label={`${isProposal?"Proposal":"Quote"} subject / project title (optional)`} value={meta.subject} onChange={e => setMeta_("subject",e.target.value)} placeholder={`${isProposal?"Proposal":"Quote"} subject / project title (optional)`} className="text-sm" />
 
         {/* Line items */}
         <div>
@@ -224,9 +224,9 @@ tbody td{padding:11px 12px;border-bottom:1px solid #f4f4f5;font-size:13px;color:
               const amt = (parseFloat(item.qty)||0)*(parseFloat(item.rate)||0);
               return (
                 <div key={item.id} className="grid grid-cols-[1fr_60px_96px_88px_28px] gap-2 items-center">
-                  <Input value={item.description} onChange={e => updateItem(item.id,"description",e.target.value)} placeholder="Description" className="text-sm" />
-                  <Input type="number" value={item.qty} onChange={e => updateItem(item.id,"qty",e.target.value)} className="text-sm text-center font-mono" min="0" />
-                  <Input type="number" value={item.rate} onChange={e => updateItem(item.id,"rate",e.target.value)} className="text-sm font-mono" min="0" />
+                  <Input aria-label="Description" value={item.description} onChange={e => updateItem(item.id,"description",e.target.value)} placeholder="Description" className="text-sm" />
+                  <Input aria-label="Quantity" type="number" value={item.qty} onChange={e => updateItem(item.id,"qty",e.target.value)} className="text-sm text-center font-mono" min="0" />
+                  <Input aria-label="Rate" type="number" value={item.rate} onChange={e => updateItem(item.id,"rate",e.target.value)} className="text-sm font-mono" min="0" />
                   <span className="text-sm font-mono text-right text-muted-foreground tabular-nums">{fmt(amt)}</span>
                   <button aria-label="Remove" onClick={() => removeItem(item.id)} disabled={items.length===1} className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive disabled:opacity-25"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
@@ -242,7 +242,7 @@ tbody td{padding:11px 12px;border-bottom:1px solid #f4f4f5;font-size:13px;color:
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">Subtotal</span><span className="font-mono">{fmt(subtotal)}</span></div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground shrink-0">Tax</span>
-              <Input type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} min="0" max="100" className="w-16 h-7 text-xs text-center font-mono" />
+              <Input aria-label="Tax rate (%)" type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} min="0" max="100" className="w-16 h-7 text-xs text-center font-mono" />
               <span className="text-sm text-muted-foreground">%</span>
               <span className="font-mono text-sm ml-auto">{fmt(taxAmt)}</span>
             </div>
@@ -252,8 +252,8 @@ tbody td{padding:11px 12px;border-bottom:1px solid #f4f4f5;font-size:13px;color:
 
         {/* Terms / Notes */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div><label className="text-xs text-muted-foreground mb-1 block">Terms & Conditions</label><Textarea value={terms} onChange={e => setTerms(e.target.value)} className="text-sm resize-none min-h-[80px]" placeholder="Terms…" /></div>
-          <div><label className="text-xs text-muted-foreground mb-1 block">Notes</label><Textarea value={notes} onChange={e => setNotes(e.target.value)} className="text-sm resize-none min-h-[80px]" placeholder="Additional notes…" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Terms & Conditions</label><Textarea aria-label="Terms & Conditions" value={terms} onChange={e => setTerms(e.target.value)} className="text-sm resize-none min-h-[80px]" placeholder="Terms…" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Notes</label><Textarea aria-label="Notes" value={notes} onChange={e => setNotes(e.target.value)} className="text-sm resize-none min-h-[80px]" placeholder="Additional notes…" /></div>
         </div>
 
         {showPreview && (

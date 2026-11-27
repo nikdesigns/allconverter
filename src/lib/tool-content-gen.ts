@@ -604,21 +604,6 @@ const CAT_LABELS: Partial<Record<ToolCategory, string>> = {
   "network-tools":    "network diagnostics",
 };
 
-const AUDIENCE_MAP: Partial<Record<ToolCategory, string>> = {
-  "pdf-tools":        "students, office workers, freelancers, and anyone who works regularly with PDF documents",
-  "image-tools":      "designers, photographers, marketers, developers, and e-commerce sellers",
-  "text-tools":       "writers, bloggers, content creators, editors, and SEO professionals",
-  "developer-tools":  "web developers, software engineers, and DevOps professionals",
-  "seo-tools":        "SEO specialists, content marketers, website owners, and digital agencies",
-  "calculators":      "individuals, students, business owners, and financial planners",
-  "unit-converters":  "students, engineers, scientists, chefs, travellers, and anyone working across measurement systems",
-  "ai-tools":         "job seekers, marketing professionals, entrepreneurs, and content creators",
-  "business-tools":   "freelancers, SMEs, startups, accountants, and business owners",
-  "color-tools":      "UI/UX designers, front-end developers, and graphic designers",
-  "audio-tools":      "podcasters, musicians, content creators, and video editors",
-  "network-tools":    "IT professionals, developers, system administrators, and network engineers",
-};
-
 const PAIN_POINTS: Partial<Record<ToolCategory, string[]>> = {
   "pdf-tools": [
     "Dealing with PDFs used to mean purchasing expensive desktop software, waiting for slow cloud uploads, or struggling with tools that added watermarks to every output. Many free alternatives cap file sizes, require account creation, or limit the number of operations per day.",
@@ -738,7 +723,6 @@ const FEATURE_HIGHLIGHTS: Partial<Record<ToolCategory, string[]>> = {
 function generateIntroduction(tool: Tool, traits: ToolTraits): string {
   const { name, description, category, slug } = tool;
   const catLabel  = CAT_LABELS[category]  ?? "online utilities";
-  const audience  = AUDIENCE_MAP[category] ?? "professionals and everyday users";
 
   const painVariants     = PAIN_POINTS[category];
   const featureVariants  = FEATURE_HIGHLIGHTS[category];
@@ -753,14 +737,6 @@ function generateIntroduction(tool: Tool, traits: ToolTraits): string {
   const privacyNote = traits.usesExternalAPI
     ? "Only the minimal data needed to fulfil your request is sent to the processing service — no files or personal data are stored."
     : "Everything runs locally in your browser. Your files and content are never transmitted to any server, keeping your data completely private.";
-
-  const actionVerb = traits.hasFileInput
-    ? "upload your file to"
-    : traits.isCalculator
-    ? "enter your values into"
-    : traits.isGenerator
-    ? "fill in the form in"
-    : "paste your content into";
 
   // Paragraph 3: trait-specific how-it-helps detail
   let traitPara = "";

@@ -3,7 +3,6 @@
 import { SendToTool } from "@/components/tools/shared/SendToTool";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUploadZone } from "@/components/tools/shared/FileUploadZone";
 import { Download, Shapes } from "lucide-react";
@@ -68,7 +67,7 @@ export function SvgToPngTool() {
       <div className="p-5 space-y-4">
         <FileUploadZone accept=".svg,image/svg+xml" onFiles={handleFile} label="Drop an SVG file here" sublabel="Or paste SVG code below" />
 
-        <Textarea value={svgText} onChange={(e) => setSvgText(e.target.value)}
+        <Textarea aria-label="SVG code" value={svgText} onChange={(e) => setSvgText(e.target.value)}
           placeholder='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">...</svg>'
           className="font-mono text-xs min-h-[120px] resize-none" />
 

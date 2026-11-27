@@ -167,17 +167,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div className="space-y-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Issued By</p>
           <div className="grid grid-cols-2 gap-2">
-            <Input value={from.name} onChange={e => setFrom_("name",e.target.value)} placeholder="Business / Person name" className="text-sm" />
-            <Input value={from.address} onChange={e => setFrom_("address",e.target.value)} placeholder="Address" className="text-sm" />
-            <Input value={from.email} onChange={e => setFrom_("email",e.target.value)} placeholder="Email (optional)" className="text-sm" />
-            <Input value={from.phone} onChange={e => setFrom_("phone",e.target.value)} placeholder="Phone (optional)" className="text-sm" />
+            <Input aria-label="Business / Person name" value={from.name} onChange={e => setFrom_("name",e.target.value)} placeholder="Business / Person name" className="text-sm" />
+            <Input aria-label="Your address" value={from.address} onChange={e => setFrom_("address",e.target.value)} placeholder="Address" className="text-sm" />
+            <Input aria-label="Email (optional)" value={from.email} onChange={e => setFrom_("email",e.target.value)} placeholder="Email (optional)" className="text-sm" />
+            <Input aria-label="Phone (optional)" value={from.phone} onChange={e => setFrom_("phone",e.target.value)} placeholder="Phone (optional)" className="text-sm" />
           </div>
         </div>
 
         {/* Receipt details */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div><label className="text-xs text-muted-foreground mb-1 block">Receipt #</label><Input value={meta.number} onChange={e => setMeta_("number",e.target.value)} className="text-sm font-mono" /></div>
-          <div><label className="text-xs text-muted-foreground mb-1 block">Date</label><Input type="date" value={meta.date} onChange={e => setMeta_("date",e.target.value)} className="text-sm" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Receipt #</label><Input aria-label="Receipt #" value={meta.number} onChange={e => setMeta_("number",e.target.value)} className="text-sm font-mono" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Date</label><Input aria-label="Date" type="date" value={meta.date} onChange={e => setMeta_("date",e.target.value)} className="text-sm" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Currency</label>
             <select aria-label="Currency" value={meta.currency} onChange={e => setMeta_("currency",e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
@@ -191,12 +191,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div><label className="text-xs text-muted-foreground mb-1 block">Received From</label><Input value={receivedFrom} onChange={e => setReceivedFrom(e.target.value)} placeholder="Payer name / company" className="text-sm" /></div>
-          <div><label className="text-xs text-muted-foreground mb-1 block">Amount</label><Input type="number" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" className="text-sm font-mono" min="0" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Received From</label><Input aria-label="Received From" value={receivedFrom} onChange={e => setReceivedFrom(e.target.value)} placeholder="Payer name / company" className="text-sm" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Amount</label><Input aria-label="Amount" type="number" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" className="text-sm font-mono" min="0" /></div>
         </div>
 
-        <div><label className="text-xs text-muted-foreground mb-1 block">For (Purpose)</label><Input value={forPurpose} onChange={e => setForPurpose(e.target.value)} placeholder="e.g. Consulting services for January 2026" className="text-sm" /></div>
-        <div><label className="text-xs text-muted-foreground mb-1 block">Notes (optional)</label><Textarea value={notes} onChange={e => setNotes(e.target.value)} className="text-sm resize-none min-h-[60px]" placeholder="Additional notes…" /></div>
+        <div><label className="text-xs text-muted-foreground mb-1 block">For (Purpose)</label><Input aria-label="For (Purpose)" value={forPurpose} onChange={e => setForPurpose(e.target.value)} placeholder="e.g. Consulting services for January 2026" className="text-sm" /></div>
+        <div><label className="text-xs text-muted-foreground mb-1 block">Notes (optional)</label><Textarea aria-label="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)} className="text-sm resize-none min-h-[60px]" placeholder="Additional notes…" /></div>
 
         {/* Amount preview */}
         {amtNum > 0 && (

@@ -51,6 +51,7 @@ export function ThemeProvider({
 
   useEffect(() => {
     const sys = getSystemTheme();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- stored theme and system preference are browser-only
     setSystemTheme(sys);
 
     const stored = localStorage.getItem("theme") as Theme | null;

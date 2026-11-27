@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Copy, Link2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,7 +36,7 @@ export function UrlParserTool() {
         <span className="text-sm font-medium">URL Parser</span>
       </div>
       <div className="p-5 space-y-4">
-        <Input value={input} onChange={e => setInput(e.target.value)} placeholder="https://example.com/path?query=value#hash" className="font-mono text-sm" />
+        <Input aria-label="URL to parse" value={input} onChange={e => setInput(e.target.value)} placeholder="https://example.com/path?query=value#hash" className="font-mono text-sm" />
 
         {!parsed.ok && input.trim() && (
           <p className="text-sm text-red-500">Invalid URL — include the protocol (https://)</p>

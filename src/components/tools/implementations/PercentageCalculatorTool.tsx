@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 
@@ -78,7 +77,7 @@ export function PercentageCalculatorTool() {
         <div className="space-y-3 pb-5 sm:pb-0 sm:pr-5">
           <h3 className="text-sm font-semibold">What is X% of Y?</h3>
           <div className="flex items-center gap-2">
-            <Input
+            <Input aria-label="Percentage (X)"
               type="number"
               value={pct1}
               onChange={(e) => setPct1(e.target.value)}
@@ -86,7 +85,7 @@ export function PercentageCalculatorTool() {
               className="h-9 text-sm"
             />
             <span className="text-sm font-medium text-muted-foreground shrink-0">% of</span>
-            <Input
+            <Input aria-label="Value (Y)"
               type="number"
               value={val1}
               onChange={(e) => setVal1(e.target.value)}
@@ -104,7 +103,7 @@ export function PercentageCalculatorTool() {
         <div className="space-y-3 py-5 sm:py-0 sm:px-5">
           <h3 className="text-sm font-semibold">X is what % of Y?</h3>
           <div className="flex items-center gap-2">
-            <Input
+            <Input aria-label="Value (X)"
               type="number"
               value={xOf}
               onChange={(e) => setXOf(e.target.value)}
@@ -112,7 +111,7 @@ export function PercentageCalculatorTool() {
               className="h-9 text-sm"
             />
             <span className="text-sm font-medium text-muted-foreground shrink-0">out of</span>
-            <Input
+            <Input aria-label="Total (Y)"
               type="number"
               value={yOf}
               onChange={(e) => setYOf(e.target.value)}
@@ -130,7 +129,7 @@ export function PercentageCalculatorTool() {
         <div className="space-y-3 pt-5 sm:pt-0 sm:pl-5">
           <h3 className="text-sm font-semibold">Percentage Change</h3>
           <div className="flex items-center gap-2">
-            <Input
+            <Input aria-label="Original value"
               type="number"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
@@ -138,7 +137,7 @@ export function PercentageCalculatorTool() {
               className="h-9 text-sm"
             />
             <span className="text-sm font-medium text-muted-foreground shrink-0">→</span>
-            <Input
+            <Input aria-label="New value"
               type="number"
               value={to}
               onChange={(e) => setTo(e.target.value)}

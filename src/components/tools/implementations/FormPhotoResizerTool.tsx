@@ -187,7 +187,6 @@ export function FormPhotoResizerTool() {
               <div className="mx-auto sm:mx-0">
                 <div className="rounded-xl border border-border bg-muted/30 p-2 inline-block">
                   {result ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={result.url} alt="Preview of the resized image" className="block max-w-[220px] max-h-[260px] w-auto h-auto" />
                   ) : (
                     <div className="w-[160px] h-[200px] flex items-center justify-center text-xs text-muted-foreground">Rendering…</div>

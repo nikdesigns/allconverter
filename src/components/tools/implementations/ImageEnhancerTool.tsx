@@ -121,14 +121,14 @@ function analyzeAndEnhance(img: HTMLImageElement): Adjustments {
   const data = ctx.getImageData(0, 0, w, h).data;
   const total = w * h;
 
-  let sumL = 0, sumSq = 0, sumR = 0, sumG = 0, sumB = 0;
+  let sumL = 0, sumSq = 0, sumR = 0, sumB = 0;
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i], g = data[i+1], b = data[i+2];
     // Rec.709 luminance
     const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
     sumL  += L;
     sumSq += L * L;
-    sumR  += r; sumG += g; sumB += b;
+    sumR  += r; sumB += b;
   }
   const meanL = sumL  / total;
   const stdL  = Math.sqrt(sumSq / total - meanL * meanL);

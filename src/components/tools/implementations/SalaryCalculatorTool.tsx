@@ -111,7 +111,7 @@ function SalaryCalculator() {
 function CtcToInhand() {
   const [ctc, setCtc] = useState("1200000");
   const [basicPct, setBasicPct] = useState("40");
-  const [hraExemptPct, setHraExemptPct] = useState("50");
+  const [hraExemptPct] = useState("50");
   const [pfEmployee, setPfEmployee] = useState("true");
   const [pfEmployer, setPfEmployer] = useState("true");
   const [pt, setPt] = useState("200");

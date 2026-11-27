@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Copy, Plus, Trash2, FileText } from "lucide-react";
+import { Copy, Plus, Trash2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -91,7 +91,7 @@ export function AiResumeBuilderTool() {
   const pField = (label: string, key: string, placeholder?: string) => (
     <div>
       <label className="text-xs text-muted-foreground mb-1 block">{label}</label>
-      <Input value={personal[key] ?? ""} onChange={e => set(key, e.target.value)}
+      <Input aria-label={label} value={personal[key] ?? ""} onChange={e => set(key, e.target.value)}
         placeholder={placeholder} className="text-sm h-9" />
     </div>
   );
@@ -137,7 +137,7 @@ export function AiResumeBuilderTool() {
             <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs text-muted-foreground">
               A strong summary is 2–4 sentences. Lead with your years of experience, your key skill, and your top achievement. Tailor it to each job.
             </div>
-            <Textarea value={summary} onChange={e => setSummary(e.target.value)}
+            <Textarea aria-label="Professional summary" value={summary} onChange={e => setSummary(e.target.value)}
               placeholder={`Results-driven software engineer with 5+ years of experience building scalable web applications. Led a team of 8 engineers at XYZ Corp, delivering a platform used by 2M+ users. Passionate about clean code, performance optimization, and mentoring junior developers.`}
               className="min-h-[120px] resize-none text-sm" />
             <div className="text-xs text-muted-foreground">{summary.split(/\s+/).filter(Boolean).length} words</div>
@@ -160,21 +160,21 @@ export function AiResumeBuilderTool() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div><label className="text-xs text-muted-foreground mb-1 block">Job Title *</label>
-                    <Input value={exp.title} onChange={e => setE(i, "title", e.target.value)} placeholder="Senior Software Engineer" className="text-sm h-9" /></div>
+                    <Input aria-label="Job Title" value={exp.title} onChange={e => setE(i, "title", e.target.value)} placeholder="Senior Software Engineer" className="text-sm h-9" /></div>
                   <div><label className="text-xs text-muted-foreground mb-1 block">Company *</label>
-                    <Input value={exp.company} onChange={e => setE(i, "company", e.target.value)} placeholder="Google" className="text-sm h-9" /></div>
+                    <Input aria-label="Company" value={exp.company} onChange={e => setE(i, "company", e.target.value)} placeholder="Google" className="text-sm h-9" /></div>
                   <div><label className="text-xs text-muted-foreground mb-1 block">Location</label>
-                    <Input value={exp.location} onChange={e => setE(i, "location", e.target.value)} placeholder="Bangalore, India" className="text-sm h-9" /></div>
+                    <Input aria-label="Location" value={exp.location} onChange={e => setE(i, "location", e.target.value)} placeholder="Bangalore, India" className="text-sm h-9" /></div>
                   <div className="grid grid-cols-2 gap-2">
                     <div><label className="text-xs text-muted-foreground mb-1 block">Start</label>
-                      <Input value={exp.start} onChange={e => setE(i, "start", e.target.value)} placeholder="Jan 2022" className="text-sm h-9" /></div>
+                      <Input aria-label="Start" value={exp.start} onChange={e => setE(i, "start", e.target.value)} placeholder="Jan 2022" className="text-sm h-9" /></div>
                     <div><label className="text-xs text-muted-foreground mb-1 block">End</label>
-                      <Input value={exp.end} onChange={e => setE(i, "end", e.target.value)} placeholder="Present" className="text-sm h-9" /></div>
+                      <Input aria-label="End" value={exp.end} onChange={e => setE(i, "end", e.target.value)} placeholder="Present" className="text-sm h-9" /></div>
                   </div>
                 </div>
                 <div>
                   <label className="text-xs text-muted-foreground mb-1 block">Key Achievements (one per line, use action verbs)</label>
-                  <Textarea value={exp.bullets} onChange={e => setE(i, "bullets", e.target.value)}
+                  <Textarea aria-label="Key Achievements (one per line, use action verbs)" value={exp.bullets} onChange={e => setE(i, "bullets", e.target.value)}
                     placeholder={`Reduced API response time by 40% by implementing Redis caching\nLed migration from monolith to microservices for 3 core services\nMentored 4 junior engineers, improving team velocity by 25%`}
                     className="min-h-[90px] resize-none text-sm" />
                 </div>
@@ -201,16 +201,16 @@ export function AiResumeBuilderTool() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div><label className="text-xs text-muted-foreground mb-1 block">Degree / Certificate *</label>
-                    <Input value={ed.degree} onChange={e => setEd2(i, "degree", e.target.value)} placeholder="B.Tech Computer Science" className="text-sm h-9" /></div>
+                    <Input aria-label="Degree / Certificate" value={ed.degree} onChange={e => setEd2(i, "degree", e.target.value)} placeholder="B.Tech Computer Science" className="text-sm h-9" /></div>
                   <div><label className="text-xs text-muted-foreground mb-1 block">Institution *</label>
-                    <Input value={ed.school} onChange={e => setEd2(i, "school", e.target.value)} placeholder="IIT Bombay" className="text-sm h-9" /></div>
+                    <Input aria-label="Institution" value={ed.school} onChange={e => setEd2(i, "school", e.target.value)} placeholder="IIT Bombay" className="text-sm h-9" /></div>
                   <div><label className="text-xs text-muted-foreground mb-1 block">Location</label>
-                    <Input value={ed.location} onChange={e => setEd2(i, "location", e.target.value)} placeholder="Mumbai, India" className="text-sm h-9" /></div>
+                    <Input aria-label="Location" value={ed.location} onChange={e => setEd2(i, "location", e.target.value)} placeholder="Mumbai, India" className="text-sm h-9" /></div>
                   <div className="grid grid-cols-2 gap-2">
                     <div><label className="text-xs text-muted-foreground mb-1 block">Year</label>
-                      <Input value={ed.year} onChange={e => setEd2(i, "year", e.target.value)} placeholder="2020" className="text-sm h-9" /></div>
+                      <Input aria-label="Year" value={ed.year} onChange={e => setEd2(i, "year", e.target.value)} placeholder="2020" className="text-sm h-9" /></div>
                     <div><label className="text-xs text-muted-foreground mb-1 block">GPA / %</label>
-                      <Input value={ed.gpa} onChange={e => setEd2(i, "gpa", e.target.value)} placeholder="8.5 / 10" className="text-sm h-9" /></div>
+                      <Input aria-label="GPA / %" value={ed.gpa} onChange={e => setEd2(i, "gpa", e.target.value)} placeholder="8.5 / 10" className="text-sm h-9" /></div>
                   </div>
                 </div>
               </div>
@@ -227,19 +227,19 @@ export function AiResumeBuilderTool() {
           <div className="space-y-4">
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">Skills (comma or newline separated)</label>
-              <Textarea value={skills} onChange={e => setSkills(e.target.value)}
+              <Textarea aria-label="Skills (comma or newline separated)" value={skills} onChange={e => setSkills(e.target.value)}
                 placeholder="React, TypeScript, Node.js, PostgreSQL, Docker, AWS, Git, Agile, REST APIs"
                 className="min-h-[80px] resize-none text-sm" />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">Certifications (one per line)</label>
-              <Textarea value={certifications} onChange={e => setCerts(e.target.value)}
+              <Textarea aria-label="Certifications (one per line)" value={certifications} onChange={e => setCerts(e.target.value)}
                 placeholder={`AWS Certified Solutions Architect — 2023\nGoogle Cloud Professional Data Engineer — 2022`}
                 className="min-h-[80px] resize-none text-sm" />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">Projects (separate each project with a blank line)</label>
-              <Textarea value={projects} onChange={e => setProjects(e.target.value)}
+              <Textarea aria-label="Projects (separate each project with a blank line)" value={projects} onChange={e => setProjects(e.target.value)}
                 placeholder={`E-Commerce Platform (React, Node.js, MongoDB)\nBuilt a full-stack e-commerce site with 10k+ monthly users.\nGitHub: github.com/johndoe/shop`}
                 className="min-h-[100px] resize-none text-sm" />
             </div>

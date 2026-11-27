@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ToolGrid } from "@/components/tools/ToolGrid";
 import { getNewTools } from "@/lib/tools-data";
 
@@ -27,11 +28,9 @@ export function NewToolsStrip() {
               The latest additions to our growing collection of free tools
             </p>
           </div>
-          <Link href="/tools/">
-            <Button variant="secondary" size="sm" className="gap-2 shrink-0">
-              View all tools
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Button>
+          <Link href="/tools/" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "gap-2 shrink-0")}>
+            View all tools
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
         <ToolGrid tools={newTools} columns={4} />

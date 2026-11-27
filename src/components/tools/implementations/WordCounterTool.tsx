@@ -64,7 +64,7 @@ export function WordCounterTool() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] divide-y lg:divide-y-0 lg:divide-x divide-border">
         {/* Input */}
         <div>
-          <Textarea
+          <Textarea aria-label="Type or paste your text here to analyze word count, character count, reading time, and more"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Type or paste your text here to analyze word count, character count, reading time, and more..."

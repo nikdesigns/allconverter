@@ -7,9 +7,9 @@ import { useHandoff } from "@/lib/handoff";
 import { escapeHtml, sanitizeHtml } from "@/lib/html";
 import { localPdfWorkerUrl } from "@/lib/pdf-worker";
 import { activateOnKey } from "@/lib/a11y";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { Upload, Download, FileText, Lock, Unlock, Stamp, ScanText, X } from "lucide-react";
+import { Upload, Download, FileText, Lock, Stamp, ScanText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -302,7 +302,6 @@ function PowerpointToPdf() {
       {error && <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 text-sm text-rose-500" role="alert">{error}</div>}
       {file && result && (
         <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={result.preview} alt="Preview of the first slide" className="w-full rounded-xl border border-border" />
           <div className="text-xs text-muted-foreground">
             {result.slideCount} slide{result.slideCount === 1 ? "" : "s"} · {(result.blob.size / 1024 / 1024).toFixed(2)} MB
@@ -535,7 +534,7 @@ function PdfWatermark() {
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Watermark text</label>
-          <Input value={text} onChange={e => setText_(e.target.value)} placeholder="e.g. CONFIDENTIAL" className="h-10 text-sm" />
+          <Input aria-label="Watermark text" value={text} onChange={e => setText_(e.target.value)} placeholder="e.g. CONFIDENTIAL" className="h-10 text-sm" />
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Color</label>

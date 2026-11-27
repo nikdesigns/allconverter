@@ -12,10 +12,10 @@ import {
   Zap,
   ExternalLink,
 } from "lucide-react";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: brandedTitle("Contact Us"),
   description:
     "Get in touch with the AllConverter.tools team — support, business inquiries, partnerships, bug reports, and feature requests. We respond within 1–2 business days.",
   alternates: { canonical: `${siteConfig.url}/contact/` },

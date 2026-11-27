@@ -83,7 +83,7 @@ export function HtmlEntityEncoderTool() {
 
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Input</label>
-          <Textarea value={input} onChange={e => setInput(e.target.value)}
+          <Textarea aria-label="Input" value={input} onChange={e => setInput(e.target.value)}
             placeholder={mode === "encode" ? "Enter HTML or text to encode…" : "Enter encoded entities to decode…"}
             className="min-h-[140px] resize-none text-sm font-mono" />
         </div>
@@ -101,7 +101,7 @@ export function HtmlEntityEncoderTool() {
               <Copy className="w-3 h-3" />Copy
             </Button>
           </div>
-          <Textarea readOnly value={output} className="min-h-[140px] resize-none text-sm font-mono bg-muted/20" />
+          <Textarea aria-label="Output" readOnly value={output} className="min-h-[140px] resize-none text-sm font-mono bg-muted/20" />
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">

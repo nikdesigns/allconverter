@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Search, AlertCircle } from "lucide-react";
 
 const EXAMPLES = [
@@ -31,7 +30,6 @@ export function RegexTesterTool() {
     try {
       const re = new RegExp(pattern, flags);
       const allMatches: Array<{ match: string; index: number; groups: string[] }> = [];
-      let m;
       if (flags.includes("g")) {
         const iter = text.matchAll(re);
         for (const match of iter) {
@@ -113,7 +111,7 @@ export function RegexTesterTool() {
         {/* Test text */}
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Test String</label>
-          <Textarea value={text} onChange={e => setText(e.target.value)}
+          <Textarea aria-label="Test String" value={text} onChange={e => setText(e.target.value)}
             className="min-h-[120px] resize-none text-sm font-mono" />
         </div>
 
@@ -151,7 +149,7 @@ export function RegexTesterTool() {
           </button>
           {showReplace && (
             <div className="mt-2 space-y-2">
-              <Input value={replaceWith} onChange={e => setReplaceWith(e.target.value)}
+              <Input aria-label="Replacement string ($1, $2 for groups)" value={replaceWith} onChange={e => setReplaceWith(e.target.value)}
                 placeholder="Replacement string ($1, $2 for groups)" className="font-mono text-sm" />
               {pattern && !error && (
                 <div className="p-3 rounded-xl border border-border bg-muted/10 text-sm font-mono whitespace-pre-wrap">

@@ -10,7 +10,7 @@ if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motio
 }
 import {
   CheckCircle2, XCircle, Shield, Zap, Lock, FolderX,
-  FileText, Image, Music, Code, Briefcase, Video, Cpu,
+  FileText, Image as ImageIcon, Music, Code, Briefcase, Video, Cpu,
   ChevronRight, AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -32,7 +32,7 @@ const BADGE_META: Record<TrustBadge, { icon: React.ReactNode; label: string; col
 };
 
 const CATEGORY_ICON: Record<string, React.ReactNode> = {
-  image:     <Image     className="w-4 h-4" />,
+  image:     <ImageIcon     className="w-4 h-4" />,
   pdf:       <FileText  className="w-4 h-4" />,
   audio:     <Music     className="w-4 h-4" />,
   video:     <Video     className="w-4 h-4" />,

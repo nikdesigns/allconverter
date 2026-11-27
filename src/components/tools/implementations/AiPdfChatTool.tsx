@@ -14,20 +14,6 @@ interface Message {
   content: string;
 }
 
-async function extractPdfText(file: File): Promise<string> {
-  const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = localPdfWorkerUrl();
-  const bytes = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-  const pages: string[] = [];
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    pages.push(content.items.map((item) => ("str" in item ? item.str : "")).join(" "));
-  }
-  return pages.join("\n\n");
-}
-
 function answerQuestion(pdfText: string, question: string): string {
   const q = question.toLowerCase().trim();
   const sentences = pdfText.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 20);
@@ -214,7 +200,7 @@ export function AiPdfChatTool() {
 
           {/* Input */}
           <div className="border-t border-border p-3 flex gap-2">
-            <Input
+            <Input aria-label="Ask anything about this PDF"
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}

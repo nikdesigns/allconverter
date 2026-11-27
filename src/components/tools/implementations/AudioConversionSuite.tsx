@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { Upload, Download, Music, X, Play, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 // Web Audio API context (lazy)
 let audioCtx: AudioContext | null = null;

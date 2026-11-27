@@ -53,6 +53,7 @@ export function LoremIpsumTool() {
 
   // Auto-generate when settings change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- random output is generated on the client, not during render
     generate(type, count, startWithLorem);
   }, [type, count, startWithLorem, generate]);
 

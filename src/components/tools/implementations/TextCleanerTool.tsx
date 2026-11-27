@@ -41,7 +41,7 @@ export function TextCleanerTool() {
   const [output, setOutput] = useState("");
   const [ops, setOps] = useState<Set<string>>(new Set(["trim","singlespace","singleline"]));
 
-  const toggle = (id: string) => setOps(prev => { const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s; });
+  const toggle = (id: string) => setOps(prev => { const s = new Set(prev); if (s.has(id)) s.delete(id); else s.add(id); return s; });
   const clean = () => { const r = applyOps(input, ops); setOutput(r); };
   const copy = () => { navigator.clipboard.writeText(output); toast.success("Copied!"); };
 
@@ -64,7 +64,7 @@ export function TextCleanerTool() {
           ))}
         </div>
 
-        <Textarea value={input} onChange={e => setInput(e.target.value)}
+        <Textarea aria-label="Text to clean" value={input} onChange={e => setInput(e.target.value)}
           placeholder="Paste your messy text here…" className="min-h-[140px] resize-none text-sm font-mono" />
 
         <Button onClick={clean} disabled={!input.trim()} className="w-full gap-2">
@@ -80,7 +80,7 @@ export function TextCleanerTool() {
                 <Button size="sm" variant="ghost" onClick={() => { setInput(output); setOutput(""); }} className="h-7 text-xs gap-1"><RotateCcw className="w-3.5 h-3.5" />Re-clean</Button>
               </div>
             </div>
-            <Textarea readOnly value={output} className="min-h-[140px] resize-none text-sm font-mono bg-muted/20" />
+            <Textarea aria-label="Output" readOnly value={output} className="min-h-[140px] resize-none text-sm font-mono bg-muted/20" />
           </div>
         )}
       </div>

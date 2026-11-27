@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,18 +30,18 @@ function GridGenerator() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">Columns</label>
-          <Input type="number" min={1} max={12} value={cols} onChange={e=>{setCols(+e.target.value);setColTemplate(`repeat(${e.target.value}, 1fr)`);}} className="text-sm font-mono" /></div>
+          <Input aria-label="Columns" type="number" min={1} max={12} value={cols} onChange={e=>{setCols(+e.target.value);setColTemplate(`repeat(${e.target.value}, 1fr)`);}} className="text-sm font-mono" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Rows</label>
-          <Input type="number" min={1} max={12} value={rows} onChange={e=>{setRows(+e.target.value);setRowTemplate(`repeat(${e.target.value}, 1fr)`);}} className="text-sm font-mono" /></div>
+          <Input aria-label="Rows" type="number" min={1} max={12} value={rows} onChange={e=>{setRows(+e.target.value);setRowTemplate(`repeat(${e.target.value}, 1fr)`);}} className="text-sm font-mono" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Column Gap (px)</label>
-          <Input type="number" value={colGap} onChange={e=>setColGap(+e.target.value)} className="text-sm font-mono" /></div>
+          <Input aria-label="Column Gap (px)" type="number" value={colGap} onChange={e=>setColGap(+e.target.value)} className="text-sm font-mono" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Row Gap (px)</label>
-          <Input type="number" value={rowGap} onChange={e=>setRowGap(+e.target.value)} className="text-sm font-mono" /></div>
+          <Input aria-label="Row Gap (px)" type="number" value={rowGap} onChange={e=>setRowGap(+e.target.value)} className="text-sm font-mono" /></div>
       </div>
       <div><label className="text-xs text-muted-foreground mb-1 block">Column template</label>
-        <Input value={colTemplate} onChange={e=>setColTemplate(e.target.value)} className="font-mono text-sm" /></div>
+        <Input aria-label="Column template" value={colTemplate} onChange={e=>setColTemplate(e.target.value)} className="font-mono text-sm" /></div>
       <div><label className="text-xs text-muted-foreground mb-1 block">Row template</label>
-        <Input value={rowTemplate} onChange={e=>setRowTemplate(e.target.value)} className="font-mono text-sm" /></div>
+        <Input aria-label="Row template" value={rowTemplate} onChange={e=>setRowTemplate(e.target.value)} className="font-mono text-sm" /></div>
       <div
         className="border border-border rounded-xl p-4 min-h-[200px]"
         style={{display:"grid",gridTemplateColumns:colTemplate,gridTemplateRows:rowTemplate,columnGap:colGap,rowGap:rowGap}}>
@@ -93,9 +93,9 @@ function FlexboxGenerator() {
       {optionRow("align-items",align,setAlign,["flex-start","flex-end","center","stretch","baseline"])}
       <div className="flex gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">Gap (px)</label>
-          <Input type="number" value={gap} onChange={e=>setGap(+e.target.value)} className="w-24 text-sm font-mono" /></div>
+          <Input aria-label="Gap (px)" type="number" value={gap} onChange={e=>setGap(+e.target.value)} className="w-24 text-sm font-mono" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Items</label>
-          <Input type="number" min={1} max={12} value={itemCount} onChange={e=>setItemCount(+e.target.value)} className="w-24 text-sm font-mono" /></div>
+          <Input aria-label="Items" type="number" min={1} max={12} value={itemCount} onChange={e=>setItemCount(+e.target.value)} className="w-24 text-sm font-mono" /></div>
       </div>
       <div className="border border-border rounded-xl p-4 min-h-[100px]"
         style={{display:"flex",flexDirection:direction as "row"|"column"|"row-reverse"|"column-reverse",flexWrap:wrap as "nowrap"|"wrap",justifyContent:justify,alignItems:align,gap}}>
@@ -153,7 +153,7 @@ function AnimationGenerator() {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {[["Duration (s)",duration,setDuration],["Delay (s)",delay,setDelay],["Iteration",iteration,setIteration]].map(([label,val,set])=>(
           <div key={label as string}><label className="text-xs text-muted-foreground mb-1 block">{label as string}</label>
-            <Input value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm font-mono" /></div>
+            <Input aria-label={label as string} value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm font-mono" /></div>
         ))}
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -204,13 +204,13 @@ function ClampCalculator() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">Min value (px)</label>
-          <Input value={minVal} onChange={e=>setMinVal(e.target.value)} className="font-mono text-sm" /></div>
+          <Input aria-label="Min value (px)" value={minVal} onChange={e=>setMinVal(e.target.value)} className="font-mono text-sm" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Max value (px)</label>
-          <Input value={maxVal} onChange={e=>setMaxVal(e.target.value)} className="font-mono text-sm" /></div>
+          <Input aria-label="Max value (px)" value={maxVal} onChange={e=>setMaxVal(e.target.value)} className="font-mono text-sm" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Min viewport (px)</label>
-          <Input value={minVw} onChange={e=>setMinVw(e.target.value)} className="font-mono text-sm" /></div>
+          <Input aria-label="Min viewport (px)" value={minVw} onChange={e=>setMinVw(e.target.value)} className="font-mono text-sm" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Max viewport (px)</label>
-          <Input value={maxVw} onChange={e=>setMaxVw(e.target.value)} className="font-mono text-sm" /></div>
+          <Input aria-label="Max viewport (px)" value={maxVw} onChange={e=>setMaxVw(e.target.value)} className="font-mono text-sm" /></div>
       </div>
       <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-muted/10">
         <code className="text-sm font-mono flex-1 break-all">{clamp}</code>
@@ -236,9 +236,9 @@ function RemPxConverter() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">{isRemToPx ? "REM value" : "PX value"}</label>
-          <Input value={value} onChange={e=>setValue(e.target.value)} className="font-mono text-sm" /></div>
+          <Input aria-label={isRemToPx ? "REM value" : "PX value"} value={value} onChange={e=>setValue(e.target.value)} className="font-mono text-sm" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Base font size (px)</label>
-          <Input value={base} onChange={e=>setBase(e.target.value)} className="font-mono text-sm" /></div>
+          <Input aria-label="Base font size (px)" value={base} onChange={e=>setBase(e.target.value)} className="font-mono text-sm" /></div>
       </div>
       <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-muted/10">
         <span className="text-sm text-muted-foreground">{value}{isRemToPx ? "rem" : "px"} =</span>
@@ -295,7 +295,7 @@ function CssUnitConverter() {
     <div className="space-y-4">
       <div className="flex gap-2 items-end">
         <div className="flex-1"><label className="text-xs text-muted-foreground mb-1 block">Value</label>
-          <Input value={value} onChange={e=>setValue(e.target.value)} className="font-mono text-sm" /></div>
+          <Input aria-label="Value" value={value} onChange={e=>setValue(e.target.value)} className="font-mono text-sm" /></div>
         <div className="w-24"><label className="text-xs text-muted-foreground mb-1 block">From</label>
           <select aria-label="From" value={fromUnit} onChange={e=>setFromUnit(e.target.value)} className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-mono">
             {UNITS.map(u=><option key={u}>{u}</option>)}
@@ -426,13 +426,13 @@ function TailwindGradientGenerator() {
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div><label className="text-xs text-muted-foreground mb-1 block">From</label>
-          <Input type="color" value={from} onChange={e=>setFrom(e.target.value)} className="h-10 p-1 cursor-pointer" /></div>
+          <Input aria-label="From" type="color" value={from} onChange={e=>setFrom(e.target.value)} className="h-10 p-1 cursor-pointer" /></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Via (optional)</label>
-          <Input type="color" value={via||"#7c3aed"} onChange={e=>setVia(e.target.value)} className="h-10 p-1 cursor-pointer" />
+          <Input aria-label="Via (optional)" type="color" value={via||"#7c3aed"} onChange={e=>setVia(e.target.value)} className="h-10 p-1 cursor-pointer" />
           <button className="text-xs text-muted-foreground mt-1" onClick={()=>setVia(v=>v?"":("#7c3aed"))}>{via?"Remove via":"Add via"}</button>
         </div>
         <div><label className="text-xs text-muted-foreground mb-1 block">To</label>
-          <Input type="color" value={to} onChange={e=>setTo(e.target.value)} className="h-10 p-1 cursor-pointer" /></div>
+          <Input aria-label="To" type="color" value={to} onChange={e=>setTo(e.target.value)} className="h-10 p-1 cursor-pointer" /></div>
       </div>
       <div className="h-24 rounded-xl border border-border" style={{background:gradient}} />
       <div className="space-y-2">

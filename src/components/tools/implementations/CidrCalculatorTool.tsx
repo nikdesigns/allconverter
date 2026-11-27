@@ -77,7 +77,7 @@ export function CidrCalculatorTool() {
       </div>
       <div className="p-5 space-y-4">
         <div className="flex gap-2">
-          <Input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter"&&calc()}
+          <Input aria-label="IP address with CIDR prefix" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter"&&calc()}
             className="font-mono text-sm flex-1" placeholder="192.168.1.0/24" />
           <Button onClick={calc}>Calculate</Button>
         </div>

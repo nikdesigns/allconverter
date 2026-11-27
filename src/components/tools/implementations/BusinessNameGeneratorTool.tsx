@@ -82,7 +82,7 @@ export function BusinessNameGeneratorTool() {
   const [industry, setIndustry] = useState("tech");
   const [style, setStyle]       = useState("modern");
   const [count, setCount]       = useState(20);
-  const [seed, setSeed]         = useState(42);
+  const [, setSeed]             = useState(42);
   const [names, setNames]       = useState<string[]>([]);
   const [copied, setCopied]     = useState<string>("");
   const [generated, setGenerated] = useState(false);
@@ -117,7 +117,7 @@ export function BusinessNameGeneratorTool() {
         {/* Keyword */}
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Keyword (optional)</label>
-          <Input value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key==="Enter" && generate()} placeholder="e.g. cloud, fit, pay, shop…" className="text-sm" />
+          <Input aria-label="Keyword (optional)" value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key==="Enter" && generate()} placeholder="e.g. cloud, fit, pay, shop…" className="text-sm" />
         </div>
 
         {/* Industry */}

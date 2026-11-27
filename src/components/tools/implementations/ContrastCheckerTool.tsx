@@ -85,7 +85,6 @@ export function ContrastCheckerTool() {
     </span>
   );
 
-  const overall = pass.aaSmall && pass.aaLarge;
   const overallColor = ratio >= 7 ? "text-emerald-400" : ratio >= 4.5 ? "text-emerald-400" : ratio >= 3 ? "text-amber-400" : "text-rose-400";
 
   return (

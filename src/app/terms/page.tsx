@@ -16,10 +16,10 @@ import {
   Mail,
   Info,
 } from "lucide-react";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions",
+  title: brandedTitle("Terms and Conditions"),
   description:
     "Terms and Conditions for AllConverter.tools — permitted use, intellectual property, liability limits, AI content disclaimer and your rights.",
   alternates: { canonical: `${siteConfig.url}/terms/` },

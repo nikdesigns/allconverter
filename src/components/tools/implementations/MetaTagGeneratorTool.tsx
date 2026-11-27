@@ -76,39 +76,39 @@ ${form.image ? `<meta property="twitter:image" content="${form.image}">` : ""}
               <label className="text-xs text-muted-foreground">Page Title *</label>
               <span className={`text-xs ${titleLen > 60 ? "text-amber-500" : "text-muted-foreground"}`}>{titleLen}/60</span>
             </div>
-            <Input value={form.title} onChange={e => set("title", e.target.value)} placeholder="Your page title" />
+            <Input aria-label="Page Title" value={form.title} onChange={e => set("title", e.target.value)} placeholder="Your page title" />
           </div>
           <div className="sm:col-span-2">
             <div className="flex items-center justify-between mb-1">
               <label className="text-xs text-muted-foreground">Meta Description *</label>
               <span className={`text-xs ${descLen > 160 ? "text-amber-500" : "text-muted-foreground"}`}>{descLen}/160</span>
             </div>
-            <Textarea value={form.description} onChange={e => set("description", e.target.value)}
+            <Textarea aria-label="Meta Description" value={form.description} onChange={e => set("description", e.target.value)}
               placeholder="A compelling description for search engines…" className="resize-none min-h-[80px] text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Keywords (comma-separated)</label>
-            <Input value={form.keywords} onChange={e => set("keywords", e.target.value)} placeholder="seo, tools, free" />
+            <Input aria-label="Keywords (comma-separated)" value={form.keywords} onChange={e => set("keywords", e.target.value)} placeholder="seo, tools, free" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Author</label>
-            <Input value={form.author} onChange={e => set("author", e.target.value)} placeholder="John Doe" />
+            <Input aria-label="Author" value={form.author} onChange={e => set("author", e.target.value)} placeholder="John Doe" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Page URL</label>
-            <Input value={form.url} onChange={e => set("url", e.target.value)} placeholder="https://example.com/page" />
+            <Input aria-label="Page URL" value={form.url} onChange={e => set("url", e.target.value)} placeholder="https://example.com/page" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">OG Image URL</label>
-            <Input value={form.image} onChange={e => set("image", e.target.value)} placeholder="https://example.com/image.jpg" />
+            <Input aria-label="OG Image URL" value={form.image} onChange={e => set("image", e.target.value)} placeholder="https://example.com/image.jpg" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Site Name</label>
-            <Input value={form.siteName} onChange={e => set("siteName", e.target.value)} placeholder="My Website" />
+            <Input aria-label="Site Name" value={form.siteName} onChange={e => set("siteName", e.target.value)} placeholder="My Website" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Twitter Handle</label>
-            <Input value={form.twitterHandle} onChange={e => set("twitterHandle", e.target.value)} placeholder="@handle" />
+            <Input aria-label="Twitter Handle" value={form.twitterHandle} onChange={e => set("twitterHandle", e.target.value)} placeholder="@handle" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Robots</label>
@@ -137,7 +137,7 @@ ${form.image ? `<meta property="twitter:image" content="${form.image}">` : ""}
             <label className="text-xs font-medium">Generated Meta Tags</label>
             <Button size="sm" onClick={copy} className="h-7 text-xs gap-1"><Copy className="w-3 h-3" />Copy</Button>
           </div>
-          <Textarea readOnly value={generated} className="min-h-[280px] resize-none text-xs font-mono bg-muted/20" />
+          <Textarea aria-label="Output" readOnly value={generated} className="min-h-[280px] resize-none text-xs font-mono bg-muted/20" />
         </div>
       </div>
     </div>

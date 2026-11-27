@@ -62,17 +62,17 @@ export function CsvXmlConverterTool() {
         <div className="flex gap-3">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Root element</label>
-            <Input value={rootEl} onChange={e => setRootEl(e.target.value)} className="w-32 text-sm font-mono" />
+            <Input aria-label="Root element" value={rootEl} onChange={e => setRootEl(e.target.value)} className="w-32 text-sm font-mono" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Row element</label>
-            <Input value={rowEl} onChange={e => setRowEl(e.target.value)} className="w-32 text-sm font-mono" />
+            <Input aria-label="Row element" value={rowEl} onChange={e => setRowEl(e.target.value)} className="w-32 text-sm font-mono" />
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">CSV Input</label>
-            <Textarea value={input} onChange={e => setInput(e.target.value)} className="min-h-[260px] resize-none text-sm font-mono" />
+            <Textarea aria-label="CSV Input" value={input} onChange={e => setInput(e.target.value)} className="min-h-[260px] resize-none text-sm font-mono" />
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
@@ -82,7 +82,7 @@ export function CsvXmlConverterTool() {
             {error ? (
               <div className="min-h-[260px] p-3 rounded-xl border border-red-500/20 bg-red-500/5 text-xs text-red-500 font-mono">{error}</div>
             ) : (
-              <Textarea readOnly value={output} className="min-h-[260px] resize-none text-xs font-mono bg-muted/10" placeholder="Output will appear here…" />
+              <Textarea aria-label="XML output" readOnly value={output} className="min-h-[260px] resize-none text-xs font-mono bg-muted/10" placeholder="Output will appear here…" />
             )}
           </div>
         </div>

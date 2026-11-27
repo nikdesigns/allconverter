@@ -51,9 +51,9 @@ function LineItems({ items, onChange }: { items: LineItem[]; onChange: (items: L
       </div>
       {items.map((it, i) => (
         <div key={i} className="grid grid-cols-12 gap-1 items-center">
-          <Input value={it.description} onChange={e=>upd(i,"description",e.target.value)} placeholder="Item description" className="col-span-6 h-8 text-xs" />
-          <Input type="number" min={1} value={it.qty} onChange={e=>upd(i,"qty",Number(e.target.value))} className="col-span-2 h-8 text-xs text-center" />
-          <Input type="number" min={0} value={it.rate} onChange={e=>upd(i,"rate",Number(e.target.value))} className="col-span-2 h-8 text-xs text-right" />
+          <Input aria-label="Item description" value={it.description} onChange={e=>upd(i,"description",e.target.value)} placeholder="Item description" className="col-span-6 h-8 text-xs" />
+          <Input aria-label="Quantity" type="number" min={1} value={it.qty} onChange={e=>upd(i,"qty",Number(e.target.value))} className="col-span-2 h-8 text-xs text-center" />
+          <Input aria-label="Rate" type="number" min={0} value={it.rate} onChange={e=>upd(i,"rate",Number(e.target.value))} className="col-span-2 h-8 text-xs text-right" />
           <span className="col-span-1 text-xs text-right font-medium">{(it.qty*it.rate).toLocaleString()}</span>
           <button aria-label="Remove" onClick={()=>del(i)} className="col-span-1 flex justify-center text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></button>
         </div>
@@ -72,7 +72,7 @@ function ProformaInvoice() {
   const [date, setDate]   = useState(new Date().toISOString().split("T")[0]);
   const [items, setItems] = useState<LineItem[]>([{ description:"", qty:1, rate:0 }]);
   const [gst, setGst]     = useState(18);
-  const [notes, setNotes] = useState("");
+  const [notes] = useState("");
 
   const subtotal = items.reduce((s,it)=>s+it.qty*it.rate, 0);
   const tax      = subtotal * gst / 100;
@@ -97,17 +97,17 @@ function ProformaInvoice() {
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-3 gap-3">
-        <Input value={num} onChange={e=>setNum(e.target.value)} placeholder="Invoice no." className="h-9 text-sm" />
-        <Input type="date" value={date} onChange={e=>setDate(e.target.value)} className="h-9 text-sm" />
-        <div className="flex items-center gap-2"><span className="text-xs text-muted-foreground whitespace-nowrap">GST %</span><Input type="number" value={gst} onChange={e=>setGst(Number(e.target.value))} className="h-9 text-sm" /></div>
+        <Input aria-label="Invoice no." value={num} onChange={e=>setNum(e.target.value)} placeholder="Invoice no." className="h-9 text-sm" />
+        <Input aria-label="Invoice date" type="date" value={date} onChange={e=>setDate(e.target.value)} className="h-9 text-sm" />
+        <div className="flex items-center gap-2"><span className="text-xs text-muted-foreground whitespace-nowrap">GST %</span><Input aria-label="GST rate (%)" type="number" value={gst} onChange={e=>setGst(Number(e.target.value))} className="h-9 text-sm" /></div>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         {[{label:"From (Seller)",s:from,set:setFrom},{label:"To (Buyer)",s:to,set:setTo}].map(p=>(
           <div key={p.label} className="space-y-2">
             <div className="text-xs font-medium text-muted-foreground">{p.label}</div>
-            <Input value={p.s.name} onChange={e=>p.set({...p.s,name:e.target.value})} placeholder="Company name" className="h-8 text-xs" />
-            <Input value={p.s.address} onChange={e=>p.set({...p.s,address:e.target.value})} placeholder="Address" className="h-8 text-xs" />
-            <Input value={p.s.gstin} onChange={e=>p.set({...p.s,gstin:e.target.value})} placeholder="GSTIN (optional)" className="h-8 text-xs" />
+            <Input aria-label="Company name" value={p.s.name} onChange={e=>p.set({...p.s,name:e.target.value})} placeholder="Company name" className="h-8 text-xs" />
+            <Input aria-label="Address" value={p.s.address} onChange={e=>p.set({...p.s,address:e.target.value})} placeholder="Address" className="h-8 text-xs" />
+            <Input aria-label="GSTIN (optional)" value={p.s.gstin} onChange={e=>p.set({...p.s,gstin:e.target.value})} placeholder="GSTIN (optional)" className="h-8 text-xs" />
           </div>
         ))}
       </div>
@@ -151,21 +151,21 @@ function PurchaseOrder() {
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-3 gap-3">
-        <Input value={poNum} onChange={e=>setPoNum(e.target.value)} placeholder="PO number" className="h-9 text-sm" />
-        <Input type="date" value={date} onChange={e=>setDate(e.target.value)} className="h-9 text-sm" />
-        <Input type="date" value={delivery} onChange={e=>setDelivery(e.target.value)} placeholder="Delivery date" className="h-9 text-sm" />
+        <Input aria-label="PO number" value={poNum} onChange={e=>setPoNum(e.target.value)} placeholder="PO number" className="h-9 text-sm" />
+        <Input aria-label="PO date" type="date" value={date} onChange={e=>setDate(e.target.value)} className="h-9 text-sm" />
+        <Input aria-label="Delivery date" type="date" value={delivery} onChange={e=>setDelivery(e.target.value)} placeholder="Delivery date" className="h-9 text-sm" />
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         {[{label:"Buyer",s:buyer,set:setBuyer},{label:"Vendor / Supplier",s:vendor,set:setVendor}].map(p=>(
           <div key={p.label} className="space-y-2">
             <div className="text-xs font-medium text-muted-foreground">{p.label}</div>
-            <Input value={p.s.name} onChange={e=>p.set({...p.s,name:e.target.value})} placeholder="Company name" className="h-8 text-xs" />
-            <Input value={p.s.address} onChange={e=>p.set({...p.s,address:e.target.value})} placeholder="Address" className="h-8 text-xs" />
+            <Input aria-label="Company name" value={p.s.name} onChange={e=>p.set({...p.s,name:e.target.value})} placeholder="Company name" className="h-8 text-xs" />
+            <Input aria-label="Address" value={p.s.address} onChange={e=>p.set({...p.s,address:e.target.value})} placeholder="Address" className="h-8 text-xs" />
           </div>
         ))}
       </div>
       <LineItems items={items} onChange={setItems} />
-      <Input value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Terms and conditions / notes (optional)" className="h-9 text-xs" />
+      <Input aria-label="Terms and conditions / notes (optional)" value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Terms and conditions / notes (optional)" className="h-9 text-xs" />
       <div className="flex items-center justify-between">
         <span className="text-sm font-bold">Order Total: {formatCurrency(total)}</span>
         <Button onClick={generate} className="gap-1.5"><Printer className="w-4 h-4" />Print / Save PDF</Button>
@@ -207,9 +207,9 @@ function DeliveryChallan() {
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-3">
-        <Input value={num} onChange={e=>setNum(e.target.value)} placeholder="Challan number" className="h-9 text-sm" />
-        <Input type="date" value={date} onChange={e=>setDate(e.target.value)} className="h-9 text-sm" />
-        <Input value={vehicle} onChange={e=>setVehicle(e.target.value)} placeholder="Vehicle number (optional)" className="h-9 text-sm" />
+        <Input aria-label="Challan number" value={num} onChange={e=>setNum(e.target.value)} placeholder="Challan number" className="h-9 text-sm" />
+        <Input aria-label="Challan date" type="date" value={date} onChange={e=>setDate(e.target.value)} className="h-9 text-sm" />
+        <Input aria-label="Vehicle number (optional)" value={vehicle} onChange={e=>setVehicle(e.target.value)} placeholder="Vehicle number (optional)" className="h-9 text-sm" />
         <select aria-label="Reason" value={reason} onChange={e=>setReason(e.target.value)} className="h-9 rounded-xl border border-border bg-background px-3 text-sm focus:outline-none">
           {reasons.map(r=><option key={r} value={r}>{r}</option>)}
         </select>
@@ -217,14 +217,14 @@ function DeliveryChallan() {
       <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <div className="text-xs font-medium text-muted-foreground">Consigner (From)</div>
-          <Input value={from.name} onChange={e=>setFrom(p=>({...p,name:e.target.value}))} placeholder="Name" className="h-8 text-xs" />
-          <Input value={from.address} onChange={e=>setFrom(p=>({...p,address:e.target.value}))} placeholder="Address" className="h-8 text-xs" />
-          <Input value={from.gstin} onChange={e=>setFrom(p=>({...p,gstin:e.target.value}))} placeholder="GSTIN" className="h-8 text-xs" />
+          <Input aria-label="Sender name" value={from.name} onChange={e=>setFrom(p=>({...p,name:e.target.value}))} placeholder="Name" className="h-8 text-xs" />
+          <Input aria-label="Sender address" value={from.address} onChange={e=>setFrom(p=>({...p,address:e.target.value}))} placeholder="Address" className="h-8 text-xs" />
+          <Input aria-label="Sender GSTIN" value={from.gstin} onChange={e=>setFrom(p=>({...p,gstin:e.target.value}))} placeholder="GSTIN" className="h-8 text-xs" />
         </div>
         <div className="space-y-2">
           <div className="text-xs font-medium text-muted-foreground">Consignee (To)</div>
-          <Input value={to.name} onChange={e=>setTo(p=>({...p,name:e.target.value}))} placeholder="Name" className="h-8 text-xs" />
-          <Input value={to.address} onChange={e=>setTo(p=>({...p,address:e.target.value}))} placeholder="Address" className="h-8 text-xs" />
+          <Input aria-label="Recipient name" value={to.name} onChange={e=>setTo(p=>({...p,name:e.target.value}))} placeholder="Name" className="h-8 text-xs" />
+          <Input aria-label="Recipient address" value={to.address} onChange={e=>setTo(p=>({...p,address:e.target.value}))} placeholder="Address" className="h-8 text-xs" />
         </div>
       </div>
       <LineItems items={items} onChange={setItems} />
@@ -269,12 +269,12 @@ function ExpenseTracker() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <Input value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&add()} placeholder="Description" className="col-span-2 sm:col-span-1 h-9 text-xs" />
+        <Input aria-label="Description" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&add()} placeholder="Description" className="col-span-2 sm:col-span-1 h-9 text-xs" />
         <select aria-label="Category" value={cat} onChange={e=>setCat(e.target.value)} className="h-9 rounded-xl border border-border bg-background px-2 text-xs focus:outline-none">
           {EXPENSE_CATS.map(c=><option key={c}>{c}</option>)}
         </select>
-        <Input type="number" value={amount} onChange={e=>setAmount(e.target.value?Number(e.target.value):"")} placeholder="Amount ₹" className="h-9 text-xs" />
-        <Input type="date" value={eDate} onChange={e=>setEDate(e.target.value)} className="h-9 text-xs" />
+        <Input aria-label="Amount ₹" type="number" value={amount} onChange={e=>setAmount(e.target.value?Number(e.target.value):"")} placeholder="Amount ₹" className="h-9 text-xs" />
+        <Input aria-label="Expense date" type="date" value={eDate} onChange={e=>setEDate(e.target.value)} className="h-9 text-xs" />
       </div>
       <Button onClick={add} disabled={!desc.trim()||!amount} className="gap-1.5 w-full sm:w-auto"><Plus className="w-3.5 h-3.5" />Add Expense</Button>
 
@@ -341,8 +341,8 @@ const ItemList = ({ items, set, label }: { items: PLItem[]; set: React.Dispatch<
     </div>
     {items.map((it,i)=>(
       <div key={i} className="flex gap-2 items-center">
-        <Input value={it.label} onChange={e=>updItem(set,i,"label",e.target.value)} placeholder="Label" className="flex-1 h-8 text-xs" />
-        <Input type="number" value={it.amount} onChange={e=>updItem(set,i,"amount",Number(e.target.value))} placeholder="0" className="w-28 h-8 text-xs text-right" />
+        <Input aria-label="Label" value={it.label} onChange={e=>updItem(set,i,"label",e.target.value)} placeholder="Label" className="flex-1 h-8 text-xs" />
+        <Input aria-label="Amount" type="number" value={it.amount} onChange={e=>updItem(set,i,"amount",Number(e.target.value))} placeholder="0" className="w-28 h-8 text-xs text-right" />
         <button aria-label="Remove" onClick={()=>delItem(set,i)} className="text-muted-foreground hover:text-rose-400 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
       </div>
     ))}
@@ -383,7 +383,7 @@ function ProfitLossCalculator() {
 
       <div className="flex items-center gap-3">
         <span className="text-xs text-muted-foreground whitespace-nowrap">Tax rate %:</span>
-        <Input type="number" value={taxRate} onChange={e=>setTaxRate(Number(e.target.value))} className="w-20 h-8 text-xs" />
+        <Input aria-label="Tax rate (%)" type="number" value={taxRate} onChange={e=>setTaxRate(Number(e.target.value))} className="w-20 h-8 text-xs" />
       </div>
 
       <div className="rounded-xl border border-border overflow-hidden">

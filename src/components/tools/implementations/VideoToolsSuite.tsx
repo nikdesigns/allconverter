@@ -93,18 +93,6 @@ function ProgressBar({ value, label }: { value: number; label: string }) {
   );
 }
 
-function RealtimeNote() {
-  return (
-    <div className="flex gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
-      <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-      <p className="text-xs text-amber-300/80">
-        Processing happens in real time in your browser — a 1-minute clip takes approximately 1 minute to process.
-        Large files take longer.
-      </p>
-    </div>
-  );
-}
-
 function ResultCard({ blob, filename, onReset }: { blob: Blob; filename: string; onReset: () => void }) {
   return (
     <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-3">
@@ -488,11 +476,11 @@ function MpFourToGif() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Start time (m:ss)</label>
-              <Input value={startStr} onChange={e => setStartStr(e.target.value)} placeholder="0:00" className="h-10 text-sm font-mono" disabled={state === "processing"} />
+              <Input aria-label="Start time (m:ss)" value={startStr} onChange={e => setStartStr(e.target.value)} placeholder="0:00" className="h-10 text-sm font-mono" disabled={state === "processing"} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Duration (max 10 s)</label>
-              <Input type="number" value={duration} onChange={e => setDuration(Math.min(10, Math.max(1, +e.target.value)))} min={1} max={10} className="h-10 text-sm" disabled={state === "processing"} />
+              <Input aria-label="Duration (max 10 s)" type="number" value={duration} onChange={e => setDuration(Math.min(10, Math.max(1, +e.target.value)))} min={1} max={10} className="h-10 text-sm" disabled={state === "processing"} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">
@@ -606,7 +594,7 @@ function VideoThumbnail() {
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="text-xs text-muted-foreground mb-1.5 block">Capture at (m:ss)</label>
-              <Input value={timeStr} onChange={e => setTimeStr(e.target.value)} placeholder="0:05" className="h-10 text-sm font-mono" />
+              <Input aria-label="Capture at (m:ss)" value={timeStr} onChange={e => setTimeStr(e.target.value)} placeholder="0:05" className="h-10 text-sm font-mono" />
             </div>
             <div className="flex items-end">
               <Button onClick={capture} disabled={capturing} className="h-10 gap-2 px-5">

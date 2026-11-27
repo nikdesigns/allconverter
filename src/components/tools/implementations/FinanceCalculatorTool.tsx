@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { DollarSign } from "lucide-react";
 
 // ── GST Calculator ────────────────────────────────────────────────────────────
@@ -23,7 +22,7 @@ function GstCalc() {
     <div className="space-y-4">
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">Amount (₹)</label>
-        <Input value={amount} onChange={e=>setAmount(e.target.value)} className="text-sm font-mono" />
+        <Input aria-label="Amount (₹)" value={amount} onChange={e=>setAmount(e.target.value)} className="text-sm font-mono" />
       </div>
       <div>
         <label className="text-xs text-muted-foreground mb-1 block">GST Rate (%)</label>
@@ -32,7 +31,7 @@ function GstCalc() {
             <button key={r} onClick={()=>setRate(String(r))} className={`px-3 py-1.5 rounded-xl border text-xs font-mono transition-all ${rate===String(r)?"border-primary/40 bg-primary/10 text-primary":"border-border text-muted-foreground"}`}>{r}%</button>
           ))}
         </div>
-        <Input value={rate} onChange={e=>setRate(e.target.value)} className="text-sm font-mono w-28" placeholder="Custom %" />
+        <Input aria-label="Custom GST rate (%)" value={rate} onChange={e=>setRate(e.target.value)} className="text-sm font-mono w-28" placeholder="Custom %" />
       </div>
       <div className="flex gap-2">
         {(["exclusive","inclusive"] as const).map(m=>(
@@ -73,7 +72,7 @@ function CagrCalc() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[["Initial Investment",initial,setInitial],["Final Value",final,setFinal],["Period (years)",years,setYears]].map(([label,val,set])=>(
           <div key={label as string}><label className="text-xs text-muted-foreground mb-1 block">{label as string}</label>
-            <Input value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm font-mono" /></div>
+            <Input aria-label={label as string} value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm font-mono" /></div>
         ))}
       </div>
       <div className="space-y-2">
@@ -109,7 +108,7 @@ function SipCalc() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[["Monthly SIP (₹)",monthly,setMonthly],["Expected Return (%/yr)",rate,setRate],["Period (years)",years,setYears]].map(([label,val,set])=>(
           <div key={label as string}><label className="text-xs text-muted-foreground mb-1 block">{label as string}</label>
-            <Input value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm font-mono" /></div>
+            <Input aria-label={label as string} value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm font-mono" /></div>
         ))}
       </div>
       <div className="space-y-2">

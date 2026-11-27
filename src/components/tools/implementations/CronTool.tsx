@@ -85,7 +85,7 @@ export function CronTool() {
             {FIELDS.map(f => (
               <div key={f.key}>
                 <label className="text-xs text-muted-foreground mb-1 block">{f.label}</label>
-                <Input value={fields[f.key]} onChange={e => setFields(p => ({ ...p, [f.key]: e.target.value }))}
+                <Input aria-label={f.label} value={fields[f.key]} onChange={e => setFields(p => ({ ...p, [f.key]: e.target.value }))}
                   placeholder={f.placeholder} className="font-mono text-sm text-center" />
               </div>
             ))}
@@ -109,7 +109,7 @@ export function CronTool() {
       </div>
       <div className="p-5 space-y-4">
         <div className="flex gap-2">
-          <Input value={expr} onChange={e => setExpr(e.target.value)} placeholder="0 9 * * 1" className="flex-1 font-mono text-sm" />
+          <Input aria-label="Cron expression" value={expr} onChange={e => setExpr(e.target.value)} placeholder="0 9 * * 1" className="flex-1 font-mono text-sm" />
           <Button onClick={() => copy(expr)} variant="outline" className="gap-1.5"><Copy className="w-4 h-4" /></Button>
         </div>
         <div className="flex flex-wrap gap-1.5">

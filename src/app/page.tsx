@@ -12,6 +12,7 @@ import { SupportSection } from "@/components/home/SupportSection";
 import { SEOContentBlock } from "@/components/home/SEOContentBlock";
 import { LatestArticles } from "@/components/home/LatestArticles";
 import { baseOpenGraph, siteConfig } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/html";
 
 const founderSchema = {
   "@context": "https://schema.org",
@@ -36,7 +37,7 @@ const founderSchema = {
 
 export const metadata: Metadata = {
   // absolute: the brand is already in the title, so skip the layout template
-  title: { absolute: "All Converter — Free Online PDF, Image & Audio Converter | AllConverter.tools" },
+  title: { absolute: "All Converter — Free Online PDF, Image & Audio Converter" },
   description: siteConfig.description,
   alternates: { canonical: `${siteConfig.url}/` },
   openGraph: baseOpenGraph("/"),
@@ -48,7 +49,7 @@ export default function HomePage() {
       {/* Organization + WebSite schema live in the root layout */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(founderSchema) }}
       />
       <HeroSection />
       <FavoriteTools />

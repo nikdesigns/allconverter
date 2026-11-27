@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Copy, Hash, RefreshCw } from "lucide-react";
+import { Copy, Hash } from "lucide-react";
 import { toast } from "sonner";
 
 // Pure-JS MD5 (Piotr Walczyszyn / blueimp)
@@ -90,7 +90,7 @@ export function HashGeneratorTool() {
       if (!cancelled) setHash(h);
     })();
     return () => { cancelled = true; };
-  }, [input, slug]);
+  }, [input, slug, algo.label]);
 
   const generateBcrypt = async () => {
     if (!input) return;
@@ -122,7 +122,7 @@ export function HashGeneratorTool() {
         <div className="p-5 space-y-4">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Password to hash</label>
-            <Input value={input} onChange={e => setInput(e.target.value)} placeholder="Enter password" className="font-mono text-sm" />
+            <Input aria-label="Password to hash" value={input} onChange={e => setInput(e.target.value)} placeholder="Enter password" className="font-mono text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-2 block">Cost factor (rounds): {rounds}</label>
@@ -140,7 +140,7 @@ export function HashGeneratorTool() {
           )}
           <div className="pt-2 border-t border-border space-y-2">
             <p className="text-xs font-medium text-muted-foreground">Verify hash</p>
-            <Input value={bcryptInput} onChange={e => { setBcryptInput(e.target.value); setVerifyResult(null); }} placeholder="Plain text to verify" className="font-mono text-sm" />
+            <Input aria-label="Plain text to verify" value={bcryptInput} onChange={e => { setBcryptInput(e.target.value); setVerifyResult(null); }} placeholder="Plain text to verify" className="font-mono text-sm" />
             <Button onClick={verifyBcrypt} disabled={loading || !bcryptInput || !bcryptHash} variant="outline" className="w-full gap-2">
               {loading ? "Verifying…" : "Verify"}
             </Button>
@@ -165,7 +165,7 @@ export function HashGeneratorTool() {
       <div className="p-5 space-y-4">
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Input text</label>
-          <Textarea value={input} onChange={e => setInput(e.target.value)} placeholder="Enter text to hash…" className="min-h-[120px] resize-none text-sm font-mono" />
+          <Textarea aria-label="Input text" value={input} onChange={e => setInput(e.target.value)} placeholder="Enter text to hash…" className="min-h-[120px] resize-none text-sm font-mono" />
         </div>
         {hash && (
           <div className="space-y-2">

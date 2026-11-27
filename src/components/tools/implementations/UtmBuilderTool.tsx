@@ -39,6 +39,7 @@ export function UtmBuilderTool() {
   const [history, setHistory]       = useState<HistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- history lives in localStorage, which only exists after hydration
   useEffect(() => { setHistory(loadHistory()); }, []);
 
   const utmUrl = useMemo(() => {
@@ -100,7 +101,7 @@ export function UtmBuilderTool() {
         {/* Base URL */}
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Base URL</label>
-          <Input value={baseUrl} onChange={e => setBaseUrl(e.target.value)} placeholder="https://yoursite.com/landing-page" className="text-sm font-mono" />
+          <Input aria-label="Base URL" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} placeholder="https://yoursite.com/landing-page" className="text-sm font-mono" />
         </div>
 
         {/* Presets */}
@@ -121,23 +122,23 @@ export function UtmBuilderTool() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="text-xs mb-1 flex items-center gap-1"><span className="text-muted-foreground">utm_source</span><span className="text-red-500">*</span></label>
-            <Input value={source} onChange={e => setSource(e.target.value)} placeholder="google, newsletter, twitter…" className="text-sm font-mono" />
+            <Input aria-label="utm_source" value={source} onChange={e => setSource(e.target.value)} placeholder="google, newsletter, twitter…" className="text-sm font-mono" />
           </div>
           <div>
             <label className="text-xs mb-1 flex items-center gap-1"><span className="text-muted-foreground">utm_medium</span><span className="text-red-500">*</span></label>
-            <Input value={medium} onChange={e => setMedium(e.target.value)} placeholder="cpc, email, social, organic…" className="text-sm font-mono" />
+            <Input aria-label="utm_medium" value={medium} onChange={e => setMedium(e.target.value)} placeholder="cpc, email, social, organic…" className="text-sm font-mono" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">utm_campaign</label>
-            <Input value={campaign} onChange={e => setCampaign(e.target.value)} placeholder="summer-sale, launch-2026…" className="text-sm font-mono" />
+            <Input aria-label="utm_campaign" value={campaign} onChange={e => setCampaign(e.target.value)} placeholder="summer-sale, launch-2026…" className="text-sm font-mono" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">utm_term <span className="opacity-60">(paid keywords)</span></label>
-            <Input value={term} onChange={e => setTerm(e.target.value)} placeholder="running+shoes" className="text-sm font-mono" />
+            <Input aria-label="utm_term (paid keywords)" value={term} onChange={e => setTerm(e.target.value)} placeholder="running+shoes" className="text-sm font-mono" />
           </div>
           <div className="sm:col-span-2">
             <label className="text-xs text-muted-foreground mb-1 block">utm_content <span className="opacity-60">(A/B differentiation)</span></label>
-            <Input value={content} onChange={e => setContent(e.target.value)} placeholder="button-cta, banner-top, logo-link…" className="text-sm font-mono" />
+            <Input aria-label="utm_content (A/B differentiation)" value={content} onChange={e => setContent(e.target.value)} placeholder="button-cta, banner-top, logo-link…" className="text-sm font-mono" />
           </div>
         </div>
 

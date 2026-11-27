@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
-  Download, Copy, Link2, Share2, QrCode,
-  CheckCircle2, AlertCircle, Smartphone, Upload, X,
-} from "lucide-react";
+  Download, Link2, Share2, QrCode,
+  CheckCircle2, AlertCircle, Smartphone, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -124,16 +123,12 @@ export function UpiQrGeneratorTool() {
   const [finalUrl, setFinalUrl]     = useState("");
   const [upiUri, setUpiUri]         = useState("");
   const [generating, setGenerating] = useState(false);
-  const [upiError, setUpiError]     = useState<string | null>(null);
   const [copied, setCopied]         = useState(false);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
-  // Validate UPI ID on change
-  useEffect(() => {
-    setUpiError(validateUpiId(upiId));
-  }, [upiId]);
+  const upiError = useMemo(() => validateUpiId(upiId), [upiId]);
 
   // QR generation
   const generate = useCallback(async () => {
@@ -299,7 +294,7 @@ export function UpiQrGeneratorTool() {
                   UPI ID <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
-                  <Input
+                  <Input aria-label="UPI ID"
                     value={upiId}
                     onChange={e => setUpiId(e.target.value.toLowerCase().trim())}
                     placeholder="merchant@upi or name@okaxis"
@@ -331,7 +326,7 @@ export function UpiQrGeneratorTool() {
                 <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
                   Recipient Name <span className="text-rose-500">*</span>
                 </label>
-                <Input
+                <Input aria-label="Recipient Name"
                   value={name}
                   onChange={e => setName(e.target.value.slice(0, 50))}
                   placeholder="ABC Store"
@@ -347,7 +342,7 @@ export function UpiQrGeneratorTool() {
                 </label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground">₹</span>
-                  <Input
+                  <Input aria-label="Amount (₹) — optional"
                     type="number"
                     value={amount}
                     onChange={e => setAmount(e.target.value)}
@@ -367,7 +362,7 @@ export function UpiQrGeneratorTool() {
                 <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
                   Transaction Note <span className="text-muted-foreground font-normal">— optional</span>
                 </label>
-                <Input
+                <Input aria-label="Transaction Note — optional"
                   value={note}
                   onChange={e => setNote(e.target.value.slice(0, 50))}
                   placeholder="Invoice #1234, Donation, Order Payment…"
@@ -423,7 +418,7 @@ export function UpiQrGeneratorTool() {
                       onChange={e => setFgColor(e.target.value)}
                       className="w-9 h-9 rounded-lg border border-input cursor-pointer p-0.5 bg-transparent"
                     />
-                    <Input
+                    <Input aria-label="QR colour (hex)"
                       value={fgColor}
                       onChange={e => /^#[0-9a-f]{0,6}$/i.test(e.target.value) && setFgColor(e.target.value)}
                       maxLength={7}
@@ -440,7 +435,7 @@ export function UpiQrGeneratorTool() {
                       onChange={e => setBgColor(e.target.value)}
                       className="w-9 h-9 rounded-lg border border-input cursor-pointer p-0.5 bg-transparent"
                     />
-                    <Input
+                    <Input aria-label="Background colour (hex)"
                       value={bgColor}
                       onChange={e => /^#[0-9a-f]{0,6}$/i.test(e.target.value) && setBgColor(e.target.value)}
                       maxLength={7}

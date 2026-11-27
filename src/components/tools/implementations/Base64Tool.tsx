@@ -71,7 +71,7 @@ export function Base64Tool() {
           <label className="text-xs font-medium text-muted-foreground mb-2 block uppercase tracking-wide">
             {mode === "encode" ? "Text Input" : "Base64 Input"}
           </label>
-          <Textarea
+          <Textarea aria-label={mode === "encode" ? "Text Input" : "Base64 Input"}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={mode === "encode" ? "Enter text to encode…" : "Enter Base64 string to decode…"}

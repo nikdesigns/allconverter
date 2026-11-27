@@ -17,6 +17,7 @@ export function TextToSpeechTool() {
   const uttRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- speechSynthesis exists only in the browser
     if (!("speechSynthesis" in window)) { setSupported(false); return; }
     function loadVoices() {
       const v = window.speechSynthesis.getVoices();
@@ -68,7 +69,7 @@ export function TextToSpeechTool() {
     <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
       <div className="space-y-2">
         <Label className="text-xs">Text to speak</Label>
-        <Textarea
+        <Textarea aria-label="Type or paste text here"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Type or paste text here…"

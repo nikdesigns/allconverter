@@ -98,7 +98,7 @@ export function YamlJsonConverterTool() {
             <label className="text-xs text-muted-foreground mb-1 block">
               Input ({dir === "yaml2json" ? "YAML" : "JSON"})
             </label>
-            <Textarea value={input} onChange={e => setInput(e.target.value)} className="min-h-[280px] resize-none text-xs font-mono" />
+            <Textarea aria-label={`Input (${dir === "yaml2json" ? "YAML" : "JSON"})`} value={input} onChange={e => setInput(e.target.value)} className="min-h-[280px] resize-none text-xs font-mono" />
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
@@ -110,7 +110,7 @@ export function YamlJsonConverterTool() {
             {error ? (
               <div className="min-h-[280px] p-3 rounded-xl border border-red-500/20 bg-red-500/5 text-xs text-red-500 font-mono">{error}</div>
             ) : (
-              <Textarea readOnly value={output} className="min-h-[280px] resize-none text-xs font-mono bg-muted/10" placeholder="Output will appear here…" />
+              <Textarea aria-label="Output" readOnly value={output} className="min-h-[280px] resize-none text-xs font-mono bg-muted/10" placeholder="Output will appear here…" />
             )}
           </div>
         </div>

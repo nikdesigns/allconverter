@@ -92,25 +92,25 @@ export function TextToolsTool() {
         {slug === "remove-line-breaks" && (
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Replace line breaks with</label>
-            <Input value={lineBreakReplace} onChange={e => setLineBreakReplace(e.target.value)} className="font-mono text-sm w-40" placeholder="space, comma, etc." />
+            <Input aria-label="Replace line breaks with" value={lineBreakReplace} onChange={e => setLineBreakReplace(e.target.value)} className="font-mono text-sm w-40" placeholder="space, comma, etc." />
           </div>
         )}
         {slug === "add-line-numbers" && (
           <div className="flex gap-3">
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">Start number</label>
-              <Input type="number" value={lineStart} onChange={e => setLineStart(+e.target.value)} className="w-24 text-sm font-mono" />
+              <Input aria-label="Start number" type="number" value={lineStart} onChange={e => setLineStart(+e.target.value)} className="w-24 text-sm font-mono" />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">Separator</label>
-              <Input value={separator} onChange={e => setSeparator(e.target.value)} className="w-20 text-sm font-mono" />
+              <Input aria-label="Separator" value={separator} onChange={e => setSeparator(e.target.value)} className="w-20 text-sm font-mono" />
             </div>
           </div>
         )}
 
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">{label.inputLabel}</label>
-          <Textarea value={input} onChange={e => setInput(e.target.value)} className="min-h-[140px] resize-none text-sm font-mono" placeholder="Paste your text here…" />
+          <Textarea aria-label={label.inputLabel} value={input} onChange={e => setInput(e.target.value)} className="min-h-[140px] resize-none text-sm font-mono" placeholder="Paste your text here…" />
         </div>
 
         {output && (
@@ -119,7 +119,7 @@ export function TextToolsTool() {
               <span className="text-xs text-muted-foreground">{label.outputLabel}</span>
               <Button size="sm" variant="ghost" onClick={copy} className="h-6 text-xs gap-1"><Copy className="w-3 h-3" />Copy</Button>
             </div>
-            <Textarea readOnly value={output} className="min-h-[140px] resize-none text-sm font-mono bg-muted/20" />
+            <Textarea aria-label="Output" readOnly value={output} className="min-h-[140px] resize-none text-sm font-mono bg-muted/20" />
           </div>
         )}
       </div>

@@ -102,7 +102,7 @@ export function JsonFormatterTool() {
           <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
             <span className="text-xs font-medium text-muted-foreground">INPUT</span>
           </div>
-          <Textarea
+          <Textarea aria-label="Paste your JSON here"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Paste your JSON here…"

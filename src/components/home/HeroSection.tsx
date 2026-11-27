@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search, ArrowRight, Zap, FileText, Image, Code2, Music, BrainCircuit, Calculator } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Tool } from "@/types";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,7 @@ const quickLinks = [
 
 export function HeroSection() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Tool[]>([]);
+  const [fetchedResults, setFetchedResults] = useState<Tool[]>([]);
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -36,18 +36,18 @@ export function HeroSection() {
   // The tool catalogue is loaded on demand when the visitor starts typing,
   // so it is not part of the homepage's initial JavaScript.
   useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
+    if (!query.trim()) return;
     let cancelled = false;
     import("@/lib/tools-data").then(({ searchTools }) => {
-      if (!cancelled) setResults(searchTools(query).slice(0, 6));
+      if (!cancelled) setFetchedResults(searchTools(query).slice(0, 6));
     });
     return () => {
       cancelled = true;
     };
   }, [query]);
+
+  // Fetched matches belong to the last non-empty query; an empty box shows none.
+  const results = query.trim() ? fetchedResults : [];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,17 +148,13 @@ export function HeroSection() {
 
         {/* CTA buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
-          <Link href="/pdf-tools/">
-            <Button size="lg" className="gap-2 h-11 px-6 text-sm font-semibold">
-              <FileText className="w-4 h-4" />
-              Try PDF Tools
-            </Button>
+          <Link href="/pdf-tools/" className={cn(buttonVariants({ size: "lg" }), "gap-2 h-11 px-6 text-sm font-semibold")}>
+            <FileText className="w-4 h-4" />
+            Try PDF Tools
           </Link>
-          <Link href="/tools/">
-            <Button size="lg" variant="outline" className="gap-2 h-11 px-6 text-sm font-semibold">
-              Browse All 250+ Tools
-              <ArrowRight className="w-4 h-4" />
-            </Button>
+          <Link href="/tools/" className={cn(buttonVariants({ size: "lg", variant: "outline" }), "gap-2 h-11 px-6 text-sm font-semibold")}>
+            Browse All 250+ Tools
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 

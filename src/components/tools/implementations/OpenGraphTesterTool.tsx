@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Globe, Eye } from "lucide-react";
@@ -43,26 +42,26 @@ export function OpenGraphTesterTool() {
               <label className="text-xs text-muted-foreground">OG Title</label>
               <span className={`text-xs ${!titleOk ? "text-amber-500" : "text-emerald-500"}`}>{data.title.length}/70</span>
             </div>
-            <Input value={data.title} onChange={e => set("title", e.target.value)} />
+            <Input aria-label="OG Title" value={data.title} onChange={e => set("title", e.target.value)} />
           </div>
           <div className="sm:col-span-2">
             <div className="flex justify-between mb-1">
               <label className="text-xs text-muted-foreground">OG Description</label>
               <span className={`text-xs ${!descOk ? "text-amber-500" : "text-emerald-500"}`}>{data.description.length}/200</span>
             </div>
-            <Textarea value={data.description} onChange={e => set("description", e.target.value)} className="resize-none min-h-[80px] text-sm" />
+            <Textarea aria-label="OG Description" value={data.description} onChange={e => set("description", e.target.value)} className="resize-none min-h-[80px] text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">OG Image URL (1200×630)</label>
-            <Input value={data.image} onChange={e => set("image", e.target.value)} placeholder="https://…/og-image.jpg" />
+            <Input aria-label="OG Image URL (1200×630)" value={data.image} onChange={e => set("image", e.target.value)} placeholder="https://…/og-image.jpg" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Page URL</label>
-            <Input value={data.url} onChange={e => set("url", e.target.value)} placeholder="https://example.com/page" />
+            <Input aria-label="Page URL" value={data.url} onChange={e => set("url", e.target.value)} placeholder="https://example.com/page" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Site Name</label>
-            <Input value={data.siteName} onChange={e => set("siteName", e.target.value)} />
+            <Input aria-label="Site Name" value={data.siteName} onChange={e => set("siteName", e.target.value)} />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">OG Type</label>

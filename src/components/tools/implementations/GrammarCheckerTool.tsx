@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Copy, CheckCircle2, AlertCircle, BookOpen } from "lucide-react";
+import { CheckCircle2, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 
 interface Issue {
@@ -86,7 +86,7 @@ export function GrammarCheckerTool() {
         <span className="text-sm font-medium">Grammar Checker</span>
       </div>
       <div className="p-5 space-y-4">
-        <Textarea value={text} onChange={e => setText(e.target.value)}
+        <Textarea aria-label="Paste or type text to check grammar" value={text} onChange={e => setText(e.target.value)}
           className="min-h-[180px] resize-none text-sm" placeholder="Paste or type text to check grammar…" />
 
         <div className="flex items-center gap-3 flex-wrap">

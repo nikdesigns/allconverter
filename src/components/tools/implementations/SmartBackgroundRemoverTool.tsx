@@ -88,7 +88,6 @@ export function SmartBackgroundRemoverTool() {
               <div className="space-y-1.5">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Original</p>
                 <div className="rounded-xl border border-border overflow-hidden bg-[repeating-conic-gradient(#8883_0%_25%,transparent_0%_50%)] bg-[length:16px_16px] aspect-square flex items-center justify-center">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={preview} alt="Original" className="max-w-full max-h-full object-contain" />
                 </div>
               </div>
@@ -96,7 +95,6 @@ export function SmartBackgroundRemoverTool() {
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Result</p>
                 <div className="rounded-xl border border-border overflow-hidden bg-[repeating-conic-gradient(#8883_0%_25%,transparent_0%_50%)] bg-[length:16px_16px] aspect-square flex items-center justify-center">
                   {outputUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={outputUrl} alt="Background removed" className="max-w-full max-h-full object-contain" />
                   ) : (
                     <span className="text-xs text-muted-foreground px-3 text-center">

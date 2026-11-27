@@ -69,7 +69,7 @@ export function UuidValidatorTool() {
         <span className="text-[10px] text-emerald-500 font-medium">● Live</span>
       </div>
       <div className="p-5 space-y-4">
-        <Input
+        <Input aria-label="UUID to validate"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="font-mono text-sm"

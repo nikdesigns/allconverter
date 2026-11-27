@@ -4,7 +4,7 @@
 import { activateOnKey } from "@/lib/a11y";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Search, Copy, RefreshCw, ExternalLink, Monitor, Smartphone, Maximize2, Globe, Shield, Server, Zap, FileSearch } from "lucide-react";
+import { Search, Copy, ExternalLink, Monitor, Smartphone, Maximize2, Globe, Shield, Server, Zap, FileSearch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -124,7 +124,7 @@ function WebsiteScreenshot() {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={url} onChange={e => setUrl(e.target.value)}
+        <Input aria-label="Website URL" value={url} onChange={e => setUrl(e.target.value)}
           onKeyDown={e => e.key === "Enter" && take()}
           placeholder="https://example.com" className="text-sm h-10" />
         <Button onClick={take} disabled={!url.trim() || loading} className="h-10 px-4 gap-1.5 shrink-0">
@@ -228,7 +228,7 @@ function DnsLookup() {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={domain} onChange={e => setDomain(e.target.value)}
+        <Input aria-label="Domain name" value={domain} onChange={e => setDomain(e.target.value)}
           onKeyDown={e => e.key === "Enter" && lookup()}
           placeholder="example.com" className="text-sm h-10" />
         <Button onClick={lookup} disabled={!domain.trim() || loading} className="h-10 px-4 shrink-0 gap-1.5">
@@ -328,7 +328,7 @@ function IpLookup() {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={ip} onChange={e => setIp(e.target.value)}
+        <Input aria-label="IP address (leave empty for your own IP)" value={ip} onChange={e => setIp(e.target.value)}
           onKeyDown={e => e.key === "Enter" && lookup()}
           placeholder="Enter IP address (leave empty for your own IP)" className="text-sm h-10" />
         <Button onClick={lookup} disabled={loading} className="h-10 px-4 shrink-0 gap-1.5">
@@ -368,6 +368,13 @@ function IpLookup() {
 
 interface CertInfo { issuer_name: string; not_before: string; not_after: string; name_value: string; id: number }
 
+// Only called while rendering certificate results, which appear after a client-side
+// fetch — never in the static HTML — so reading the clock here is safe.
+function getDaysLeft(notAfter: string) {
+  const diff = new Date(notAfter).getTime() - Date.now();
+  return Math.floor(diff / 86400000);
+}
+
 function SslChecker() {
   const [domain, setDomain]   = useState("");
   const [certs, setCerts]     = useState<CertInfo[]>([]);
@@ -396,17 +403,12 @@ function SslChecker() {
     }
   };
 
-  const getDaysLeft = (notAfter: string) => {
-    const diff = new Date(notAfter).getTime() - Date.now();
-    return Math.floor(diff / 86400000);
-  };
-
   const latest = certs[0];
 
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={domain} onChange={e => setDomain(e.target.value)}
+        <Input aria-label="Domain name" value={domain} onChange={e => setDomain(e.target.value)}
           onKeyDown={e => e.key === "Enter" && check()}
           placeholder="example.com" className="text-sm h-10" />
         <Button onClick={check} disabled={!domain.trim() || loading} className="h-10 px-4 shrink-0 gap-1.5">
@@ -506,7 +508,7 @@ function WebsiteMetadata() {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={url} onChange={e => setUrl(e.target.value)}
+        <Input aria-label="Website URL" value={url} onChange={e => setUrl(e.target.value)}
           onKeyDown={e => e.key === "Enter" && extract()}
           placeholder="https://example.com" className="text-sm h-10" />
         <Button onClick={extract} disabled={!url.trim() || loading} className="h-10 px-4 shrink-0 gap-1.5">
@@ -606,7 +608,7 @@ function WebsiteSpeed() {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Input value={url} onChange={e => setUrl(e.target.value)}
+        <Input aria-label="Website URL" value={url} onChange={e => setUrl(e.target.value)}
           onKeyDown={e => e.key === "Enter" && check()}
           placeholder="https://example.com" className="text-sm h-10" />
         <Button onClick={check} disabled={!url.trim() || loading} className="h-10 px-4 shrink-0 gap-1.5">
@@ -633,7 +635,7 @@ function WebsiteSpeed() {
       {showKey && (
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-2.5">
           <div className="text-xs font-semibold text-amber-400">Google PageSpeed API Key (optional but recommended)</div>
-          <Input
+          <Input aria-label="Google API key"
             value={apiKey}
             onChange={e => setApiKey(e.target.value)}
             placeholder="AIza…"

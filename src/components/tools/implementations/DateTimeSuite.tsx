@@ -42,7 +42,7 @@ function DateCalculator() {
       <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Start date</label>
-          <Input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="h-10 text-sm" />
+          <Input aria-label="Start date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="h-10 text-sm" />
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Operation</label>
@@ -62,7 +62,7 @@ function DateCalculator() {
         {[{label:"Days",val:days,set:setDays},{label:"Weeks",val:weeks,set:setWeeks},{label:"Months",val:months,set:setMonths},{label:"Years",val:years,set:setYears}].map(f => (
           <div key={f.label} className="space-y-1">
             <label className="text-[10px] font-medium text-muted-foreground block text-center">{f.label}</label>
-            <Input type="number" min={0} value={f.val} onChange={e => f.set(Number(e.target.value))}
+            <Input aria-label={f.label} type="number" min={0} value={f.val} onChange={e => f.set(Number(e.target.value))}
               className="h-9 text-sm text-center" />
           </div>
         ))}
@@ -119,7 +119,7 @@ function DateDifferenceCalculator() {
         {[{label:"Start date",val:date1,set:setDate1},{label:"End date",val:date2,set:setDate2}].map(f => (
           <div key={f.label} className="space-y-1.5">
             <label className="text-xs font-medium text-muted-foreground">{f.label}</label>
-            <Input type="date" value={f.val} onChange={e => f.set(e.target.value)} className="h-10 text-sm" />
+            <Input aria-label={f.label} type="date" value={f.val} onChange={e => f.set(e.target.value)} className="h-10 text-sm" />
           </div>
         ))}
       </div>
@@ -194,7 +194,7 @@ function TimezoneConverter() {
     <div className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-xs font-medium text-muted-foreground">Date & time</label>
-        <Input type="datetime-local" value={datetime} onChange={e => setDatetime(e.target.value)} className="h-10 text-sm" />
+        <Input aria-label="Date & time" type="datetime-local" value={datetime} onChange={e => setDatetime(e.target.value)} className="h-10 text-sm" />
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         {tzSelect(fromTz, setFromTz, "From timezone")}
@@ -360,6 +360,7 @@ function WorldClock() {
   const dropRef  = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- clock starts on the client so the static HTML has no stale time
     setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
@@ -376,6 +377,7 @@ function WorldClock() {
 
   useEffect(() => {
     const q = query.trim().toLowerCase();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- dropdown position comes from the input's DOM rect
     if (!q) { setSuggestions([]); setOpen(false); return; }
     const matches = CITY_TZ_DB.filter(
       ({ city, country }) =>
@@ -455,7 +457,7 @@ function WorldClock() {
 
       {/* City search — single input, auto-resolves timezone */}
       <div ref={dropRef}>
-        <Input
+        <Input aria-label="Type a city name to add… e.g. Tokyo, Paris, Mumbai"
           ref={inputRef}
           value={query}
           onChange={e => setQuery(e.target.value)}
@@ -561,15 +563,15 @@ function CountdownTimer() {
       <div className="grid sm:grid-cols-3 gap-3">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Event date</label>
-          <Input type="date" value={targetDate} onChange={e => setTargetDate(e.target.value)} className="h-10 text-sm" />
+          <Input aria-label="Event date" type="date" value={targetDate} onChange={e => setTargetDate(e.target.value)} className="h-10 text-sm" />
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Time</label>
-          <Input type="time" value={targetTime} onChange={e => setTargetTime(e.target.value)} className="h-10 text-sm" />
+          <Input aria-label="Time" type="time" value={targetTime} onChange={e => setTargetTime(e.target.value)} className="h-10 text-sm" />
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Event name (optional)</label>
-          <Input value={eventName} onChange={e => setEventName(e.target.value)} placeholder="e.g. New Year 2026" className="h-10 text-sm" />
+          <Input aria-label="Event name (optional)" value={eventName} onChange={e => setEventName(e.target.value)} placeholder="e.g. New Year 2026" className="h-10 text-sm" />
         </div>
       </div>
 

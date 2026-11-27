@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { TrendingUp } from "lucide-react";
 
 const fmt = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(n);
-const fmtPct = (n: number) => n.toFixed(2) + "%";
 
 export function CompoundInterestCalculatorTool() {
   const [principal, setPrincipal] = useState("10000");
@@ -26,7 +25,6 @@ export function CompoundInterestCalculatorTool() {
     let totalContributions = P;
 
     for (let yr = 1; yr <= Math.min(t, 50); yr++) {
-      const startBalance = balance;
       balance = balance * Math.pow(1 + r / n, n);
       const monthlyGrowth = M > 0 ? M * ((Math.pow(1 + r / n, n) - 1) / (r / n)) : 0;
       balance += monthlyGrowth;
@@ -49,19 +47,19 @@ export function CompoundInterestCalculatorTool() {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Principal ($)</label>
-            <Input value={principal} onChange={e => setPrincipal(e.target.value)} type="number" min="0" className="font-mono text-sm" />
+            <Input aria-label="Principal ($)" value={principal} onChange={e => setPrincipal(e.target.value)} type="number" min="0" className="font-mono text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Annual Rate (%)</label>
-            <Input value={rate} onChange={e => setRate(e.target.value)} type="number" min="0" max="100" step="0.1" className="font-mono text-sm" />
+            <Input aria-label="Annual Rate (%)" value={rate} onChange={e => setRate(e.target.value)} type="number" min="0" max="100" step="0.1" className="font-mono text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Duration (years)</label>
-            <Input value={years} onChange={e => setYears(e.target.value)} type="number" min="1" max="50" className="font-mono text-sm" />
+            <Input aria-label="Duration (years)" value={years} onChange={e => setYears(e.target.value)} type="number" min="1" max="50" className="font-mono text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Monthly Contribution ($)</label>
-            <Input value={monthly} onChange={e => setMonthly(e.target.value)} type="number" min="0" className="font-mono text-sm" />
+            <Input aria-label="Monthly Contribution ($)" value={monthly} onChange={e => setMonthly(e.target.value)} type="number" min="0" className="font-mono text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Compound Frequency</label>

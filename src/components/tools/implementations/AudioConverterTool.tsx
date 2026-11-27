@@ -6,7 +6,7 @@ import { useHandoff } from "@/lib/handoff";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
-import { FileAudio, Upload, Download, Loader2, CheckCircle2, X } from "lucide-react";
+import { FileAudio, Download, Loader2, CheckCircle2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { decodeAudioFile, downloadBlob } from "@/lib/audio-utils";
 import { encodeAudio, AUDIO_FORMAT_INFO, type AudioFormat } from "@/lib/audio-encoders";

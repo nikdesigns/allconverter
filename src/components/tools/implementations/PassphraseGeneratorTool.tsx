@@ -46,11 +46,11 @@ export function PassphraseGeneratorTool() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Words</label>
-            <Input type="number" min={3} max={8} value={wordCount} onChange={e => setWordCount(+e.target.value)} className="text-sm font-mono" />
+            <Input aria-label="Words" type="number" min={3} max={8} value={wordCount} onChange={e => setWordCount(+e.target.value)} className="text-sm font-mono" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Separator</label>
-            <Input value={separator} onChange={e => setSeparator(e.target.value)} className="text-sm font-mono" />
+            <Input aria-label="Separator" value={separator} onChange={e => setSeparator(e.target.value)} className="text-sm font-mono" />
           </div>
         </div>
         <div className="flex gap-4">

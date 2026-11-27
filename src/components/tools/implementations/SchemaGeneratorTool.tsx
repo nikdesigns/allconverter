@@ -169,7 +169,7 @@ export function SchemaGeneratorTool() {
   const field = (label: string, key: string, placeholder?: string, hint?: string) => (
     <div>
       <label className="text-xs text-muted-foreground mb-1 block">{label}</label>
-      <Input value={fields[key] ?? ""} onChange={e => set(key, e.target.value)}
+      <Input aria-label={label} value={fields[key] ?? ""} onChange={e => set(key, e.target.value)}
         placeholder={placeholder} className="text-sm h-9" />
       {hint && <p className="text-[10px] text-muted-foreground mt-0.5">{hint}</p>}
     </div>
@@ -218,9 +218,9 @@ export function SchemaGeneratorTool() {
                           className="text-[10px] text-rose-400 hover:text-rose-300">Remove</button>
                       )}
                     </div>
-                    <Input value={pair.q} onChange={e => setFaqs(f => f.map((p, j) => j === i ? { ...p, q: e.target.value } : p))}
+                    <Input aria-label="Question" value={pair.q} onChange={e => setFaqs(f => f.map((p, j) => j === i ? { ...p, q: e.target.value } : p))}
                       placeholder="What is your question?" className="text-sm h-9" />
-                    <Textarea value={pair.a} onChange={e => setFaqs(f => f.map((p, j) => j === i ? { ...p, a: e.target.value } : p))}
+                    <Textarea aria-label="Answer" value={pair.a} onChange={e => setFaqs(f => f.map((p, j) => j === i ? { ...p, a: e.target.value } : p))}
                       placeholder="Provide a clear and concise answer…" className="text-sm min-h-[70px] resize-none" />
                   </div>
                 ))}
@@ -244,7 +244,7 @@ export function SchemaGeneratorTool() {
               {field("Publisher Logo URL", "logoUrl", "https://example.com/logo.png")}
               <div className="sm:col-span-2">
                 <label className="text-xs text-muted-foreground mb-1 block">Description</label>
-                <Textarea value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
+                <Textarea aria-label="Description" value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
                   placeholder="Brief article description (150-160 chars recommended)…"
                   className="text-sm min-h-[70px] resize-none" />
               </div>
@@ -264,7 +264,7 @@ export function SchemaGeneratorTool() {
               {field("Review Count", "reviewCount", "128")}
               <div className="sm:col-span-2">
                 <label className="text-xs text-muted-foreground mb-1 block">Description</label>
-                <Textarea value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
+                <Textarea aria-label="Description" value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
                   placeholder="Product description…" className="text-sm min-h-[70px] resize-none" />
               </div>
             </div>
@@ -283,7 +283,7 @@ export function SchemaGeneratorTool() {
               </div>
               <div className="sm:col-span-2">
                 <label className="text-xs text-muted-foreground mb-1 block">Description</label>
-                <Textarea value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
+                <Textarea aria-label="Description" value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
                   placeholder="Short company description…" className="text-sm min-h-[60px] resize-none" />
               </div>
             </div>
@@ -306,7 +306,7 @@ export function SchemaGeneratorTool() {
               {field("Review Count", "reviewCount", "256")}
               <div className="sm:col-span-2">
                 <label className="text-xs text-muted-foreground mb-1 block">Description</label>
-                <Textarea value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
+                <Textarea aria-label="Description" value={fields.description ?? ""} onChange={e => set("description", e.target.value)}
                   placeholder="Brief business description…" className="text-sm min-h-[60px] resize-none" />
               </div>
             </div>

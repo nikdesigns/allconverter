@@ -40,7 +40,7 @@ function CharacterCounter() {
 
   return (
     <div className="space-y-4">
-      <Textarea value={text} onChange={e => setText(e.target.value)}
+      <Textarea aria-label="Type or paste your text here" value={text} onChange={e => setText(e.target.value)}
         placeholder="Type or paste your text here…"
         className="min-h-[180px] text-sm font-mono resize-y" />
 
@@ -97,12 +97,12 @@ function RemoveDuplicateLines() {
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Input</label>
-          <Textarea value={input} onChange={e => setInput(e.target.value)}
+          <Textarea aria-label="Input" value={input} onChange={e => setInput(e.target.value)}
             placeholder="Paste lines here…" className="min-h-[200px] text-sm font-mono resize-y" />
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Output</label>
-          <Textarea value={output} readOnly className="min-h-[200px] text-sm font-mono resize-y bg-muted/5" />
+          <Textarea aria-label="Output" value={output} readOnly className="min-h-[200px] text-sm font-mono resize-y bg-muted/5" />
         </div>
       </div>
       <div className="flex items-center gap-3 flex-wrap">
@@ -163,9 +163,9 @@ function SortLines() {
         ))}
       </div>
       <div className="grid sm:grid-cols-2 gap-3">
-        <Textarea value={input} onChange={e => setInput(e.target.value)}
+        <Textarea aria-label="Paste lines to sort" value={input} onChange={e => setInput(e.target.value)}
           placeholder="Paste lines to sort…" className="min-h-[200px] text-sm font-mono resize-y" />
-        <Textarea value={output} readOnly className="min-h-[200px] text-sm font-mono resize-y bg-muted/5" />
+        <Textarea aria-label="Output" value={output} readOnly className="min-h-[200px] text-sm font-mono resize-y bg-muted/5" />
       </div>
       <div className="flex gap-2">
         <Button onClick={process} disabled={!input.trim()} className="gap-1.5">
@@ -209,9 +209,9 @@ function ReverseText() {
         ))}
       </div>
       <div className="grid sm:grid-cols-2 gap-3">
-        <Textarea value={input} onChange={e => setInput(e.target.value)}
+        <Textarea aria-label="Enter text to reverse" value={input} onChange={e => setInput(e.target.value)}
           placeholder="Enter text to reverse…" className="min-h-[180px] text-sm font-mono resize-y" />
-        <Textarea value={output} readOnly className="min-h-[180px] text-sm font-mono resize-y bg-muted/5" />
+        <Textarea aria-label="Output" value={output} readOnly className="min-h-[180px] text-sm font-mono resize-y bg-muted/5" />
       </div>
       {output && (
         <Button variant="outline" size="sm" onClick={() => copy(output)} className="gap-1.5 text-xs">

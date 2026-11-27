@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ToolGrid } from "@/components/tools/ToolGrid";
 import { getPopularTools, getTrendingTools } from "@/lib/tools-data";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -27,11 +28,9 @@ export function PopularTools() {
               The tools our users reach for most
             </p>
           </div>
-          <Link href="/tools/">
-            <Button variant="secondary" size="sm" className="gap-2 shrink-0">
-              View all tools
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Button>
+          <Link href="/tools/" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "gap-2 shrink-0")}>
+            View all tools
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 

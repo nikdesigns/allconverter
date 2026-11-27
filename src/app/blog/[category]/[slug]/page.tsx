@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { blogCategories } from "@/data/blog-categories";
 import { allBlogPosts } from "@/data/blog-posts";
 import { getBlogPost, getRelatedPosts, getBlogCategory } from "@/lib/blog-utils";
 import { ArticleBody } from "@/components/blog/ArticleBody";
@@ -12,7 +11,8 @@ import { BlogBreadcrumbs } from "@/components/blog/BlogBreadcrumbs";
 import { AdUnit } from "@/components/ads/AdUnit";
 import type { BlogCategorySlug } from "@/types/blog";
 
-import { defaultOgImages, stripBrand, truncateAtWord } from "@/lib/seo-utils";
+import { defaultOgImages, truncateAtWord, brandedTitle } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/html";
 const SITE_URL = "https://allconverter.tools";
 const SITE_NAME = "AllConverter.tools";
 
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   return {
-    title: stripBrand(post.seoTitle),
+    title: brandedTitle(post.seoTitle),
     description: truncateAtWord(post.metaDescription),
     keywords: [post.primaryKeyword, ...post.secondaryKeywords].join(", "),
     alternates: { canonical: `${SITE_URL}/blog/${category}/${slug}/` },
@@ -113,7 +113,7 @@ export default async function BlogArticlePage({ params }: Props) {
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(schema) }}
         />
       ))}
 

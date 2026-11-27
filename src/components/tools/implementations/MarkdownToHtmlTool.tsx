@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Copy, Eye, Code2 } from "lucide-react";
+import { Copy, Code2 } from "lucide-react";
 import { toast } from "sonner";
 
 const SAMPLE = `# Hello World
@@ -72,10 +72,10 @@ function simpleMarkdown(md: string): string {
 
 export function MarkdownToHtmlTool() {
   const [input, setInput] = useState(SAMPLE);
-  const [html, setHtml] = useState("");
+
   const [view, setView] = useState<"code" | "preview">("code");
 
-  useEffect(() => { setHtml(simpleMarkdown(input)); }, [input]);
+  const html = useMemo(() => simpleMarkdown(input), [input]);
 
   const copy = () => { navigator.clipboard.writeText(html); toast.success("HTML copied!"); };
 
@@ -104,7 +104,7 @@ export function MarkdownToHtmlTool() {
               <span className="text-xs font-medium text-muted-foreground">Markdown</span>
               <Button size="sm" variant="ghost" onClick={() => setInput("")} className="h-6 text-xs">Clear</Button>
             </div>
-            <Textarea value={input} onChange={e => setInput(e.target.value)}
+            <Textarea aria-label="Type Markdown here" value={input} onChange={e => setInput(e.target.value)}
               className="min-h-[400px] resize-none text-sm font-mono" placeholder="Type Markdown here…" />
           </div>
           <div>
@@ -115,7 +115,7 @@ export function MarkdownToHtmlTool() {
               </Button>
             </div>
             {view === "code" ? (
-              <Textarea readOnly value={html} className="min-h-[400px] resize-none text-xs font-mono bg-muted/20" />
+              <Textarea aria-label="Output" readOnly value={html} className="min-h-[400px] resize-none text-xs font-mono bg-muted/20" />
             ) : (
               <div
                 className="min-h-[400px] p-4 rounded-xl border border-border bg-background overflow-auto prose prose-sm dark:prose-invert max-w-none text-sm"

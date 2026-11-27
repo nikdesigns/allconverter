@@ -121,7 +121,7 @@ export function CaseConverterTool() {
 
       <div className="p-4 space-y-4">
         {/* Input */}
-        <Textarea
+        <Textarea aria-label="Enter text to convert"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Enter text to convert..."

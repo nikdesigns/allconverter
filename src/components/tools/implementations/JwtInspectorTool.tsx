@@ -48,6 +48,7 @@ export function JwtInspectorTool() {
   // Client-only "now" to avoid hydration mismatch (Date.now() differs server vs client)
   const [now, setNow] = useState(0);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only clock avoids a hydration mismatch
     setNow(Math.floor(Date.now() / 1000));
   }, []);
 
@@ -63,7 +64,7 @@ export function JwtInspectorTool() {
         {/* JWT Token field with fixed/constrained width to prevent page overflow from long tokens */}
         <div className="w-full max-w-full">
           <label className="text-xs text-muted-foreground mb-1 block">JWT Token</label>
-          <Textarea
+          <Textarea aria-label="JWT Token"
             value={token}
             onChange={e => setToken(e.target.value)}
             className="min-h-[110px] w-full resize-y text-xs font-mono"

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Wrench, MapPin, Globe } from "lucide-react";
-import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages, brandedTitle } from "@/lib/seo-utils";
 import { allBlogPosts } from "@/data/blog-posts";
+import { jsonLd } from "@/lib/html";
 
 export const metadata: Metadata = {
-  title: `Nitin Kaushik — Founder & Developer`,
+  title: brandedTitle(`Nitin Kaushik — Founder & Developer`),
   description:
     "Nitin Kaushik is the founder and developer of AllConverter.tools — a free browser-based platform with 250+ online tools. Based in Mumbai, India.",
   alternates: { canonical: `${siteConfig.url}/author/nitin/` },
@@ -53,10 +54,6 @@ const authorSchema = {
       "AI content tools",
       "Browser-based applications",
     ],
-    sameAs: [
-      "https://twitter.com/allconvertertools",
-      "https://github.com/allconvertertools",
-    ],
   },
 };
 
@@ -80,7 +77,7 @@ export default function AuthorPage() {
     <div className="min-h-screen pt-20">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(authorSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(authorSchema) }}
       />
 
       {/* Hero */}

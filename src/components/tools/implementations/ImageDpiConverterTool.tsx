@@ -75,14 +75,14 @@ export function ImageDpiConverterTool() {
         <input aria-label="Choose file" ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
         <div className="grid grid-cols-2 gap-3">
           <div><label className="text-xs text-muted-foreground mb-1 block">Current DPI (source)</label>
-            <Input type="number" value={sourceDpi} onChange={e=>setSourceDpi(+e.target.value)} className="font-mono text-sm" /></div>
+            <Input aria-label="Current DPI (source)" type="number" value={sourceDpi} onChange={e=>setSourceDpi(+e.target.value)} className="font-mono text-sm" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Target DPI</label>
             <div className="flex gap-1.5 mb-1 flex-wrap">
               {[72,96,150,300,600].map(d=>(
                 <button key={d} onClick={()=>setTargetDpi(d)} className={`px-2 py-1 rounded-lg border text-xs font-mono ${targetDpi===d?"border-primary/40 bg-primary/10 text-primary":"border-border"}`}>{d}</button>
               ))}
             </div>
-            <Input type="number" value={targetDpi} onChange={e=>setTargetDpi(+e.target.value)} className="font-mono text-sm" /></div>
+            <Input aria-label="Target DPI" type="number" value={targetDpi} onChange={e=>setTargetDpi(+e.target.value)} className="font-mono text-sm" /></div>
         </div>
         {naturalW > 0 && (
           <div className="p-3 rounded-xl border border-border bg-muted/10 text-sm">

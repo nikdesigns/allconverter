@@ -10,10 +10,10 @@ import {
   Mail,
   Info,
 } from "lucide-react";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy",
+  title: brandedTitle("Cookie Policy"),
   description:
     "How AllConverter.tools uses essential, analytics and advertising cookies from Google Analytics and Google AdSense, and how to manage your preferences.",
   alternates: { canonical: `${siteConfig.url}/cookies/` },

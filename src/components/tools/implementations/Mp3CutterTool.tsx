@@ -5,7 +5,7 @@ import { useHandoff } from "@/lib/handoff";
 import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
-import { Scissors, Upload, Download, Loader2, CheckCircle2, X, Play, Square } from "lucide-react";
+import { Scissors, Download, Loader2, CheckCircle2, X, Play, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -164,7 +164,7 @@ export function Mp3CutterTool() {
                   }}
                   className="flex-1 accent-primary"
                 />
-                <Input
+                <Input aria-label="Start time (seconds)"
                   type="number"
                   min={0}
                   max={endSec - 0.1}
@@ -192,7 +192,7 @@ export function Mp3CutterTool() {
                   }}
                   className="flex-1 accent-primary"
                 />
-                <Input
+                <Input aria-label="End time (seconds)"
                   type="number"
                   min={startSec + 0.1}
                   max={duration}

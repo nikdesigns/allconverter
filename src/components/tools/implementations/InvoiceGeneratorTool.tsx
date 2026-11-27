@@ -55,22 +55,6 @@ export function InvoiceGeneratorTool() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const previewTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (!showPreview) return;
-    if (previewTimer.current) clearTimeout(previewTimer.current);
-    previewTimer.current = setTimeout(() => {
-      const iframe = iframeRef.current;
-      if (!iframe) return;
-      const doc = iframe.contentDocument;
-      if (!doc) return;
-      doc.open();
-      doc.write(buildHTML());
-      doc.close();
-    }, 150);
-    return () => { if (previewTimer.current) clearTimeout(previewTimer.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showPreview, from, to, meta, items, taxRate, discount, notes, logoBase64, themeAccent]);
-
   const setFrom_ = (k: string, v: string) => setFrom(p => ({ ...p, [k]: v }));
   const setTo_   = (k: string, v: string) => setTo(p => ({ ...p, [k]: v }));
   const setMeta_ = (k: string, v: string) => setMeta(p => ({ ...p, [k]: v }));
@@ -229,6 +213,23 @@ tbody tr:last-child td{border-bottom:none}
 </body>
 </html>`;
 
+  // Declared after buildHTML, which it calls.
+  useEffect(() => {
+    if (!showPreview) return;
+    if (previewTimer.current) clearTimeout(previewTimer.current);
+    previewTimer.current = setTimeout(() => {
+      const iframe = iframeRef.current;
+      if (!iframe) return;
+      const doc = iframe.contentDocument;
+      if (!doc) return;
+      doc.open();
+      doc.write(buildHTML());
+      doc.close();
+    }, 150);
+    return () => { if (previewTimer.current) clearTimeout(previewTimer.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showPreview, from, to, meta, items, taxRate, discount, notes, logoBase64, themeAccent]);
+
   const printInvoice = () => {
     const w = window.open("", "_blank")!;
     w.document.write(buildHTML());
@@ -283,7 +284,7 @@ tbody tr:last-child td{border-bottom:none}
                 />
               ))}
               {/* Custom color */}
-              <input
+              <input aria-label="Accent colour"
                 type="color"
                 value={themeAccent}
                 onChange={e => setThemeAccent(e.target.value)}
@@ -332,17 +333,17 @@ tbody tr:last-child td{border-bottom:none}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">From</p>
-            <Input value={from.name}    onChange={e => setFrom_("name",    e.target.value)} placeholder="Company name"  className="text-sm" />
-            <Textarea value={from.address} onChange={e => setFrom_("address", e.target.value)} className="text-sm resize-none min-h-[68px]" placeholder="Address" />
-            <Input value={from.email}   onChange={e => setFrom_("email",   e.target.value)} placeholder="Email"         className="text-sm" />
-            <Input value={from.phone}   onChange={e => setFrom_("phone",   e.target.value)} placeholder="Phone"         className="text-sm" />
-            <Input value={from.website} onChange={e => setFrom_("website", e.target.value)} placeholder="Website"       className="text-sm" />
+            <Input aria-label="Company name" value={from.name}    onChange={e => setFrom_("name",    e.target.value)} placeholder="Company name"  className="text-sm" />
+            <Textarea aria-label="Your address" value={from.address} onChange={e => setFrom_("address", e.target.value)} className="text-sm resize-none min-h-[68px]" placeholder="Address" />
+            <Input aria-label="Your email" value={from.email}   onChange={e => setFrom_("email",   e.target.value)} placeholder="Email"         className="text-sm" />
+            <Input aria-label="Your phone" value={from.phone}   onChange={e => setFrom_("phone",   e.target.value)} placeholder="Phone"         className="text-sm" />
+            <Input aria-label="Your website" value={from.website} onChange={e => setFrom_("website", e.target.value)} placeholder="Website"       className="text-sm" />
           </div>
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Bill To</p>
-            <Input value={to.name}    onChange={e => setTo_("name",    e.target.value)} placeholder="Client name"    className="text-sm" />
-            <Textarea value={to.address} onChange={e => setTo_("address", e.target.value)} className="text-sm resize-none min-h-[68px]" placeholder="Address" />
-            <Input value={to.email}   onChange={e => setTo_("email",   e.target.value)} placeholder="Email"         className="text-sm" />
+            <Input aria-label="Client name" value={to.name}    onChange={e => setTo_("name",    e.target.value)} placeholder="Client name"    className="text-sm" />
+            <Textarea aria-label="Client address" value={to.address} onChange={e => setTo_("address", e.target.value)} className="text-sm resize-none min-h-[68px]" placeholder="Address" />
+            <Input aria-label="Client email" value={to.email}   onChange={e => setTo_("email",   e.target.value)} placeholder="Email"         className="text-sm" />
           </div>
         </div>
 
@@ -350,7 +351,7 @@ tbody tr:last-child td{border-bottom:none}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Invoice #</label>
-            <Input value={meta.number} onChange={e => setMeta_("number", e.target.value)} className="text-sm font-mono" />
+            <Input aria-label="Invoice #" value={meta.number} onChange={e => setMeta_("number", e.target.value)} className="text-sm font-mono" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Currency</label>
@@ -366,11 +367,11 @@ tbody tr:last-child td{border-bottom:none}
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Issue Date</label>
-            <Input type="date" value={meta.date} onChange={e => setMeta_("date", e.target.value)} className="text-sm" />
+            <Input aria-label="Issue Date" type="date" value={meta.date} onChange={e => setMeta_("date", e.target.value)} className="text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Due Date</label>
-            <Input type="date" value={meta.due}  onChange={e => setMeta_("due",  e.target.value)} className="text-sm" />
+            <Input aria-label="Due Date" type="date" value={meta.due}  onChange={e => setMeta_("due",  e.target.value)} className="text-sm" />
           </div>
         </div>
 
@@ -387,20 +388,20 @@ tbody tr:last-child td{border-bottom:none}
               const amt = (parseFloat(item.qty) || 0) * (parseFloat(item.rate) || 0);
               return (
                 <div key={item.id} className="grid grid-cols-[1fr_64px_96px_88px_32px] gap-2 items-center">
-                  <Input
+                  <Input aria-label="Description"
                     value={item.description}
                     onChange={e => updateItem(item.id, "description", e.target.value)}
                     placeholder="Description"
                     className="text-sm"
                   />
-                  <Input
+                  <Input aria-label="Quantity"
                     type="number"
                     value={item.qty}
                     onChange={e => updateItem(item.id, "qty", e.target.value)}
                     className="text-sm text-center font-mono"
                     min="0"
                   />
-                  <Input
+                  <Input aria-label="Rate"
                     type="number"
                     value={item.rate}
                     onChange={e => updateItem(item.id, "rate", e.target.value)}
@@ -436,7 +437,7 @@ tbody tr:last-child td{border-bottom:none}
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground shrink-0">Discount</span>
-                <Input
+                <Input aria-label="Discount"
                   type="number"
                   value={discount}
                   onChange={e => setDiscount(e.target.value)}
@@ -452,7 +453,7 @@ tbody tr:last-child td{border-bottom:none}
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground shrink-0">Tax</span>
-                <Input
+                <Input aria-label="Tax rate (%)"
                   type="number"
                   value={taxRate}
                   onChange={e => setTaxRate(e.target.value)}
@@ -476,7 +477,7 @@ tbody tr:last-child td{border-bottom:none}
         {/* Notes */}
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Notes / Payment Terms</label>
-          <Textarea
+          <Textarea aria-label="Notes / Payment Terms"
             value={notes}
             onChange={e => setNotes(e.target.value)}
             className="text-sm resize-none min-h-[64px]"

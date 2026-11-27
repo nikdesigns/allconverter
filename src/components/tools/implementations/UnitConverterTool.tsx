@@ -2,7 +2,7 @@
 
 
 import { activateOnKey } from "@/lib/a11y";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { ArrowLeftRight } from "lucide-react";
@@ -147,12 +147,14 @@ export function UnitConverterTool() {
   const [toIndex, setToIndex] = useState(startTo);
   const [inputVal, setInputVal] = useState("1");
 
-  // Reset when slug changes
-  useEffect(() => {
+  // Reset when the visitor navigates to another converter (the component stays mounted).
+  const [prevSlug, setPrevSlug] = useState(slug);
+  if (slug !== prevSlug) {
+    setPrevSlug(slug);
     setFromIndex(startFrom);
     setToIndex(startTo);
     setInputVal("1");
-  }, [slug, startFrom, startTo]);
+  }
 
   const allResults = useMemo(() => {
     const num = parseFloat(inputVal);
@@ -196,7 +198,7 @@ export function UnitConverterTool() {
                 <option key={i} value={i}>{u.label}</option>
               ))}
             </select>
-            <Input
+            <Input aria-label="Value to convert"
               type="number"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}

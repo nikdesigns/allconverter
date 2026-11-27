@@ -142,7 +142,7 @@ export function AiRegexGeneratorTool() {
 
       <div className="p-5 space-y-4">
         <div className="flex gap-2">
-          <Input value={query} onChange={e => setQuery(e.target.value)}
+          <Input aria-label="Describe what to match" value={query} onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === "Enter" && generate()}
             placeholder={`Describe what to match — e.g. "Indian mobile number"`}
             className="text-sm h-10" />
@@ -197,7 +197,7 @@ export function AiRegexGeneratorTool() {
             {/* Live tester */}
             <div className="rounded-xl border border-border p-4 space-y-3">
               <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Live Tester</div>
-              <Input value={testStr} onChange={e => setTestStr(e.target.value)}
+              <Input aria-label="Paste text here to test the regex" value={testStr} onChange={e => setTestStr(e.target.value)}
                 placeholder="Paste text here to test the regex…" className="text-sm h-9" />
               {testStr && testMatches !== null && (
                 <div className="space-y-1">

@@ -11,7 +11,8 @@ export const siteConfig = {
   tagline: SITE_TAGLINE,
   description:
     "250+ free online tools for PDF, images, audio, AI, developer & business tasks. 100% browser-based — no sign-up, no file uploads, no limits. Works on any device.",
-  twitter: "@allconvertertools",
+  // No social profiles yet. When real ones exist, add the X handle here (max 15 chars)
+  // and the profile URLs to `sameAs` in src/app/layout.tsx and src/app/author/nitin/page.tsx.
   locale: "en_US",
   /**
    * Date of the last site-wide content change. Used as the sitemap
@@ -37,6 +38,19 @@ export const defaultOgImages = [
  */
 export function stripBrand(title: string): string {
   return title.replace(/\s*\|\s*AllConverter\.tools\s*$/i, "").trim();
+}
+
+const BRAND_SUFFIX = ` | ${SITE_NAME}`;
+const MAX_TITLE_LENGTH = 60;
+
+/**
+ * Metadata `title` for a page. The root layout's template appends
+ * " | AllConverter.tools", but only when the result still fits in ~60 chars —
+ * past that Google truncates or rewrites it, so long titles go out without the brand.
+ */
+export function brandedTitle(title: string): string | { absolute: string } {
+  const t = stripBrand(title);
+  return t.length + BRAND_SUFFIX.length <= MAX_TITLE_LENGTH ? t : { absolute: t };
 }
 
 /** Shortens text to `max` chars at a sentence or word boundary — never mid-word. */
@@ -256,7 +270,7 @@ export function generateToolMetadata(tool: Tool) {
   const canonical   = `${SITE_URL}/tools/${tool.slug}/`;
 
   return {
-    title,
+    title: brandedTitle(title),
     description,
     keywords,
     canonical,
@@ -271,7 +285,6 @@ export function generateToolMetadata(tool: Tool) {
     },
     twitter: {
       card: "summary_large_image" as const,
-      site: siteConfig.twitter,
       title: socialTitle,
       description,
       images: defaultOgImages.map((i) => i.url),
@@ -290,7 +303,7 @@ export function generateCategoryMetadata(category: ToolCategory_Data, toolCount:
   const canonical   = `${SITE_URL}/${category.slug}/`;
 
   return {
-    title,
+    title: brandedTitle(title),
     description,
     keywords: [
       `free ${catName.toLowerCase()}`,

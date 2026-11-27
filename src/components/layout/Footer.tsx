@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, X, Heart, Code2 } from "lucide-react";
+import { Zap, Heart } from "lucide-react";
 import { categories } from "@/lib/categories";
 import { getPopularTools } from "@/lib/tools-data";
 
@@ -41,31 +41,11 @@ export function Footer() {
             <p className="text-sm text-[var(--body-subtle)] leading-relaxed mb-4 max-w-[220px]">
               Convert Anything. All in One Place. 250+ free online tools — no sign-up required.
             </p>
-            <div className="flex items-center gap-3">
-              <a
-                href="https://twitter.com/allconvertertools"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-[var(--radius-default)] border border-[var(--border-default)] flex items-center justify-center hover:bg-[var(--neutral-secondary-medium)] hover:text-[var(--fg-brand)] transition-colors"
-                aria-label="Follow on Twitter"
-              >
-                <X className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://github.com/allconvertertools"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-[var(--radius-default)] border border-[var(--border-default)] flex items-center justify-center hover:bg-[var(--neutral-secondary-medium)] hover:text-[var(--fg-brand)] transition-colors"
-                aria-label="View on GitHub"
-              >
-                <Code2 className="w-3.5 h-3.5" />
-              </a>
-            </div>
           </div>
 
           {/* Tools categories */}
           <div>
-            <h3 className="text-sm font-semibold mb-3">Tool Categories</h3>
+            <h2 className="text-sm font-semibold mb-3">Tool Categories</h2>
             <ul className="space-y-2">
               {categories.slice(0, 5).map((cat) => (
                 <li key={cat.slug}>
@@ -83,7 +63,7 @@ export function Footer() {
 
           {/* More categories */}
           <div>
-            <h3 className="text-sm font-semibold mb-3">More Tools</h3>
+            <h2 className="text-sm font-semibold mb-3">More Tools</h2>
             <ul className="space-y-2">
               {categories.slice(5).map((cat) => (
                 <li key={cat.slug}>
@@ -110,7 +90,7 @@ export function Footer() {
 
           {/* Popular tools */}
           <div>
-            <h3 className="text-sm font-semibold mb-3">Popular Tools</h3>
+            <h2 className="text-sm font-semibold mb-3">Popular Tools</h2>
             <ul className="space-y-2">
               {popularTools.slice(0, 6).map((tool) => (
                 <li key={tool.slug}>
@@ -128,7 +108,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-sm font-semibold mb-3">Company</h3>
+            <h2 className="text-sm font-semibold mb-3">Company</h2>
             <ul className="space-y-2">
               {companyLinks.map((link) => (
                 <li key={link.href}>

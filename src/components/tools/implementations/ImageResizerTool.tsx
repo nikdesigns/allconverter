@@ -132,6 +132,8 @@ export function ImageResizerTool() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => resize(file, origW, origH), 500);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  // `resize` is recreated every render; listing it would re-run this on every render.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, mode, percent, preset, origW, origH]);
 
   // Pixels mode: debounced 600ms after typing stops
@@ -140,6 +142,8 @@ export function ImageResizerTool() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => resize(file, origW, origH), 600);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  // Only typing in the width/height boxes should trigger this debounce.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width, height]);
 
   const outputName = file ? file.name.replace(/\.[^.]+$/, `_${outputDims.w}x${outputDims.h}$&`) : "";
@@ -184,11 +188,11 @@ export function ImageResizerTool() {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">Width (px)</label>
-                      <Input type="number" value={width} onChange={(e) => onWidthChange(e.target.value)} className="h-10" />
+                      <Input aria-label="Width (px)" type="number" value={width} onChange={(e) => onWidthChange(e.target.value)} className="h-10" />
                     </div>
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">Height (px)</label>
-                      <Input type="number" value={height} onChange={(e) => onHeightChange(e.target.value)} className="h-10" />
+                      <Input aria-label="Height (px)" type="number" value={height} onChange={(e) => onHeightChange(e.target.value)} className="h-10" />
                     </div>
                   </div>
                   <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">

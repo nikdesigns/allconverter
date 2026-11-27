@@ -10,6 +10,7 @@ import { AdBlockNotice } from '@/components/ads/AdBlockNotice';
 import { MobileAnchorAd } from '@/components/ads/MobileAnchorAd';
 import { CommandPalette } from '@/components/layout/CommandPalette';
 import { PWAInstallPrompt } from '@/components/layout/PWAInstallPrompt';
+import { jsonLd } from '@/lib/html';
 import './globals.css';
 
 // Using SF Pro (Apple's system font) via native stack for best performance and native feel on Apple devices.
@@ -28,97 +29,6 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: [
-    // Core brand
-    'allconverter tools',
-    'free online tools',
-    'all in one online tools',
-    // PDF
-    'pdf tools',
-    'pdf compressor',
-    'pdf merger',
-    'pdf splitter',
-    'pdf to jpg',
-    'jpg to pdf',
-    'compress pdf online free',
-    'merge pdf online',
-    'split pdf online',
-    // Image
-    'image tools',
-    'image compressor',
-    'image resizer',
-    'compress image online free',
-    'jpg to png',
-    'png to jpg',
-    'png to webp',
-    'webp to jpg',
-    'background remover',
-    'heic to jpg',
-    'svg to png',
-    'bulk image converter',
-    // Audio
-    'audio tools',
-    'mp3 cutter',
-    'audio converter',
-    'audio joiner',
-    'mp3 to wav',
-    // Developer
-    'developer tools',
-    'json formatter',
-    'base64 encoder',
-    'url encoder',
-    'uuid generator',
-    'regex tester',
-    'css minifier',
-    'json validator',
-    'html formatter',
-    // Text
-    'text tools',
-    'word counter',
-    'case converter',
-    'lorem ipsum generator',
-    'character counter',
-    // SEO
-    'seo tools',
-    'meta tag generator',
-    'robots txt generator',
-    'keyword density checker',
-    'sitemap generator',
-    'faq schema generator',
-    'redirect checker',
-    // Calculators
-    'calculators',
-    'bmi calculator',
-    'age calculator',
-    'compound interest calculator',
-    'loan calculator',
-    'date calculator',
-    'timezone converter',
-    'percentage calculator',
-    // AI
-    'ai tools',
-    'ai content generator',
-    'ai cover letter',
-    'ai blog writer',
-    // Business
-    'business tools',
-    'invoice generator',
-    'gst invoice',
-    'expense tracker',
-    // Unit converters
-    'unit converters',
-    'length converter',
-    'weight converter',
-    'temperature converter',
-    // Value props
-    'no sign up',
-    'no registration',
-    'browser based',
-    '100% free',
-    'no file upload',
-    'file converter',
-    'online converter',
-  ],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
   publisher: siteConfig.name,
@@ -149,7 +59,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: siteConfig.twitter,
   },
   icons: {
     icon: [
@@ -183,7 +92,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLd({
               '@context': 'https://schema.org',
               '@graph': [
                 {
@@ -215,10 +124,6 @@ export default function RootLayout({
                     addressRegion: 'Maharashtra',
                     addressCountry: 'IN',
                   },
-                  sameAs: [
-                    'https://twitter.com/allconvertertools',
-                    'https://github.com/allconvertertools',
-                  ],
                   knowsAbout: [
                     'PDF conversion tools',
                     'Image editing and compression',
@@ -242,7 +147,7 @@ export default function RootLayout({
                   publisher: { '@id': `${siteConfig.url}/#organization` },
                 },
               ],
-            }).replace(/</g, '\\u003c'),
+            }),
           }}
         />
         <ThemeProvider

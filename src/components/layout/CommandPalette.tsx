@@ -51,6 +51,7 @@ export function CommandPalette() {
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset the palette each time it opens
       setQuery("");
       setActiveIndex(0);
       requestAnimationFrame(() => inputRef.current?.focus());
@@ -62,10 +63,6 @@ export function CommandPalette() {
       document.body.style.overflow = "";
     };
   }, [open]);
-
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [query]);
 
   function goTo(slug: string) {
     setOpen(false);
@@ -103,7 +100,7 @@ export function CommandPalette() {
           <input aria-label="Search 250+ tools"
             ref={inputRef}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => { setQuery(e.target.value); setActiveIndex(0); }}
             onKeyDown={onInputKeyDown}
             placeholder="Search 250+ tools..."
             className="flex-1 bg-transparent py-3.5 text-sm text-(--heading) placeholder:text-(--body-subtle) outline-none"

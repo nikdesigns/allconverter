@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Copy, Upload, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Sparkles, Copy, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -228,7 +228,7 @@ export function AiContractSummarizerTool() {
 
         <div className="space-y-2">
           <label className="text-xs text-muted-foreground">Contract / NDA / Agreement Text</label>
-          <Textarea
+          <Textarea aria-label="Contract / NDA / Agreement Text"
             value={text}
             onChange={e => setText(e.target.value)}
             placeholder="Paste the full contract text here…"

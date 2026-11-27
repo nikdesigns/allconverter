@@ -38,7 +38,7 @@ export function KeywordDensityCheckerTool() {
         <span className="text-sm font-medium">Keyword Density Checker</span>
       </div>
       <div className="p-5 space-y-4">
-        <Textarea value={text} onChange={e => setText(e.target.value)}
+        <Textarea aria-label="Paste your article or web page content here to analyse keyword density" value={text} onChange={e => setText(e.target.value)}
           placeholder="Paste your article or web page content here to analyse keyword density…"
           className="min-h-[160px] resize-none text-sm" />
 

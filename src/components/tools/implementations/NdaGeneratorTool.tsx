@@ -22,7 +22,7 @@ export function NdaGeneratorTool() {
   const [duration, setDuration]     = useState("2");
   const [jurisdiction, setJurisdiction] = useState("Delaware, United States");
   const [purpose, setPurpose]       = useState("");
-  const [exceptions, setExceptions] = useState("publicly known information, information independently developed without use of confidential information");
+  const [exceptions] = useState("publicly known information, information independently developed without use of confidential information");
   const [showPreview, setShowPreview] = useState(false);
   const [copied, setCopied] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -179,28 +179,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Disclosing Party</p>
-            <Input value={disclosing.name} onChange={e => setD("name",e.target.value)} placeholder="Full legal name" className="text-sm" />
-            <Textarea value={disclosing.address} onChange={e => setD("address",e.target.value)} placeholder="Address" className="text-sm resize-none min-h-[60px]" />
+            <Input aria-label="Disclosing party name" value={disclosing.name} onChange={e => setD("name",e.target.value)} placeholder="Full legal name" className="text-sm" />
+            <Textarea aria-label="Disclosing party address" value={disclosing.address} onChange={e => setD("address",e.target.value)} placeholder="Address" className="text-sm resize-none min-h-[60px]" />
           </div>
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Receiving Party</p>
-            <Input value={receiving.name} onChange={e => setR("name",e.target.value)} placeholder="Full legal name" className="text-sm" />
-            <Textarea value={receiving.address} onChange={e => setR("address",e.target.value)} placeholder="Address" className="text-sm resize-none min-h-[60px]" />
+            <Input aria-label="Receiving party name" value={receiving.name} onChange={e => setR("name",e.target.value)} placeholder="Full legal name" className="text-sm" />
+            <Textarea aria-label="Receiving party address" value={receiving.address} onChange={e => setR("address",e.target.value)} placeholder="Address" className="text-sm resize-none min-h-[60px]" />
           </div>
         </div>
 
         {/* Terms */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div><label className="text-xs text-muted-foreground mb-1 block">Effective Date</label><Input type="date" value={effective} onChange={e => setEffective(e.target.value)} className="text-sm" /></div>
+          <div><label className="text-xs text-muted-foreground mb-1 block">Effective Date</label><Input aria-label="Effective Date" type="date" value={effective} onChange={e => setEffective(e.target.value)} className="text-sm" /></div>
           <div><label className="text-xs text-muted-foreground mb-1 block">Duration (years)</label>
             <select aria-label="Duration (years)" value={duration} onChange={e => setDuration(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-input bg-background text-sm">
               {["1","2","3","5","10"].map(y => <option key={y} value={y}>{y} year{y!=="1"?"s":""}</option>)}
             </select>
           </div>
-          <div className="col-span-2"><label className="text-xs text-muted-foreground mb-1 block">Governing Jurisdiction</label><Input value={jurisdiction} onChange={e => setJurisdiction(e.target.value)} placeholder="e.g. California, USA" className="text-sm" /></div>
+          <div className="col-span-2"><label className="text-xs text-muted-foreground mb-1 block">Governing Jurisdiction</label><Input aria-label="Governing Jurisdiction" value={jurisdiction} onChange={e => setJurisdiction(e.target.value)} placeholder="e.g. California, USA" className="text-sm" /></div>
         </div>
 
-        <div><label className="text-xs text-muted-foreground mb-1 block">Purpose of Disclosure</label><Textarea value={purpose} onChange={e => setPurpose(e.target.value)} placeholder="Describe why confidential information will be shared (e.g. evaluating a potential business partnership)…" className="text-sm resize-none min-h-[72px]" /></div>
+        <div><label className="text-xs text-muted-foreground mb-1 block">Purpose of Disclosure</label><Textarea aria-label="Purpose of Disclosure" value={purpose} onChange={e => setPurpose(e.target.value)} placeholder="Describe why confidential information will be shared (e.g. evaluating a potential business partnership)…" className="text-sm resize-none min-h-[72px]" /></div>
 
         {showPreview && (
           <div>

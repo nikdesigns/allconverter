@@ -7,12 +7,12 @@ import {
 } from "lucide-react";
 import { tools } from "@/lib/tools-data";
 import { categories } from "@/lib/categories";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
 import { allBlogPosts } from "@/data/blog-posts";
 import { blogCategories } from "@/data/blog-categories";
 
 export const metadata: Metadata = {
-  title: "Sitemap — All Tools & Pages",
+  title: brandedTitle("Sitemap — All Tools & Pages"),
   description:
     "Complete sitemap of AllConverter.tools — browse all 250+ free online tools organized by category: PDF, image, text, developer, SEO, business, audio, AI tools and more.",
   alternates: { canonical: `${siteConfig.url}/sitemap/` },

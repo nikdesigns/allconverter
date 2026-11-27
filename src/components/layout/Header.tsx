@@ -9,7 +9,7 @@ import {
   Calculator, ArrowLeftRight, Sparkles, Briefcase, Palette,
   ArrowRight, LayoutGrid, Heart,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { categories } from "@/lib/categories";
 import { cn } from "@/lib/utils";
@@ -175,11 +175,9 @@ export function Header() {
                       <p className="text-[11px] text-[var(--body-subtle)]">
                         250+ free tools · No sign-up · Browser-based
                       </p>
-                      <Link href="/tools/">
-                        <Button size="sm" className="h-7 text-[11px] px-3 gap-1">
-                          Browse All
-                          <ArrowRight className="w-3 h-3" />
-                        </Button>
+                      <Link href="/tools/" className={cn(buttonVariants({ size: "sm" }), "h-7 text-[11px] px-3 gap-1")}>
+                        Browse All
+                        <ArrowRight className="w-3 h-3" />
                       </Link>
                     </div>
                   </div>
@@ -234,17 +232,16 @@ export function Header() {
             <Link
               href="/support/"
               title="Support the project"
+              aria-label="Support the project"
               className="hidden xl:flex items-center justify-center w-8 h-8 rounded-(--radius-default) text-rose-400 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
             >
               <Heart className="w-4 h-4" />
             </Link>
 
             {/* CTA */}
-            <Link href="/tools/" className="hidden sm:block">
-              <Button size="sm" className="h-8 px-4 text-xs font-semibold gap-1.5">
-                Get Started
-                <ArrowRight className="w-3 h-3" />
-              </Button>
+            <Link href="/tools/" className={cn(buttonVariants({ size: "sm" }), "hidden sm:inline-flex h-8 px-4 text-xs font-semibold gap-1.5")}>
+              Get Started
+              <ArrowRight className="w-3 h-3" />
             </Link>
 
             {/* Mobile menu */}
@@ -253,6 +250,7 @@ export function Header() {
                 render={
                   <Button variant="ghost" size="icon" className="lg:hidden h-8 w-8" />
                 }
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
               >
                 {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </SheetTrigger>

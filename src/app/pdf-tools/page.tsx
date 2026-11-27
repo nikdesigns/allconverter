@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CategoryPage } from "@/components/shared/CategoryPage";
 import { getCategoryBySlug } from "@/lib/categories";
-import { getToolsByCategory, getFeaturedTools } from "@/lib/tools-data";
+import { getToolsByCategory } from "@/lib/tools-data";
 import { categories } from "@/lib/categories";
 import { generateCategoryMetadata, siteConfig } from "@/lib/seo-utils";
 

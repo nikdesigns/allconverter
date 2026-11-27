@@ -84,7 +84,7 @@ export function CssMinifierTool() {
       <div className="p-5 space-y-4">
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Input CSS</label>
-          <Textarea value={input} onChange={e => setInput(e.target.value)}
+          <Textarea aria-label="Input CSS" value={input} onChange={e => setInput(e.target.value)}
             className="min-h-[200px] resize-none text-sm font-mono" placeholder="Paste your CSS here…" />
         </div>
 
@@ -105,7 +105,7 @@ export function CssMinifierTool() {
               <Copy className="w-3 h-3" />Copy
             </Button>
           </div>
-          <Textarea readOnly value={output} className="min-h-[200px] resize-none text-sm font-mono bg-muted/20" />
+          <Textarea aria-label="Output" readOnly value={output} className="min-h-[200px] resize-none text-sm font-mono bg-muted/20" />
         </div>
       </div>
     </div>

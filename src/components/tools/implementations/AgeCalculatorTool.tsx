@@ -77,7 +77,7 @@ export function AgeCalculatorTool() {
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wide">
               Date of Birth
             </label>
-            <Input
+            <Input aria-label="Date of Birth"
               type="date"
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
@@ -89,11 +89,11 @@ export function AgeCalculatorTool() {
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wide">
               Age on date
             </label>
-            <Input
+            <Input aria-label="Age on date"
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
-              max={new Date(Date.now() + 86400000 * 365 * 50).toISOString().split("T")[0]}
+              max="2099-12-31"
               className="h-11"
             />
           </div>

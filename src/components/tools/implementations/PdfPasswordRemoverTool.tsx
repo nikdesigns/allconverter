@@ -58,7 +58,7 @@ export function PdfPasswordRemoverTool() {
         <input aria-label="Choose file" ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e=>{const f=e.target.files?.[0];if(f)handleFile(f);}} />
         <div>
           <label className="text-xs text-muted-foreground mb-1 block">Current PDF password (leave empty if the file opens without one and is only restricted)</label>
-          <Input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter PDF password if required…" className="text-sm" />
+          <Input aria-label="Current PDF password (leave empty if the file opens without one and is only restricted)" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter PDF password if required…" className="text-sm" />
         </div>
         <Button onClick={remove} disabled={!file || loading} className="w-full gap-2">
           <Download className="w-4 h-4" />{loading ? "Removing password…" : "Remove Password & Download"}

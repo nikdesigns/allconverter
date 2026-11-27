@@ -84,7 +84,6 @@ ${suggestions.length ? suggestions.map((s, i) => `${i + 1}. ${s}`).join("\n") : 
 
 function seoAudit(content: string): string {
   const t = content.toLowerCase();
-  const lines = content.split("\n").map(l => l.trim()).filter(Boolean);
   const wordCount = content.trim().split(/\s+/).length;
 
   const hasTitle = /<title[^>]*>/.test(t) || /^title:/im.test(content);
@@ -509,7 +508,7 @@ function summarizeCode(code: string, lang: string): string {
   return parts.length > 0 ? parts.join(", ") : `appears to be a ${lang} script`;
 }
 
-function detectConcepts(code: string, lang: string): { name: string; description: string }[] {
+function detectConcepts(code: string, _lang: string): { name: string; description: string }[] {
   const concepts: { name: string; description: string }[] = [];
   if (/async|await/.test(code)) concepts.push({ name: "Async/Await", description: "Handles asynchronous code in a synchronous-looking style" });
   if (/\.map\(|\.filter\(|\.reduce\(/.test(code)) concepts.push({ name: "Array Methods", description: "Functional programming patterns for transforming data" });
@@ -905,7 +904,6 @@ This matters: you can't reference SELECT aliases in WHERE, but you can in ORDER 
 
 function optimizeSql(sql: string): string {
   if (!sql.trim()) return "Please paste a SQL query to optimize.";
-  const s = sql.toUpperCase();
   const issues: string[] = [];
   const suggestions: string[] = [];
 
@@ -1171,7 +1169,7 @@ export function AiToolsSuite() {
           <div key={field.key} className="space-y-1.5">
             <label className="text-xs text-muted-foreground font-medium">{field.label}</label>
             {field.type === "textarea" && (
-              <Textarea
+              <Textarea aria-label={field.label}
                 value={values[field.key] ?? ""}
                 onChange={(e) => set(field.key, e.target.value)}
                 placeholder={field.placeholder}
@@ -1180,7 +1178,7 @@ export function AiToolsSuite() {
               />
             )}
             {field.type === "text" && (
-              <Input
+              <Input aria-label={field.placeholder}
                 value={values[field.key] ?? ""}
                 onChange={(e) => set(field.key, e.target.value)}
                 placeholder={field.placeholder}
@@ -1214,7 +1212,7 @@ export function AiToolsSuite() {
                 {copied ? <><CheckCircle2 className="w-3 h-3 text-emerald-500" />Copied!</> : <><Copy className="w-3 h-3" />Copy</>}
               </Button>
             </div>
-            <Textarea
+            <Textarea aria-label="Generated output"
               readOnly
               value={output}
               rows={tool.outputRows ?? 30}

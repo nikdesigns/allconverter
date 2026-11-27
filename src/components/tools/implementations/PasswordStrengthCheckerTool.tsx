@@ -74,7 +74,7 @@ export function PasswordStrengthCheckerTool() {
       </div>
       <div className="p-5 space-y-4">
         <div className="relative">
-          <Input
+          <Input aria-label="Enter a password to analyse"
             type={show ? "text" : "password"}
             value={password}
             onChange={e => setPassword(e.target.value)}

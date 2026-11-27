@@ -9,7 +9,8 @@ import { BlogBreadcrumbs } from "@/components/blog/BlogBreadcrumbs";
 import { AdUnit } from "@/components/ads/AdUnit";
 import type { BlogCategorySlug } from "@/types/blog";
 
-import { defaultOgImages, stripBrand, truncateAtWord } from "@/lib/seo-utils";
+import { defaultOgImages, truncateAtWord, brandedTitle } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/html";
 const SITE_URL = "https://allconverter.tools";
 const SITE_NAME = "AllConverter.tools";
 
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cat) return {};
 
   return {
-    title: stripBrand(cat.metaTitle),
+    title: brandedTitle(cat.metaTitle),
     description: truncateAtWord(cat.metaDescription),
     alternates: { canonical: `${SITE_URL}/blog/${cat.slug}/` },
     openGraph: {
@@ -66,7 +67,7 @@ export default async function BlogCategoryPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbSchema) }}
       />
 
       <div className="container mx-auto px-4 py-10 max-w-6xl">

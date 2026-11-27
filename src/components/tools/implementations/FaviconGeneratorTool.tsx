@@ -5,7 +5,7 @@ import { activateOnKey } from "@/lib/a11y";
 import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Upload, Download, Image } from "lucide-react";
+import { Upload, Download, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
 const FAVICON_SIZES = [16, 32, 48, 64, 96, 128, 180, 192, 256, 512];
@@ -87,7 +87,7 @@ export function FaviconGeneratorTool() {
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
-        <Image className="w-4 h-4 text-primary" />
+        <ImageIcon className="w-4 h-4 text-primary" />
         <span className="text-sm font-medium">Favicon Generator</span>
       </div>
       <div className="p-5 space-y-4">
@@ -106,9 +106,9 @@ export function FaviconGeneratorTool() {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div><label className="text-xs text-muted-foreground mb-1 block">Background</label>
-                <Input type="color" value={bgColor} onChange={e=>setBgColor(e.target.value)} className="h-10 p-1 cursor-pointer" /></div>
+                <Input aria-label="Background" type="color" value={bgColor} onChange={e=>setBgColor(e.target.value)} className="h-10 p-1 cursor-pointer" /></div>
               <div><label className="text-xs text-muted-foreground mb-1 block">Padding %</label>
-                <Input type="number" min={0} max={40} value={padding} onChange={e=>setPadding(+e.target.value)} className="text-sm font-mono" /></div>
+                <Input aria-label="Padding %" type="number" min={0} max={40} value={padding} onChange={e=>setPadding(+e.target.value)} className="text-sm font-mono" /></div>
               <div className="flex items-end pb-1">
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
                   <input type="checkbox" checked={roundedCorners} onChange={e=>setRoundedCorners(e.target.checked)} className="w-4 h-4 rounded" />

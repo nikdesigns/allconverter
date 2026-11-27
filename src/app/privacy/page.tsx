@@ -18,10 +18,10 @@ import {
   Megaphone,
   FileText,
 } from "lucide-react";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: brandedTitle("Privacy Policy"),
   description:
     "Privacy Policy for AllConverter.tools — how we collect, use and protect your data, including Google Analytics, AdSense, cookies and your rights.",
   alternates: { canonical: `${siteConfig.url}/privacy/` },

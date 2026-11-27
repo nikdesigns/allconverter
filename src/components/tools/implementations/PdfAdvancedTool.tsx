@@ -31,7 +31,7 @@ function PdfPageNumberAdder() {
       const font = await doc.embedFont(StandardFonts.HelveticaBold);
       const pages = doc.getPages();
       pages.forEach((page, i) => {
-        const { width, height } = page.getSize();
+        const { width } = page.getSize();
         const text = String(i + startNum);
         const fontSize = 10;
         const textWidth = font.widthOfTextAtSize(text, fontSize);
@@ -62,7 +62,7 @@ function PdfPageNumberAdder() {
             <option value="bottom-left">Bottom Left</option>
           </select></div>
         <div><label className="text-xs text-muted-foreground mb-1 block">Start from</label>
-          <Input type="number" min={0} value={startNum} onChange={e=>setStartNum(+e.target.value)} className="text-sm font-mono" /></div>
+          <Input aria-label="Start from" type="number" min={0} value={startNum} onChange={e=>setStartNum(+e.target.value)} className="text-sm font-mono" /></div>
       </div>
       <Button onClick={process} disabled={!file || loading} className="w-full gap-2">
         <Download className="w-4 h-4" />{loading ? "Processing…" : "Add Page Numbers & Download"}
@@ -123,7 +123,7 @@ function PdfMetadataEditor() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {[["Title",title,setTitle],["Author",author,setAuthor],["Subject",subject,setSubject],["Keywords",keywords,setKeywords],["Creator",creator,setCreator]].map(([label,val,set])=>(
           <div key={label as string}><label className="text-xs text-muted-foreground mb-1 block">{label as string}</label>
-            <Input value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm" /></div>
+            <Input aria-label={label as string} value={val as string} onChange={e=>(set as (v:string)=>void)(e.target.value)} className="text-sm" /></div>
         ))}
       </div>
       <Button onClick={process} disabled={!file || loading} className="w-full gap-2">
@@ -183,7 +183,7 @@ function PdfPageReorder() {
           <label className="text-xs text-muted-foreground mb-1 block">
             Page order (comma-separated, 1–{pageCount}). Duplicate or skip pages as needed.
           </label>
-          <Input value={order} onChange={e=>setOrder(e.target.value)} className="font-mono text-sm" placeholder="1, 3, 2, 4…" />
+          <Input aria-label={`Page order (comma-separated, 1–${pageCount}). Duplicate or skip pages as needed.`} value={order} onChange={e=>setOrder(e.target.value)} className="font-mono text-sm" placeholder="1, 3, 2, 4…" />
           <p className="text-xs text-muted-foreground mt-1">Original: {pageCount} pages</p>
         </div>
       )}

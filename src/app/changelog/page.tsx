@@ -20,10 +20,11 @@ import {
 } from "lucide-react";
 import { releases, roadmap } from "@/data/changelog";
 import type { ChangeType } from "@/data/changelog";
-import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages, brandedTitle } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/html";
 
 export const metadata: Metadata = {
-  title: "Changelog — Release History & Updates",
+  title: brandedTitle("Changelog — Release History & Updates"),
   description:
     "Full release history for AllConverter.tools — every new tool, feature, performance improvement, bug fix, and SEO enhancement since v1.0. Updated with every release.",
   alternates: { canonical: `${siteConfig.url}/changelog/` },
@@ -89,7 +90,7 @@ export default function ChangelogPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen pt-20">

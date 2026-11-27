@@ -320,7 +320,7 @@ export function AiSpreadsheetFormulaTool() {
         </div>
 
         <div className="flex gap-2">
-          <Input
+          <Input aria-label="Describe the formula you need"
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === "Enter" && generate()}

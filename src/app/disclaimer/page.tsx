@@ -11,10 +11,10 @@ import {
   Mail,
   Info,
 } from "lucide-react";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: "Disclaimer",
+  title: brandedTitle("Disclaimer"),
   description:
     "Important disclaimers for AllConverter.tools — no financial, legal, or professional advice. AI-generated content, accuracy limitations, and user responsibilities explained.",
   alternates: { canonical: `${siteConfig.url}/disclaimer/` },

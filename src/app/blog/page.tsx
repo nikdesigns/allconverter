@@ -6,12 +6,13 @@ import { FeaturedCard } from "@/components/blog/FeaturedCard";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { AdUnit } from "@/components/ads/AdUnit";
 
-import { defaultOgImages } from "@/lib/seo-utils";
+import { defaultOgImages, brandedTitle } from "@/lib/seo-utils";
+import { jsonLd } from "@/lib/html";
 const SITE_URL = "https://allconverter.tools";
 const SITE_NAME = "AllConverter.tools";
 
 export const metadata: Metadata = {
-  title: `Blog — Tools Guides, Tutorials & Tips`,
+  title: brandedTitle(`Blog — Tools Guides, Tutorials & Tips`),
   description:
     "Expert guides on PDF tools, image formats, developer utilities, SEO, finance, business, AI writing, and audio tools. Free tutorials from the team behind 250+ free tools.",
   alternates: { canonical: `${SITE_URL}/blog/` },
@@ -42,7 +43,7 @@ export default function BlogPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbSchema) }}
       />
 
       <div className="container mx-auto px-4 py-10 max-w-6xl">

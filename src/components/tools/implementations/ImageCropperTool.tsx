@@ -186,43 +186,42 @@ export function ImageCropperTool() {
 
   // ── drag ──────────────────────────────────────────────────────────────────
 
-  function startDrag(handle: Handle) {
-    return (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+  // Called from mouse-down handlers only, so the refs are read at event time.
+  function startDrag(handle: Handle, e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      const rect = containerRef.current!.getBoundingClientRect();
-      sessionRef.current = {
-        handle,
-        startMouseX: e.clientX - rect.left,
-        startMouseY: e.clientY - rect.top,
-        startCrop: { ...crop },
-        imgBounds: { ...imgBoundsRef.current },
-        aspectRatio: ASPECT_PRESETS[aspectIdx].ratio,
-        naturalW,
-        naturalH,
-      };
-
-      function onMove(me: MouseEvent) {
-        const s = sessionRef.current;
-        if (!s || !containerRef.current) return;
-        const cr = containerRef.current.getBoundingClientRect();
-        const mx = me.clientX - cr.left;
-        const my = me.clientY - cr.top;
-        const dx = (mx - s.startMouseX) / s.imgBounds.w;
-        const dy = (my - s.startMouseY) / s.imgBounds.h;
-        setCrop(applyDrag(s.handle, dx, dy, s.startCrop, s.aspectRatio, s.naturalW, s.naturalH));
-      }
-
-      function onUp() {
-        sessionRef.current = null;
-        window.removeEventListener("mousemove", onMove);
-        window.removeEventListener("mouseup", onUp);
-      }
-
-      window.addEventListener("mousemove", onMove);
-      window.addEventListener("mouseup", onUp);
+    const rect = containerRef.current!.getBoundingClientRect();
+    sessionRef.current = {
+      handle,
+      startMouseX: e.clientX - rect.left,
+      startMouseY: e.clientY - rect.top,
+      startCrop: { ...crop },
+      imgBounds: { ...imgBoundsRef.current },
+      aspectRatio: ASPECT_PRESETS[aspectIdx].ratio,
+      naturalW,
+      naturalH,
     };
+
+    function onMove(me: MouseEvent) {
+      const s = sessionRef.current;
+      if (!s || !containerRef.current) return;
+      const cr = containerRef.current.getBoundingClientRect();
+      const mx = me.clientX - cr.left;
+      const my = me.clientY - cr.top;
+      const dx = (mx - s.startMouseX) / s.imgBounds.w;
+      const dy = (my - s.startMouseY) / s.imgBounds.h;
+      setCrop(applyDrag(s.handle, dx, dy, s.startCrop, s.aspectRatio, s.naturalW, s.naturalH));
+    }
+
+    function onUp() {
+      sessionRef.current = null;
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
   }
 
   // ── aspect ratio button ───────────────────────────────────────────────────
@@ -376,7 +375,7 @@ export function ImageCropperTool() {
                     cursor: CURSORS.move,
                     boxSizing: "border-box",
                   }}
-                  onMouseDown={startDrag("move")}
+                  onMouseDown={e => startDrag("move", e)}
                 >
                   {/* Border */}
                   <div style={{ position: "absolute", inset: 0, border: "2px solid rgba(99,102,241,0.95)", boxSizing: "border-box", pointerEvents: "none" }} />
@@ -401,7 +400,7 @@ export function ImageCropperTool() {
                         zIndex: 10,
                         ...style,
                       }}
-                      onMouseDown={e => { e.stopPropagation(); startDrag(id)(e); }}
+                      onMouseDown={e => { e.stopPropagation(); startDrag(id, e); }}
                     />
                   ))}
                 </div>

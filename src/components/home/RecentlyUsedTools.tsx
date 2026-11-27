@@ -12,6 +12,7 @@ export function RecentlyUsedTools() {
   useEffect(() => {
     const slugs = getRecentSlugs();
     if (slugs.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- recent tools live in localStorage, which only exists after hydration
       setTools([]);
       return;
     }

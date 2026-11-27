@@ -11,10 +11,10 @@ import {
   AlertTriangle,
   Mail,
 } from "lucide-react";
-import { siteConfig, baseOpenGraph } from "@/lib/seo-utils";
+import { siteConfig, baseOpenGraph, brandedTitle } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: "Security — How We Protect Your Data",
+  title: brandedTitle("Security — How We Protect Your Data"),
   description:
     "AllConverter.tools processes everything in your browser. No file uploads, no servers, no data retention. Learn how we keep your data private and secure.",
   alternates: { canonical: `${siteConfig.url}/security/` },

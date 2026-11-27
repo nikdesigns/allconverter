@@ -5,10 +5,10 @@ import {
   ShieldCheck, CreditCard, Eye, ArrowRight,
   CheckCircle2, Zap,
 } from "lucide-react";
-import { siteConfig, defaultOgImages } from "@/lib/seo-utils";
+import { siteConfig, defaultOgImages, brandedTitle } from "@/lib/seo-utils";
 
 export const metadata: Metadata = {
-  title: `Support the Project`,
+  title: brandedTitle(`Support the Project`),
   description:
     "AllConverter.tools is free for everyone, forever. If it's saved you time, consider a one-time contribution to help cover hosting, AI API costs, and new tool development.",
   alternates: { canonical: `${siteConfig.url}/support/` },

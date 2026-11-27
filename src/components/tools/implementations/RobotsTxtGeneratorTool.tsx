@@ -94,11 +94,11 @@ export function RobotsTxtGeneratorTool() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Sitemap URL</label>
-            <Input value={sitemapUrl} onChange={e => setSitemapUrl(e.target.value)} placeholder="https://example.com/sitemap.xml" className="text-sm" />
+            <Input aria-label="Sitemap URL" value={sitemapUrl} onChange={e => setSitemapUrl(e.target.value)} placeholder="https://example.com/sitemap.xml" className="text-sm" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Crawl-delay (optional)</label>
-            <Input type="number" value={crawlDelay} onChange={e => setCrawlDelay(e.target.value)} placeholder="e.g. 10" className="text-sm" />
+            <Input aria-label="Crawl-delay (optional)" type="number" value={crawlDelay} onChange={e => setCrawlDelay(e.target.value)} placeholder="e.g. 10" className="text-sm" />
           </div>
         </div>
 

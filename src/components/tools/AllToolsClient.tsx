@@ -45,7 +45,7 @@ export function AllToolsClient() {
           {/* Search */}
           <div className="relative max-w-lg">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-            <Input
+            <Input aria-label="Search tools"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search tools..."

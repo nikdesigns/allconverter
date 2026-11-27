@@ -35,3 +35,11 @@ export function sanitizeHtml(html: string): string {
   });
   return doc.body.firstElementChild?.innerHTML ?? "";
 }
+
+/**
+ * Serialises structured data for a <script type="application/ld+json"> tag.
+ * Escaping "<" keeps a "</script>" inside any string from closing the tag early.
+ */
+export function jsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
